@@ -9,6 +9,7 @@ repositories {
 
 dependencies {
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.98'
+    implementation 'org.springframework:spring-webmvc:5.3.39'
 
     implementation libs.guava
 
