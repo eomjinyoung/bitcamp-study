@@ -17,3 +17,13 @@
 - JavaEE의 개요: Jakarta EE 및 구현서버와의 관계
 - Embedded Tomcat 적용하기
 - 세미 팀 프로젝트 구현
+
+### 2025-02-21(금)
+- Servlet 개요: GenericServlet, HttpServlet 사용법
+- Spring Framework WebMVC 설정: DispatcherServlet 사용법
+- 페이지 컨트롤러 생성 및 실행 확인
+- Eclise 설치 및 Exerd DB 모델링 플러그인 설치
+- 세미 팀 프로젝트 구현
+
+### 2025-02-24(월)
+- 
