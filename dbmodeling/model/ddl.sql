@@ -46,6 +46,12 @@ DROP TABLE IF EXISTS ed_position RESTRICT;
 -- 수강신청상태
 DROP TABLE IF EXISTS ed_application_status RESTRICT;
 
+-- 게시판
+DROP TABLE IF EXISTS ed_board RESTRICT;
+
+-- 첨부파일
+DROP TABLE IF EXISTS ed_attach_file RESTRICT;
+
 -- 수강신청
 CREATE TABLE ed_application (
 	application_id INTEGER  NOT NULL COMMENT '수강신청번호', -- 수강신청번호
@@ -271,11 +277,13 @@ ALTER TABLE ed_teacher_lecture
 
 -- 회원
 CREATE TABLE ed_member (
-	member_id   INTEGER     NOT NULL COMMENT '회원번호', -- 회원번호
-	name        VARCHAR(50) NOT NULL COMMENT '이름', -- 이름
-	email       VARCHAR(40) NOT NULL COMMENT '이메일', -- 이메일
-	tel         VARCHAR(30) NOT NULL COMMENT '전화', -- 전화
-	create_date DATETIME    NOT NULL DEFAULT current_timestamp() COMMENT '등록일' -- 등록일
+	member_id   INTEGER      NOT NULL COMMENT '회원번호', -- 회원번호
+	name        VARCHAR(50)  NOT NULL COMMENT '이름', -- 이름
+	email       VARCHAR(40)  NOT NULL COMMENT '이메일', -- 이메일
+	tel         VARCHAR(30)  NOT NULL COMMENT '전화', -- 전화
+	create_date DATETIME     NOT NULL DEFAULT current_timestamp() COMMENT '등록일', -- 등록일
+	pwd         VARCHAR(100) NOT NULL COMMENT '암호', -- 암호
+	photo       VARCHAR(255) NULL     COMMENT '사진' -- 사진
 )
 COMMENT '회원';
 
@@ -393,6 +401,45 @@ ALTER TABLE ed_application_status
 
 ALTER TABLE ed_application_status
 	MODIFY COLUMN as_id INTEGER NOT NULL AUTO_INCREMENT COMMENT '상태번호';
+
+-- 게시판
+CREATE TABLE ed_board (
+	board_id    INTEGER      NOT NULL COMMENT '게시판번호', -- 게시판번호
+	member_id   INTEGER      NOT NULL COMMENT '작성자', -- 작성자
+	title       VARCHAR(255) NOT NULL COMMENT '제목', -- 제목
+	content     MEDIUMTEXT   NOT NULL COMMENT '내용', -- 내용
+	create_date DATETIME     NULL     DEFAULT current_timestamp() COMMENT '작성일', -- 작성일
+	view_count  INTEGER      NULL     DEFAULT 0 COMMENT '조회수' -- 조회수
+)
+COMMENT '게시판';
+
+-- 게시판
+ALTER TABLE ed_board
+	ADD CONSTRAINT PK_ed_board -- 게시판 기본키
+	PRIMARY KEY (
+	board_id -- 게시판번호
+	);
+
+ALTER TABLE ed_board
+	MODIFY COLUMN board_id INTEGER NOT NULL AUTO_INCREMENT COMMENT '게시판번호';
+
+-- 첨부파일
+CREATE TABLE ed_attach_file (
+	af_id    INTEGER      NOT NULL COMMENT '첨부파일번호', -- 첨부파일번호
+	board_id INTEGER      NOT NULL COMMENT '게시판번호', -- 게시판번호
+	filename VARCHAR(255) NOT NULL COMMENT '파일명' -- 파일명
+)
+COMMENT '첨부파일';
+
+-- 첨부파일
+ALTER TABLE ed_attach_file
+	ADD CONSTRAINT PK_ed_attach_file -- 첨부파일 기본키
+	PRIMARY KEY (
+	af_id -- 첨부파일번호
+	);
+
+ALTER TABLE ed_attach_file
+	MODIFY COLUMN af_id INTEGER NOT NULL AUTO_INCREMENT COMMENT '첨부파일번호';
 
 -- 수강신청
 ALTER TABLE ed_application
@@ -562,4 +609,24 @@ ALTER TABLE ed_teacher_lecture
 	)
 	REFERENCES ed_lecture ( -- 과목
 	lecture_id -- 과목번호
+	);
+
+-- 게시판
+ALTER TABLE ed_board
+	ADD CONSTRAINT FK_ed_member_TO_ed_board -- 회원 -> 게시판
+	FOREIGN KEY (
+	member_id -- 작성자
+	)
+	REFERENCES ed_member ( -- 회원
+	member_id -- 회원번호
+	);
+
+-- 첨부파일
+ALTER TABLE ed_attach_file
+	ADD CONSTRAINT FK_ed_board_TO_ed_attach_file -- 게시판 -> 첨부파일
+	FOREIGN KEY (
+	board_id -- 게시판번호
+	)
+	REFERENCES ed_board ( -- 게시판
+	board_id -- 게시판번호
 	);
