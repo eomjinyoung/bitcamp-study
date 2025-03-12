@@ -7,10 +7,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -22,12 +19,23 @@ public class LoginServlet extends HttpServlet {
     try {
       String email = req.getParameter("email");
       String password = req.getParameter("password");
+      String saveEmail = req.getParameter("saveEmail");
 
       MemberService memberService = (MemberService) getServletContext().getAttribute("memberService");
       Member member = memberService.get(email, password);
       if (member == null) {
         resp.sendRedirect("/auth/login-form");
         return;
+      }
+
+      if (saveEmail != null) {
+        Cookie emailCookie = new Cookie("email", email);
+        emailCookie.setMaxAge(60 * 60 * 24 * 7);
+        resp.addCookie(emailCookie);
+      } else {
+        Cookie emailCookie = new Cookie("email", "");
+        emailCookie.setMaxAge(0);
+        resp.addCookie(emailCookie);
       }
 
       req.getSession().setAttribute("loginUser", member);
