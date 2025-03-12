@@ -29,7 +29,7 @@ public class LoginServlet extends HttpServlet {
         resp.sendRedirect("/auth/login-form");
         return;
       }
-      
+
       req.getSession().setAttribute("loginUser", member);
       resp.sendRedirect("/home");
 
