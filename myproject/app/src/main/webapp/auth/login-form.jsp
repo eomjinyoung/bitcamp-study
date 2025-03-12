@@ -11,11 +11,11 @@
     <form action="/auth/login" method="post">
         <div>
             <label for="email">이메일:</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" name="email" required>
         </div>
         <div>
             <label for="password">암호:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" name="password" required>
         </div>
         <div>
             <input type="submit" value="로그인">
