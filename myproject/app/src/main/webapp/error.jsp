@@ -9,7 +9,7 @@
 <body>
 <div>
     <h2>실행 오류!</h2>
-    <p>${exception}</p>
+    <pre>${exception}</pre>
 </div>
 </body>
 </html>
