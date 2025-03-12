@@ -1,13 +1,17 @@
 package bitcamp.myapp.service;
 
+import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.vo.Member;
 
 public class MemberService {
-  public Member get(String email, String password) {
-    Member user = new Member();
-    user.setNo(1);
-    user.setName("user1");
-    user.setEmail("user1@test.com");
-    return user;
+
+  private MemberDao memberDao;
+
+  public MemberService(MemberDao memberDao) {
+    this.memberDao = memberDao;
+  }
+
+  public Member get(String email, String password) throws Exception {
+    return memberDao.findByEmailAndPassword(email, password);
   }
 }
