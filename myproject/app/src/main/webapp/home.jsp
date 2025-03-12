@@ -24,6 +24,9 @@ trimDirectiveWhitespaces="true" %>
 <div>
     <h1>강의 관리 시스템</h1>
     <p>환영합니다!</p>
+    <ul>
+        <li><a href="/board/list">게시판</a></li>
+    </ul>
 </div>
 </div>
 </body>
