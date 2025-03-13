@@ -1,6 +1,8 @@
 package bitcamp.myapp.servlet;
 
 import bitcamp.myapp.service.BoardService;
+import bitcamp.myapp.service.NCPObjectStorageService;
+import bitcamp.myapp.service.StorageService;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
 
@@ -11,10 +13,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.List;
+import java.util.*;
 
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024,
@@ -39,6 +42,22 @@ public class BoardAddServlet extends HttpServlet {
       BoardService boardService = (BoardService) getServletContext().getAttribute("boardService");
       boardService.add(board);
 
+      StorageService storageService =
+              (StorageService) getServletContext().getAttribute("storageService");
+
+      Collection<Part> parts = req.getParts();
+      for (Part part : parts) {
+        if (!part.getName().equals("files")) {
+          continue;
+        }
+        // 업로드 할 때 사용할 파일명 준비
+        String filename = UUID.randomUUID().toString();
+
+        // 클라우드에 업로드
+        storageService.upload("board/" + filename, part.getInputStream());
+      }
+
+
       resp.sendRedirect("/board/list");
 
     } catch (Exception e) {
@@ -51,4 +70,5 @@ public class BoardAddServlet extends HttpServlet {
       요청배달자.forward(req, resp); // 오류가 발생하기 직전까지 출력했던 것은 버린다.
     }
   }
+
 }

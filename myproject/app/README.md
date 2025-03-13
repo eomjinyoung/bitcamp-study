@@ -7,11 +7,21 @@
 
 ## 작업
 
-### 1. 게시글 입력 폼 변경 
+### 1. SOLID 원칙에서 OCP 적용하기
+
+- CharacterEncodingFilter 클래스 생성
+  - 기존 서블릿 클래스를 손대지 않고(Closed) 요청 데이터의 문자 집합을 지정하기(Open)
+
+
+### 2. 게시글 입력 폼 변경 
 
 - /board/form.jsp 변경
   - <form> 태그에 enctype="multipart/form-data" 지정.
 
+### 3. 네이버 클라우드의 Storage Object 서비스 설정
+
+- 
+  
   
 ## HTTP 프로토콜 POST 요청
 ### application/x-www-form-urlencoded
