@@ -6,6 +6,7 @@ import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.webresources.DirResourceSet;
 import org.apache.catalina.webresources.StandardRoot;
+import sun.misc.Signal;
 
 import java.io.File;
 
@@ -60,6 +61,22 @@ public class App {
 
     // 톰캣 서버 구동
     tomcat.start();
+
+    // SIGTERM 감지하여 종료 훅 실행
+    Signal.handle(new Signal("TERM"), sig -> {
+      System.out.println("SIGTERM received. Shutting down gracefully...");
+      System.exit(0);
+    });
+
+    // JVM 종료 시 Tomcat 정상 종료
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      try {
+        System.out.println("서버 종료 중...");
+        tomcat.stop();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }));
 
     // 톰캣 서버를 구동한 후 종료될 때까지 JVM을 끝내지 말고 기다린다.
     tomcat.getServer().await();
