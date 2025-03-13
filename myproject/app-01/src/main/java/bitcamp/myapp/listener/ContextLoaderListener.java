@@ -2,7 +2,6 @@ package bitcamp.myapp.listener;
 
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.dao.MemberDao;
-import bitcamp.myapp.dao.MySQLBoardDao;
 import bitcamp.myapp.service.BoardService;
 import bitcamp.myapp.service.MemberService;
 
@@ -39,7 +38,7 @@ public class ContextLoaderListener implements ServletContextListener {
       ServletContext ctx = sce.getServletContext();
 
       MemberDao memberDao = new MemberDao(con);
-      MySQLBoardDao boardDao = new MySQLBoardDao(con);
+      BoardDao boardDao = new BoardDao(con);
 
       MemberService memberService = new MemberService(memberDao);
       ctx.setAttribute("memberService", memberService);

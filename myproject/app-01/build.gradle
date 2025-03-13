@@ -1,0 +1,38 @@
+plugins {
+    id 'application'
+}
+
+
+repositories {
+    mavenCentral() // https://repo.maven.apache.org/maven2/
+}
+
+dependencies {
+    //implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.98'
+    //implementation 'org.springframework:spring-webmvc:5.3.39'
+    //implementation 'com.mysql:mysql-connector-j:8.4.0'
+    implementation 'javax.servlet:jstl:1.2'
+
+    implementation libs.guava
+    implementation libs.mysql.connectorj
+    implementation libs.tomcat.embed.jasper
+    implementation libs.spring.webmvc
+
+
+    testImplementation libs.junit.jupiter
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+application {
+    mainClass = 'bitcamp.myapp.App'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
