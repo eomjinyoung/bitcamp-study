@@ -73,7 +73,7 @@
 <body>
 <div class="board-form-container">
     <h1>새 게시글</h1>
-    <form action="/board/add" method="post">
+    <form action="/board/add" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="title">제목:</label>
             <input type="text" id="title" name="title" required>
@@ -81,6 +81,10 @@
         <div class="form-group">
             <label for="content">내용:</label>
             <textarea id="content" name="content" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="files">첨부파일:</label>
+            <input type="file" id="files" name="files" multiple>
         </div>
         <div class="form-group">
             <input type="submit" value="등록">
