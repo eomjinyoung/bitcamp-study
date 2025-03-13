@@ -65,6 +65,9 @@ public class ContextLoaderListener implements ServletContextListener {
       if (con != null && !con.isClosed()) {
         con.close();
       }
+
+      System.out.println("웹애플리케이션 자원 해제!");
+
     } catch (Exception e) {
       System.out.println("웹애플리케이션 실행 환경 해제 중 오류 발생!");
       e.printStackTrace();

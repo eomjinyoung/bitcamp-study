@@ -62,12 +62,6 @@ public class App {
     // 톰캣 서버 구동
     tomcat.start();
 
-    // SIGTERM 감지하여 종료 훅 실행
-    Signal.handle(new Signal("TERM"), sig -> {
-      System.out.println("SIGTERM received. Shutting down gracefully...");
-      System.exit(0);
-    });
-
     // JVM 종료 시 Tomcat 정상 종료
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       try {
