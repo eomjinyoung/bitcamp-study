@@ -87,7 +87,7 @@
 <body>
 <div class="board-form-container">
     <h1>게시글</h1>
-    <form action="/board/update" method="post">
+    <form action="/board/update" method="post"  enctype="multipart/form-data">
         <div class="form-group">
             <label for="no">번호:</label>
             <input type="text" id="no" name="no" value="${board.no}" readonly>
@@ -101,7 +101,8 @@
             <textarea id="content" name="content" required>${board.content}</textarea>
         </div>
         <div class="form-group">
-            <label for="attached-files">첨부파일:</label>
+            <label for="files">첨부파일:</label>
+            <input type="file" id="files" name="files" multiple>
             <ul id="attached-files">
             <c:forEach items="${board.attachedFiles}" var="attachedFile">
                 <li>

@@ -36,10 +36,19 @@ public class DefaultBoardService implements BoardService {
 
   public void update(Board board) {
     boardDao.update(board);
+
+    for (AttachedFile file : board.getAttachedFiles()) {
+      boardFileDao.insert(file);
+    }
   }
 
   public void delete(int no) {
     boardDao.delete(no);
+  }
+
+  @Override
+  public void increaseViewCount(int no) {
+    boardDao.updateViewCount(no, 1);
   }
 
   public AttachedFile getAttachedFile(int fileNo) {

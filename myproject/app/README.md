@@ -93,7 +93,27 @@
   - delete() 구현
 - BoardFileDeleteServlet 생성
 
+### 10. 게시글 변경할 때 첨부파일 추가
 
+- /board/detail.jsp 변경
+  - 첨부 파일 입력 항목 추가
+- BoardUpdateServlet 변경
+  - 멀티파트 파일 업로드 처리 추가
+- DefaultBoardService 변경
+  - update() 변경
+
+### 11. 게시글 조회수 증가
+
+- BoardService 인터페이스 변경
+  - increaseViewCount() 추가
+- DefaultBoardService 클래스 변경
+  - increaseViewCount() 구현
+- BoardDao 인터페이스 변경
+  - updateViewCount() 추가
+- MySQLBoardDao 클래스 변경
+  - updateViewCount() 구현
+- BoardDetailServlet 클래스 변경
+  - 게시글 조회수 증가
 
 ## HTTP 프로토콜 POST 요청
 ### application/x-www-form-urlencoded

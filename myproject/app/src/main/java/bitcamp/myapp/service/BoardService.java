@@ -14,6 +14,7 @@ public interface BoardService {
   Board get(int no);
   void update(Board board);
   void delete(int no);
+  void increaseViewCount(int no);
 
   AttachedFile getAttachedFile(int fileNo);
   void deleteAttachedFile(int fileNo);

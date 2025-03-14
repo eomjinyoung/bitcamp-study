@@ -176,4 +176,16 @@ public class MySQLBoardDao implements BoardDao {
     }
   }
 
+  @Override
+  public int updateViewCount(int no, int increment) {
+    String sql = "update ed_board set " +
+            "          view_count = view_count + " + increment +
+            "      where board_id=" + no;
+
+    try (Statement stmt = con.createStatement()) {
+      return stmt.executeUpdate(sql);
+    } catch (Exception e) {
+      throw new DaoException(e);
+    }
+  }
 }

@@ -20,4 +20,6 @@ public interface BoardDao {
   int update(Board board) throws DaoException;
 
   int delete(int no) throws DaoException;
+
+  int updateViewCount(int no, int increment);
 }

@@ -22,6 +22,7 @@ public class BoardDetailServlet extends HttpServlet {
       int no = Integer.parseInt(req.getParameter("no"));
 
       BoardService boardService = (BoardService) getServletContext().getAttribute("boardService");
+      boardService.increaseViewCount(no);
       Board board = boardService.get(no);
 
       req.setAttribute("board", board);
