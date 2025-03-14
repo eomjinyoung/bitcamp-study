@@ -22,16 +22,6 @@ public class ContextLoaderListener implements ServletContextListener {
   @Override
   public void contextInitialized(ServletContextEvent sce) {
     try {
-      // 1. JDBC Driver 로딩(java.sql.Driver 구현체 로딩)
-//      Class.forName("com.mysql.jdbc.Driver");
-
-      // 2. Driver 구현 객체 생성
-//      Driver driver = new com.mysql.jdbc.Driver();
-
-      // 3. Driver 객체를 JDBC 드라이버 관리자에 등록
-//      DriverManager.registerDriver(driver);
-
-      // 4. DB에 연결
       con = DriverManager.getConnection(
               "jdbc:mysql://db-32e40j-kr.vpc-pub-cdb.ntruss.com:3306/studentdb",
               "student",

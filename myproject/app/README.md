@@ -2,8 +2,9 @@
 
 ## 학습목표
 
+- 서블릿 필터를 다룰 수 있다.
 - 네이버 클라우드의 Object Storage 사용할 수 있다.
-- 멀티파트 파일 업로드 다룰 수 있다.
+- 멀티파트 파일 업로드를 다룰 수 있다.
 
 ## 작업
 
@@ -20,9 +21,17 @@
 
 ### 3. 네이버 클라우드의 Storage Object 서비스 설정
 
-- 
+- 버킷 생성
   
-  
+### 4. Object Storage 서비스를 활용한 파일 업로드 처리
+
+- 서비스 컴포넌트 생성
+  - StorageService 인터페이스 생성
+  - NCPObjectStorageService 클래스생성
+- BoardAddServlet 변경
+  - NCP의 Object Storage를 이용한 파일 업로드 적용
+
+
 ## HTTP 프로토콜 POST 요청
 ### application/x-www-form-urlencoded
 POST /board/add HTTP/1.1
