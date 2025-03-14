@@ -3,6 +3,7 @@ package bitcamp.myapp.servlet;
 import bitcamp.myapp.service.BoardService;
 import bitcamp.myapp.service.NCPObjectStorageService;
 import bitcamp.myapp.service.StorageService;
+import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
 
@@ -39,13 +40,13 @@ public class BoardAddServlet extends HttpServlet {
       board.setContent(req.getParameter("content"));
       board.setWriter(loginUser);
 
-      BoardService boardService = (BoardService) getServletContext().getAttribute("boardService");
-      boardService.add(board);
-
+      // 파일 업로드 처리
       StorageService storageService =
               (StorageService) getServletContext().getAttribute("storageService");
 
       Collection<Part> parts = req.getParts();
+      ArrayList<AttachedFile> fileList = new ArrayList<>();
+
       for (Part part : parts) {
         if (!part.getName().equals("files")) {
           continue;
@@ -55,8 +56,18 @@ public class BoardAddServlet extends HttpServlet {
 
         // 클라우드에 업로드
         storageService.upload("board/" + filename, part.getInputStream());
+
+        AttachedFile attachedFile = new AttachedFile();
+        attachedFile.setFilename(filename);
+        attachedFile.setOriginFilename(part.getSubmittedFileName());
+
+        fileList.add(attachedFile);
       }
 
+      board.setAttachedFiles(fileList);
+
+      BoardService boardService = (BoardService) getServletContext().getAttribute("boardService");
+      boardService.add(board);
 
       resp.sendRedirect("/board/list");
 

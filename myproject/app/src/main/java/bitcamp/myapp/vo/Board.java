@@ -1,6 +1,7 @@
 package bitcamp.myapp.vo;
 
 import java.sql.Date;
+import java.util.List;
 
 public class Board {
   private int no;
@@ -9,6 +10,7 @@ public class Board {
   private int viewCount;
   private Member writer;
   private Date createDate;
+  private List<AttachedFile> attachedFiles;
 
   public int getNo() {
     return no;
@@ -56,5 +58,13 @@ public class Board {
 
   public void setCreateDate(Date createDate) {
     this.createDate = createDate;
+  }
+
+  public List<AttachedFile> getAttachedFiles() {
+    return attachedFiles;
+  }
+
+  public void setAttachedFiles(List<AttachedFile> attachedFiles) {
+    this.attachedFiles = attachedFiles;
   }
 }

@@ -1,9 +1,6 @@
 package bitcamp.myapp.listener;
 
-import bitcamp.myapp.dao.BoardDao;
-import bitcamp.myapp.dao.MemberDao;
-import bitcamp.myapp.dao.MySQLBoardDao;
-import bitcamp.myapp.dao.MySQLMemberDao;
+import bitcamp.myapp.dao.*;
 import bitcamp.myapp.service.*;
 import org.checkerframework.checker.units.qual.N;
 
@@ -31,6 +28,7 @@ public class ContextLoaderListener implements ServletContextListener {
 
       MySQLMemberDao memberDao = new MySQLMemberDao(con);
       MySQLBoardDao boardDao = new MySQLBoardDao(con);
+      MySQLBoardFileDao boardFileDao = new MySQLBoardFileDao(con);
 
       DefaultMemberService memberService = new DefaultMemberService(memberDao);
       ctx.setAttribute("memberService", memberService);

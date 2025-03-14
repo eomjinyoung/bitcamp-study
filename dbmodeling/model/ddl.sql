@@ -425,9 +425,10 @@ ALTER TABLE ed_board
 
 -- 첨부파일
 CREATE TABLE ed_attach_file (
-	af_id    INTEGER      NOT NULL COMMENT '첨부파일번호', -- 첨부파일번호
-	board_id INTEGER      NOT NULL COMMENT '게시판번호', -- 게시판번호
-	filename VARCHAR(255) NOT NULL COMMENT '파일명' -- 파일명
+	af_id           INTEGER      NOT NULL COMMENT '첨부파일번호', -- 첨부파일번호
+	board_id        INTEGER      NOT NULL COMMENT '게시판번호', -- 게시판번호
+	filename        VARCHAR(255) NOT NULL COMMENT '파일명', -- 파일명
+	origin_filename VARCHAR(255) NULL     COMMENT '오리저널파일명' -- 오리저널파일명
 )
 COMMENT '첨부파일';
 
