@@ -12,18 +12,26 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Properties;
 
 public class NCPObjectStorageService implements StorageService {
-  final String endPoint = "";
-  final String regionName = "";
-  final String accessKey = "";
-  final String secretKey = "";
+  final String endPoint;
+  final String regionName;
+  final String accessKey;
+  final String secretKey;
 
-  final String bucketName = "";
+  final String bucketName;
 
   final AmazonS3 s3;
 
-  public NCPObjectStorageService() {
+  public NCPObjectStorageService(Properties props) {
+
+    this.endPoint = props.getProperty("ncp.end-point");
+    this.regionName = props.getProperty("ncp.region-name");
+    this.accessKey = props.getProperty("ncp.access-key");
+    this.secretKey = props.getProperty("ncp.secret-key");
+    this.bucketName = props.getProperty("ncp.bucket-name");
+
     s3 = AmazonS3ClientBuilder.standard()
             .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
             .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))

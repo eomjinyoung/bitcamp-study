@@ -8,8 +8,12 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 @WebListener
 public class ContextLoaderListener implements ServletContextListener {
@@ -19,10 +23,14 @@ public class ContextLoaderListener implements ServletContextListener {
   @Override
   public void contextInitialized(ServletContextEvent sce) {
     try {
+      String userHome = System.getProperty("user.home");
+      Properties appProps = new Properties();
+      appProps.load(new FileReader(userHome + "/config/bitcamp-study.properties"));
+
       con = DriverManager.getConnection(
-              "jdbc:mysql://db-32e40j-kr.vpc-pub-cdb.ntruss.com:3306/studentdb",
-              "student",
-              "bitcamp123!@#");
+              appProps.getProperty("jdbc.url"),
+              appProps.getProperty("jdbc.username"),
+              appProps.getProperty("jdbc.password"));
 
       ServletContext ctx = sce.getServletContext();
 
@@ -33,10 +41,10 @@ public class ContextLoaderListener implements ServletContextListener {
       DefaultMemberService memberService = new DefaultMemberService(memberDao);
       ctx.setAttribute("memberService", memberService);
 
-      DefaultBoardService boardService = new DefaultBoardService(boardDao);
+      DefaultBoardService boardService = new DefaultBoardService(boardDao, boardFileDao);
       ctx.setAttribute("boardService", boardService);
 
-      NCPObjectStorageService storageService = new NCPObjectStorageService();
+      NCPObjectStorageService storageService = new NCPObjectStorageService(appProps);
       ctx.setAttribute("storageService", storageService);
 
       System.out.println("웹애플리케이션 실행 환경 준비!");

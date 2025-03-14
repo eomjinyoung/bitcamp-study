@@ -68,7 +68,13 @@ public class MySQLBoardDao implements BoardDao {
 
 
     try (Statement stmt = con.createStatement()) {
-      return stmt.executeUpdate(sql);
+      int count = stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+
+      ResultSet rs = stmt.getGeneratedKeys(); // 자동 생성 번호 PK 값을 꺼낼 객체 준비
+      rs.next(); // 이 객체를 사용하여 서버에서 자동 생성된 PK 값을 가져온다.
+      board.setNo(rs.getInt(1)); // 가져온 PK 값 중에서 첫 번째 값을 꺼낸다. PK가 여러 컬럼으로 되어 있을 경우를 대비함.
+
+      return count;
     } catch (Exception e) {
       throw new DaoException(e);
     }
