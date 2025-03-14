@@ -68,7 +68,7 @@ public class App {
         e.printStackTrace();
       }
     }));
-    
+
     // 톰캣 서버 구동
     tomcat.start();
 
