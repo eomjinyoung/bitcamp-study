@@ -45,4 +45,9 @@ public class DefaultBoardService implements BoardService {
   public AttachedFile getAttachedFile(int fileNo) {
     return boardFileDao.findByNo(fileNo);
   }
+
+  @Override
+  public void deleteAttachedFile(int fileNo) {
+    boardFileDao.delete(fileNo);
+  }
 }

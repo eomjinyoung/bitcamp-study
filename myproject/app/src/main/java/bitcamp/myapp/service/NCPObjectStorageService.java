@@ -76,5 +76,12 @@ public class NCPObjectStorageService implements StorageService {
     }
   }
 
-
+  @Override
+  public void delete(String filePath) {
+    try {
+      s3.deleteObject(bucketName, filePath);
+    } catch (Exception e) {
+      throw new StorageServiceException(e);
+    }
+  }
 }

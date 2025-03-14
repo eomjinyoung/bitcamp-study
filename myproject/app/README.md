@@ -21,13 +21,15 @@
 
 ### 3. 네이버 클라우드의 Storage Object 서비스 설정
 
-- 버킷 생성
+- 버킷 생성(예: bitcamp-118)
   
 ### 4. Object Storage 서비스를 활용한 파일 업로드 처리
 
 - 서비스 컴포넌트 생성
   - StorageService 인터페이스 생성
+    - upload() 추가
   - NCPObjectStorageService 클래스생성
+    - upload() 구현
 - BoardAddServlet 변경
   - NCP의 Object Storage를 이용한 파일 업로드 적용
 
@@ -36,8 +38,11 @@
 - ed_attach_file 테이블에 origin_filename 컬럼 추가
 - BoardFile 클래스 생성
 - BoardFileDao 인터페이스 생성
+  - insert() 추가
 - DefaultBoardFileDao 클래스 생성
+  - insert() 구현
 - DefaultBoardService 클래스 변경
+  - add() 변경
 - ContextLoaderListener 클래스 변경
 
 ### 6. 애플리케이션 프로퍼티를 .properties 파일에 저장
@@ -59,31 +64,33 @@
 - BoardFileDao 인터페이스 변경
   - findByNo() 추가
 - MySQLBoardFileDao 클래스 변경
-  - findByNo() 추가
+  - findByNo() 구현
 - BoardService 인터페이스 변경
   - getAttachedFile() 추가
 - DefaultBoardService 클래스 변경
-  - getAttachedFile() 추가
+  - getAttachedFile() 구현
 - StorageService 인터페이스 변경
   - download() 추가
 - NCPObjectStorageService 클래스 변경
-  - download() 추가
-- BoardDownloadServlet 생성
+  - download() 구현
+- BoardFileDownloadServlet 생성
 
 ### 9. 첨부파일 삭제
 
+- /board/detail.jsp 변경
+  - 첨부파일 링크 옆에 삭제 버튼 추가
 - BoardFileDao 인터페이스 변경
   - delete() 추가
 - MySQLBoardFileDao 클래스 변경
-  - delete() 추가
+  - delete() 구현
 - BoardService 인터페이스 변경
   - deleteAttachedFile() 추가
 - DefaultBoardService 클래스 변경
-  - deleteAttachedFile() 추가  
+  - deleteAttachedFile() 구현  
 - StorageService 인터페이스 변경
   - delete() 추가
 - NCPObjectStorageService 클래스 변경
-  - delete() 추가
+  - delete() 구현
 - BoardFileDeleteServlet 생성
 
 

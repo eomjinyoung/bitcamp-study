@@ -3,8 +3,6 @@ package bitcamp.myapp.servlet;
 import bitcamp.myapp.service.BoardService;
 import bitcamp.myapp.service.StorageService;
 import bitcamp.myapp.vo.AttachedFile;
-import bitcamp.myapp.vo.Board;
-import bitcamp.myapp.vo.Member;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,8 +14,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-@WebServlet("/board/download")
-public class BoardDownloadServlet extends HttpServlet {
+@WebServlet("/board/file/download")
+public class BoardFileDownloadServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     try {

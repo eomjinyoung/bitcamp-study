@@ -16,4 +16,5 @@ public interface BoardService {
   void delete(int no);
 
   AttachedFile getAttachedFile(int fileNo);
+  void deleteAttachedFile(int fileNo);
 }

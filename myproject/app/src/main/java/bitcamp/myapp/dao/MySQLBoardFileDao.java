@@ -74,4 +74,20 @@ public class MySQLBoardFileDao implements BoardFileDao {
     }
 
   }
+
+  @Override
+  public int delete(int fileNo) {
+    /*
+      delete from ed_attach_file
+      where af_id=fileNo
+     */
+    String sql = "delete from ed_attach_file\n" +
+            "      where af_id=" + fileNo;
+
+    try (Statement stmt = con.createStatement()) {
+      return stmt.executeUpdate(sql);
+    } catch (Exception e) {
+      throw new DaoException(e);
+    }
+  }
 }
