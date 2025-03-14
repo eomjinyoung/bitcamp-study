@@ -36,4 +36,42 @@ public class MySQLBoardFileDao implements BoardFileDao {
     }
 
   }
+
+  public AttachedFile findByNo(int fileNo) {
+    /*
+      select
+        af_id,
+        board_id,
+        filename,
+        origin_filename
+      from ed_attach_file
+      where af_id=fileNo
+     */
+    String sql = "select" +
+            "        af_id," +
+            "        board_id," +
+            "        filename," +
+            "        origin_filename" +
+            "      from ed_attach_file" +
+            "      where af_id=" + fileNo;
+
+    try (Statement stmt = con.createStatement()) {
+      ResultSet rs = stmt.executeQuery(sql);
+      if (!rs.next()) {
+        return null;
+      }
+
+      AttachedFile attachedFile = new AttachedFile();
+      attachedFile.setNo(rs.getInt("af_id"));
+      attachedFile.setBoardNo(rs.getInt("board_id"));
+      attachedFile.setFilename(rs.getString("filename"));
+      attachedFile.setOriginFilename(rs.getString("origin_filename"));
+
+      return attachedFile;
+
+    } catch (Exception e) {
+      throw new DaoException(e);
+    }
+
+  }
 }

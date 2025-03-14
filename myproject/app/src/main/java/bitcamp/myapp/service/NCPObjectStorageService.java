@@ -6,12 +6,9 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Properties;
 
 public class NCPObjectStorageService implements StorageService {
@@ -52,6 +49,27 @@ public class NCPObjectStorageService implements StorageService {
 
     try {
       s3.putObject(putObjectRequest);
+
+    } catch (Exception e) {
+      throw new StorageServiceException(e);
+    }
+  }
+
+  @Override
+  public void download(String filePath, OutputStream fileOut) {
+    try {
+      S3Object s3Object = s3.getObject(bucketName, filePath);
+      S3ObjectInputStream s3ObjectInputStream = s3Object.getObjectContent();
+
+
+      byte[] bytesArray = new byte[4096];
+      int bytesRead = -1;
+      while ((bytesRead = s3ObjectInputStream.read(bytesArray)) != -1) {
+        fileOut.write(bytesArray, 0, bytesRead);
+      }
+
+      s3ObjectInputStream.close();
+      fileOut.close();
 
     } catch (Exception e) {
       throw new StorageServiceException(e);

@@ -2,6 +2,7 @@ package bitcamp.myapp.service;
 
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.dao.MemberDao;
+import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
 
@@ -13,4 +14,6 @@ public interface BoardService {
   Board get(int no);
   void update(Board board);
   void delete(int no);
+
+  AttachedFile getAttachedFile(int fileNo);
 }

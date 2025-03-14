@@ -104,7 +104,7 @@
             <label for="attached-files">첨부파일:</label>
             <ul id="attached-files">
             <c:forEach items="${board.attachedFiles}" var="attachedFile">
-                <li><a href="/board/download?filename=${attachedFile.filename}">${attachedFile.originFilename}</a></li>
+                <li><a href="/board/download?fileNo=${attachedFile.no}">${attachedFile.originFilename}</a></li>
             </c:forEach>
             </ul>
         </div>
