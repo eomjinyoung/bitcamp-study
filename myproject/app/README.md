@@ -49,10 +49,42 @@
   - ContextLoaderListener 클래스 변경
   - NCPObjectStorageService 클래스 변경
 
-### 7. 게시글 조회 화면에 첨부 파일 다운로드 기능 추가
+### 7. 게시글 조회 화면에 첨부 파일 목록 출력
 
-- MySQLBoardDao.findBy() 변경
+- MySQLBoardDao.findByNo() 변경
 - /board/detail.jsp 변경
+
+### 8. 첨부파일 다운로드 
+
+- BoardFileDao 인터페이스 변경
+  - findByNo() 추가
+- MySQLBoardFileDao 클래스 변경
+  - findByNo() 추가
+- BoardService 인터페이스 변경
+  - getAttachedFile() 추가
+- DefaultBoardService 클래스 변경
+  - getAttachedFile() 추가
+- StorageService 인터페이스 변경
+  - download() 추가
+- NCPObjectStorageService 클래스 변경
+  - download() 추가
+- BoardDownloadServlet 생성
+
+### 9. 첨부파일 삭제
+
+- BoardFileDao 인터페이스 변경
+  - delete() 추가
+- MySQLBoardFileDao 클래스 변경
+  - delete() 추가
+- BoardService 인터페이스 변경
+  - deleteAttachedFile() 추가
+- DefaultBoardService 클래스 변경
+  - deleteAttachedFile() 추가  
+- StorageService 인터페이스 변경
+  - delete() 추가
+- NCPObjectStorageService 클래스 변경
+  - delete() 추가
+- BoardFileDeleteServlet 생성
 
 
 
