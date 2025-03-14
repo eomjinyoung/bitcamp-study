@@ -31,6 +31,30 @@
 - BoardAddServlet 변경
   - NCP의 Object Storage를 이용한 파일 업로드 적용
 
+### 5. 첨부파일 정보를 DB에 저장
+
+- ed_attach_file 테이블에 origin_filename 컬럼 추가
+- BoardFile 클래스 생성
+- BoardFileDao 인터페이스 생성
+- DefaultBoardFileDao 클래스 생성
+- DefaultBoardService 클래스 변경
+- ContextLoaderListener 클래스 변경
+
+### 6. 애플리케이션 프로퍼티를 .properties 파일에 저장
+
+- $HOME/config/bitcamp-study.properties 파일 생성
+  - NCP Object Storage 관련 정보 보관
+  - JDBC 관련 정보 보관
+- .properties 파일 로딩 
+  - ContextLoaderListener 클래스 변경
+  - NCPObjectStorageService 클래스 변경
+
+### 7. 게시글 조회 화면에 첨부 파일 다운로드 기능 추가
+
+- MySQLBoardDao.findBy() 변경
+- /board/detail.jsp 변경
+
+
 
 ## HTTP 프로토콜 POST 요청
 ### application/x-www-form-urlencoded

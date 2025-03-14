@@ -92,6 +92,9 @@
     - 게시판 구현(CRUD)
 
 ### 2025-03-13(목)
+- 기술 이론
+    - URL 인코딩과 디코딩
+    - POST 요청: application/x-www-form-urlencoded 와 multipart/form-data 
 - 02. 서비스, DAO 컴포넌트에 인터페이스 도입
     - SOLID 설계 원칙: DIP 적용
     - SOLID 설계 원칙: ISP 이해
@@ -100,11 +103,17 @@
     - SOLID 설계 원칙: OCP 적용
     - 네이버 클라우드 Object Storage 설정
 
+
 ### 2025-03-14(금)
+- 기술 이론
+    - JVM 프로퍼티 조회하는 방법
+    - .properties 파일을 다루는 방법
 - 03. 네이버 클라우드의 Object Storage 활용: 게시글 첨부파일 보관(계속)
     - 톰캣 서버에 SIGKILL 또는 SIGTERM 종료 신호 보내기 및 신호 가로채기
-    - 업로드 파일명을 DB에 저장
-    
+    - 업로드 파일명 및 오리지널 파일명을 DB에 저장
+    - DB 정보 및 NCP 관련 정보를 .properties 파일로 분리하기
+
+
 ### 2025-03-17(월)
 - 파이널 팀 프로젝트
     - 팀 프로젝트 주제 1차 발표(팀당 2개 이상)
