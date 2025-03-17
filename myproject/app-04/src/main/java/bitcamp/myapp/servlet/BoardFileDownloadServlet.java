@@ -3,8 +3,6 @@ package bitcamp.myapp.servlet;
 import bitcamp.myapp.service.BoardService;
 import bitcamp.myapp.service.StorageService;
 import bitcamp.myapp.vo.AttachedFile;
-import bitcamp.myapp.vo.Board;
-import bitcamp.myapp.vo.Member;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,33 +14,24 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-@WebServlet("/board/delete")
-public class BoardDeleteServlet extends HttpServlet {
+@WebServlet("/board/file/download")
+public class BoardFileDownloadServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     try {
-      Member loginUser = (Member) req.getSession().getAttribute("loginUser");
-      if (loginUser == null) {
-        throw new Exception("로그인이 필요합니다.");
-      }
-
-      int no = Integer.parseInt(req.getParameter("no"));
-
+      int fileNo = Integer.parseInt(req.getParameter("fileNo"));
       BoardService boardService = (BoardService) getServletContext().getAttribute("boardService");
-      Board board = boardService.get(no);
+      AttachedFile attachedFile = boardService.getAttachedFile(fileNo);
 
-      if (board.getWriter().getNo() != loginUser.getNo()) {
-        throw new Exception("삭제 권한이 없습니다.");
-      }
+      // 응답헤더를 통해 클라이언트에 보내는 파일의 이름을 알려준다.
+      // 그러면 웹브라우저는 이 이름으로 다운로드 할 수 있게 다운로드 창을 띄운다.
+      resp.setHeader("Content-Disposition", "attachment; filename=" + attachedFile.getOriginFilename());
 
-      // 네이버 클라우드 Object Storage에 업로드한 파일 삭제
       StorageService storageService = (StorageService) getServletContext().getAttribute("storageService");
-      for (AttachedFile attachedFile : board.getAttachedFiles()) {
-        storageService.delete("board/" + attachedFile.getFilename());
-      }
-
-      boardService.delete(no);
-      resp.sendRedirect("/board/list");
+      storageService.download(
+              "board/" + attachedFile.getFilename(), // 스토리지 서비스의 버킷에서 다운로드 할 파일의 경로
+              resp.getOutputStream() // 다운로드 한 데이터를 보낼 클라이언트 출력 스트림
+      );
 
     } catch (Exception e) {
       StringWriter stringWriter = new StringWriter();

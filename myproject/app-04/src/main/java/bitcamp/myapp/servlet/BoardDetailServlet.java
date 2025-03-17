@@ -1,10 +1,7 @@
 package bitcamp.myapp.servlet;
 
 import bitcamp.myapp.service.BoardService;
-import bitcamp.myapp.service.StorageService;
-import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
-import bitcamp.myapp.vo.Member;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,34 +12,23 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.List;
 
-@WebServlet("/board/delete")
-public class BoardDeleteServlet extends HttpServlet {
+@WebServlet("/board/detail")
+public class BoardDetailServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     try {
-      Member loginUser = (Member) req.getSession().getAttribute("loginUser");
-      if (loginUser == null) {
-        throw new Exception("로그인이 필요합니다.");
-      }
-
       int no = Integer.parseInt(req.getParameter("no"));
 
       BoardService boardService = (BoardService) getServletContext().getAttribute("boardService");
+      boardService.increaseViewCount(no);
       Board board = boardService.get(no);
 
-      if (board.getWriter().getNo() != loginUser.getNo()) {
-        throw new Exception("삭제 권한이 없습니다.");
-      }
+      req.setAttribute("board", board);
 
-      // 네이버 클라우드 Object Storage에 업로드한 파일 삭제
-      StorageService storageService = (StorageService) getServletContext().getAttribute("storageService");
-      for (AttachedFile attachedFile : board.getAttachedFiles()) {
-        storageService.delete("board/" + attachedFile.getFilename());
-      }
-
-      boardService.delete(no);
-      resp.sendRedirect("/board/list");
+      resp.setContentType("text/html; charset=UTF-8");
+      req.getRequestDispatcher("/board/detail.jsp").include(req, resp);
 
     } catch (Exception e) {
       StringWriter stringWriter = new StringWriter();

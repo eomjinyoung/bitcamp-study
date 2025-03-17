@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-@WebServlet("/board/delete")
-public class BoardDeleteServlet extends HttpServlet {
+@WebServlet("/board/file/delete")
+public class BoardFileDeleteServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     try {
@@ -26,23 +26,22 @@ public class BoardDeleteServlet extends HttpServlet {
         throw new Exception("로그인이 필요합니다.");
       }
 
-      int no = Integer.parseInt(req.getParameter("no"));
+      int fileNo = Integer.parseInt(req.getParameter("no"));
 
       BoardService boardService = (BoardService) getServletContext().getAttribute("boardService");
-      Board board = boardService.get(no);
+      AttachedFile attachedFile = boardService.getAttachedFile(fileNo);
+      Board board = boardService.get(attachedFile.getBoardNo());
 
       if (board.getWriter().getNo() != loginUser.getNo()) {
         throw new Exception("삭제 권한이 없습니다.");
       }
 
-      // 네이버 클라우드 Object Storage에 업로드한 파일 삭제
       StorageService storageService = (StorageService) getServletContext().getAttribute("storageService");
-      for (AttachedFile attachedFile : board.getAttachedFiles()) {
-        storageService.delete("board/" + attachedFile.getFilename());
-      }
+      storageService.delete("board/" + attachedFile.getFilename());
 
-      boardService.delete(no);
-      resp.sendRedirect("/board/list");
+      boardService.deleteAttachedFile(fileNo);
+
+      resp.sendRedirect("/board/detail?no=" + board.getNo());
 
     } catch (Exception e) {
       StringWriter stringWriter = new StringWriter();
