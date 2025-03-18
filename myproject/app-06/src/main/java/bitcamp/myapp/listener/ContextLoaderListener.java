@@ -46,7 +46,7 @@ public class ContextLoaderListener implements ServletContextListener {
       ctx.setAttribute("memberService",
               transactionProxyFactory.createProxy(memberService, MemberService.class));
 
-      DefaultBoardService boardService = new DefaultBoardService(boardDao, boardFileDao, con);
+      DefaultBoardService boardService = new DefaultBoardService(boardDao, boardFileDao);
       ctx.setAttribute("boardService",
               transactionProxyFactory.createProxy(boardService, BoardService.class));
 

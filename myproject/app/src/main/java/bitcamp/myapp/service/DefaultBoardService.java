@@ -13,16 +13,13 @@ public class DefaultBoardService implements BoardService {
 
   private BoardDao boardDao;
   private BoardFileDao boardFileDao;
-  private Connection con;
 
 
   public DefaultBoardService(
           BoardDao boardDao,
-          BoardFileDao boardFileDao,
-          Connection con) {
+          BoardFileDao boardFileDao) {
     this.boardDao = boardDao;
     this.boardFileDao = boardFileDao;
-    this.con = con;
   }
 
   @Override
@@ -36,12 +33,6 @@ public class DefaultBoardService implements BoardService {
     System.out.println("DefaultBoardService.add() 호출됨!");
 
     boardDao.insert(board);
-
-    try {
-      Thread.sleep(10000); // 10초 잠자는 동안 다른 웹브라우저에서 게시글을 삭제한다.
-    } catch (Exception e) {
-
-    }
 
     int count = 0;
     for (AttachedFile file : board.getAttachedFiles()) {

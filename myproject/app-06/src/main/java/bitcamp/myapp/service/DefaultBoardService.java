@@ -13,16 +13,13 @@ public class DefaultBoardService implements BoardService {
 
   private BoardDao boardDao;
   private BoardFileDao boardFileDao;
-  private Connection con;
 
 
   public DefaultBoardService(
           BoardDao boardDao,
-          BoardFileDao boardFileDao,
-          Connection con) {
+          BoardFileDao boardFileDao) {
     this.boardDao = boardDao;
     this.boardFileDao = boardFileDao;
-    this.con = con;
   }
 
   @Override
