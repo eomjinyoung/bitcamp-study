@@ -1,31 +1,29 @@
-# 05. 트랜잭션 다루기
+# 06. 트랜잭션 제어 코드를 캡슐화하기
 
 ## 학습목표
 
-- 트랜잭션의 개념을 설명할 수 있다.
-- MySQL에서 트랜잭션을 다룰 수 있다.
+- 애노테이션을 정의하고 다룰 수 있다.
+- GoF의 Proxy 패턴을 이해하고 구현할 수 있다.
 
 ## 작업
 
-### 1. MySQL 클라이언트를 통해 트랜잭션 제어
+### 1. 트랜잭션을 표시할 애노테이션 정의
 
-- 트랜잭션을 시작하기
-  - `mysql> set autocommit = 0`
-- 데이터 변경 작업 실행하기
-  - `insert into ed_board(member_id, title, content) values(101, 'aaa1', 'aaaaa');`
-  - `insert into ed_board(member_id, title, content) values(102, 'aaa1', 'aaaaa');`
-  - `insert into ed_board(member_id, title, content) values(103, 'aaa1', 'aaaaa');`
-  - `update ed_board set title='xxxx' where board_id=27;`
-- 데이터 결과 조회
-  - 클라이언트1: select 실행 및 결과 확인
-  - 클라이언트2: select 실행 및 결과 확인
-  - 결과의 차이점을 이해
-- commit 실행 후
-  - 클라이언트1과 클라이언트2의 select 실행 결과 확인
-- rollback 실행 후 
-  - 클라이언트1과 클라이언트2의 select 실행 결과 확인
+- Transactional 애노테이션 추가
 
-### 2. JDBC 에서 트랜잭션 제어
+### 2. 트랜잭션 애노테이션 적용
 
 - DefaultBoardService 변경
-  - add(), update(), delete() 메서드에 트랜잭션 적용
+  - 트랜잭션을 다루는 메서드에 Transactional 애노테이션을 붙인다.
+
+### 3. 프록시 객체 팩토리 준비
+
+- TransactionProxyFactory 클래스 생성
+
+### 4. 트랜잭션 코드를 처리할 대행자 준비
+
+- TransactionInvocationHandler 클래스 생성
+
+### 5. 서비스 객체에 적용
+
+- ContextLoaderList 클래스 변경
