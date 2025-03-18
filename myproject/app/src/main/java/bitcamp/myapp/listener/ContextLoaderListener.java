@@ -41,7 +41,7 @@ public class ContextLoaderListener implements ServletContextListener {
       DefaultMemberService memberService = new DefaultMemberService(memberDao);
       ctx.setAttribute("memberService", memberService);
 
-      DefaultBoardService boardService = new DefaultBoardService(boardDao, boardFileDao);
+      DefaultBoardService boardService = new DefaultBoardService(boardDao, boardFileDao, con);
       ctx.setAttribute("boardService", boardService);
 
       NCPObjectStorageService storageService = new NCPObjectStorageService(appProps);

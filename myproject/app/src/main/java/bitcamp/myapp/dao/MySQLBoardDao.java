@@ -62,6 +62,7 @@ public class MySQLBoardDao implements BoardDao {
 
     String sql = "insert into ed_board(title, content, member_id) values (?, ?, ?)";
 
+
     try (PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
       stmt.setString(1, board.getTitle());

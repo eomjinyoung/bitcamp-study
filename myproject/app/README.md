@@ -1,31 +1,31 @@
-# 04. SQL 삽입 공격 차단하기 및 부모 테이블 데이터 삭제하기
+# 05. 트랜잭션 다루기
 
 ## 학습목표
 
-- SQL 삽입 공격의 개념을 이해한다.
-- SQL 삽입 공격의 예를 보일 수 있다.
-- SQL 삽입 공격의 보안 약점을 해소하는 코드를 작성할 수 있다. 
-  - PreparedStatement를 사용할 수 있다.
-- 자식 테이블에 데이터가 있는 부모 테이블의 데이터를 삭제할 수 있다.
-
+- 트랜잭션의 개념을 설명할 수 있다.
+- MySQL에서 트랜잭션을 다룰 수 있다.
 
 ## 작업
 
-### 1. 삽입 공격 방어하기
+### 1. MySQL 클라이언트를 통해 트랜잭션 제어
 
-- MySQLBoardDao 변경
-  - Statement를 PreparedStatement로 변경한다.
-- MySQLBoardFileDao 변경
-  - Statement를 PreparedStatement로 변경한다.
-- MySQLMemberDao 변경
-  - Statement를 PreparedStatement로 변경한다.
+- 트랜잭션을 시작하기
+  - `mysql> set autocommit = 0`
+- 데이터 변경 작업 실행하기
+  - `insert into ed_board(member_id, title, content) values(101, 'aaa1', 'aaaaa');`
+  - `insert into ed_board(member_id, title, content) values(102, 'aaa1', 'aaaaa');`
+  - `insert into ed_board(member_id, title, content) values(103, 'aaa1', 'aaaaa');`
+  - `update ed_board set title='xxxx' where board_id=27;`
+- 데이터 결과 조회
+  - 클라이언트1: select 실행 및 결과 확인
+  - 클라이언트2: select 실행 및 결과 확인
+  - 결과의 차이점을 이해
+- commit 실행 후
+  - 클라이언트1과 클라이언트2의 select 실행 결과 확인
+- rollback 실행 후 
+  - 클라이언트1과 클라이언트2의 select 실행 결과 확인
 
-### 2. 첨부 파일이 있는 게시글 삭제 오류 해결
+### 2. JDBC 에서 트랜잭션 제어
 
-- 게시글의 첨부 파일 데이터 모두 삭제하기
-  - BoardFileDao.deleteAllByBoardNo() 메서드 추가
-  - MySQLBoardFileDao.deleteAllByBoardNo() 메서드 구현
-- 게시글 삭제할 때 첨부 파일 데이터를 먼저 삭제하기
-  - DefaultBoardService.delete() 메서드 변경
-- 게시글 삭제할 때 네이버 클라우드의 업로드 파일도 삭제하기
-  - BoardDeleteServlet 변경
+- DefaultBoardService 변경
+  - add(), update(), delete() 메서드에 트랜잭션 적용

@@ -5,16 +5,23 @@ import bitcamp.myapp.dao.BoardFileDao;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 
+import java.sql.Connection;
 import java.util.List;
 
 public class DefaultBoardService implements BoardService {
 
   private BoardDao boardDao;
   private BoardFileDao boardFileDao;
+  private Connection con;
 
-  public DefaultBoardService(BoardDao boardDao, BoardFileDao boardFileDao) {
+
+  public DefaultBoardService(
+          BoardDao boardDao,
+          BoardFileDao boardFileDao,
+          Connection con) {
     this.boardDao = boardDao;
     this.boardFileDao = boardFileDao;
+    this.con = con;
   }
 
   public List<Board> list() {
@@ -22,11 +29,30 @@ public class DefaultBoardService implements BoardService {
   }
 
   public void add(Board board) {
-    boardDao.insert(board);
+    try {
+      con.setAutoCommit(false);
 
-    for (AttachedFile file : board.getAttachedFiles()) {
-      file.setBoardNo(board.getNo());
-      boardFileDao.insert(file);
+      boardDao.insert(board);
+
+      int count = 0;
+      for (AttachedFile file : board.getAttachedFiles()) {
+        file.setBoardNo(board.getNo());
+        boardFileDao.insert(file);
+        count++;
+        if (count > 1) {
+          throw new Exception("일부러 예외 발생!");
+        }
+      }
+
+      con.commit();
+
+    } catch (Exception e) {
+      try {con.rollback();} catch (Exception e2) {}
+      throw new ServiceException(e);
+
+    } finally {
+      try {con.setAutoCommit(true);} catch (Exception e) {}
+
     }
   }
 
