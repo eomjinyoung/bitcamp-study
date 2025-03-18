@@ -37,6 +37,12 @@ public class DefaultBoardService implements BoardService {
 
     boardDao.insert(board);
 
+    try {
+      Thread.sleep(10000); // 10초 잠자는 동안 다른 웹브라우저에서 게시글을 삭제한다.
+    } catch (Exception e) {
+
+    }
+
     int count = 0;
     for (AttachedFile file : board.getAttachedFiles()) {
       if (count > 1) {
