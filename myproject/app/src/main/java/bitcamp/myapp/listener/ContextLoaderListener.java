@@ -51,7 +51,7 @@ public class ContextLoaderListener implements ServletContextListener {
       MySQLBoardFileDao boardFileDao = new MySQLBoardFileDao(con, sqlSessionFactory);
 
       // 서비스 객체의 트랜잭션을 처리할 프록시 객체 생성기
-      TransactionProxyFactory transactionProxyFactory = new TransactionProxyFactory(con);
+      TransactionProxyFactory transactionProxyFactory = new TransactionProxyFactory(sqlSessionFactory);
 
       DefaultMemberService memberService = new DefaultMemberService(memberDao);
       ctx.setAttribute("memberService",

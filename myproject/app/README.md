@@ -31,5 +31,10 @@
 - bitcamp/myapp/mapper/BoardDao.xml 생성
   - MySQLBoardDao에서 사용할 SQL 문을 보관
 
-  
+### 4. 트랜잭션 제어
+
+- TransactionInvocationHandler 변경
+- TransactionProxyFactory 변경
+- SqlSessionFactoryProxy 생성
+- ContextLoaderListener 변경
 
