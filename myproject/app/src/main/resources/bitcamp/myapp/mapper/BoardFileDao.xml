@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardFileDao">
+
+    <resultMap id="attachedFileMap" type="bitcamp.myapp.vo.AttachedFile">
+        <id column="af_id" property="no"/>
+        <result column="filename" property="filename"/>
+        <result column="origin_filename" property="originFilename"/>
+        <result column="board_id" property="boardNo"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="bitcamp.myapp.vo.AttachedFile">
+        insert into ed_attach_file(board_id, filename, origin_filename)
+        values (#{boardNo}, #{filename}, #{originFilename})
+    </insert>
+
+</mapper>

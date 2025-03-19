@@ -3,6 +3,8 @@ package bitcamp.myapp.dao;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,27 +15,20 @@ import java.util.List;
 
 public class MySQLBoardFileDao implements BoardFileDao {
 
+  private SqlSessionFactory sqlSessionFactory;
   private Connection con;
 
-  public MySQLBoardFileDao(Connection con) {
+  public MySQLBoardFileDao(Connection con, SqlSessionFactory sqlSessionFactory) {
     this.con = con;
+    this.sqlSessionFactory = sqlSessionFactory;
   }
 
   public int insert(AttachedFile attachedFile) {
-    String sql = "insert into ed_attach_file(board_id, filename, origin_filename) values (?, ?, ?)";
-
-    try (PreparedStatement stmt = con.prepareStatement(sql)) {
-
-      stmt.setInt(1, attachedFile.getBoardNo());
-      stmt.setString(2, attachedFile.getFilename());
-      stmt.setString(3, attachedFile.getOriginFilename());
-
-      return stmt.executeUpdate();
-
-    } catch (Exception e) {
-      throw new DaoException(e);
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      int count = sqlSession.insert("BoardFileDao.insert", attachedFile);
+      sqlSession.commit();
+      return count;
     }
-
   }
 
   public AttachedFile findByNo(int fileNo) {

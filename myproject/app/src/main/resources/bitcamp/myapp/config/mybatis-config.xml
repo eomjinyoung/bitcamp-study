@@ -20,6 +20,7 @@
 
     <mappers>
         <mapper resource="bitcamp/myapp/mapper/BoardDao.xml"/>
+        <mapper resource="bitcamp/myapp/mapper/BoardFileDao.xml"/>
     </mappers>
 
 </configuration>
