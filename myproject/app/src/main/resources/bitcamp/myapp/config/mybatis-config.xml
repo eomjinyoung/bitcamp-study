@@ -19,7 +19,7 @@
     </environments>
 
     <mappers>
-        <mapper resource="org/mybatis/example/BlogMapper.xml"/>
+        <mapper resource="bitcamp/myapp/mapper/BoardDao.xml"/>
     </mappers>
 
 </configuration>

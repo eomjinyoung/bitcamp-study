@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardDao">
+
+    <resultMap id="boardMap" type="bitcamp.myapp.vo.Board">
+        <id column="board_id" property="no"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="create_date" property="createDate"/>
+        <result column="view_count" property="viewCount"/>
+
+        <association property="writer" javaType="bitcamp.myapp.vo.Member">
+            <id column="member_id" property="no"/>
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
+
+    <select id="findAll" resultMap="boardMap">
+        select
+            b.board_id,
+            b.title,
+            b.create_date,
+            b.view_count,
+            m.member_id,
+            m.name
+        from ed_board b
+            join ed_member m on b.member_id=m.member_id
+    </select>
+
+</mapper>

@@ -47,7 +47,7 @@ public class ContextLoaderListener implements ServletContextListener {
       ServletContext ctx = sce.getServletContext();
 
       MySQLMemberDao memberDao = new MySQLMemberDao(con);
-      MySQLBoardDao boardDao = new MySQLBoardDao(con);
+      MySQLBoardDao boardDao = new MySQLBoardDao(con, sqlSessionFactory);
       MySQLBoardFileDao boardFileDao = new MySQLBoardFileDao(con);
 
       // 서비스 객체의 트랜잭션을 처리할 프록시 객체 생성기
