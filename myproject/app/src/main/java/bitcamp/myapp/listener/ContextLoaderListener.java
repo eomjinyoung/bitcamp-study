@@ -3,13 +3,18 @@ package bitcamp.myapp.listener;
 import bitcamp.myapp.dao.*;
 import bitcamp.myapp.service.*;
 import bitcamp.transaction.TransactionProxyFactory;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.checkerframework.checker.units.qual.N;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Map;
@@ -27,6 +32,12 @@ public class ContextLoaderListener implements ServletContextListener {
       String userHome = System.getProperty("user.home");
       Properties appProps = new Properties();
       appProps.load(new FileReader(userHome + "/config/bitcamp-study.properties"));
+
+      String resource = "bitcamp/myapp/config/mybatis-config.xml";
+      InputStream inputStream = Resources.getResourceAsStream(resource); // 클래스 경로를 절대 경로로 바꿔 리턴
+      SqlSessionFactory sqlSessionFactory =
+              new SqlSessionFactoryBuilder().build(inputStream);
+
 
       con = DriverManager.getConnection(
               appProps.getProperty("jdbc.url"),
