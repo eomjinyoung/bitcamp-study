@@ -40,16 +40,16 @@ public class ContextLoaderListener implements ServletContextListener {
               new SqlSessionFactoryProxy(new SqlSessionFactoryBuilder().build(inputStream));
 
 
-      con = DriverManager.getConnection(
-              appProps.getProperty("jdbc.url"),
-              appProps.getProperty("jdbc.username"),
-              appProps.getProperty("jdbc.password"));
+//      con = DriverManager.getConnection(
+//              appProps.getProperty("jdbc.url"),
+//              appProps.getProperty("jdbc.username"),
+//              appProps.getProperty("jdbc.password"));
 
       ServletContext ctx = sce.getServletContext();
 
-      MySQLMemberDao memberDao = new MySQLMemberDao(con);
-      MySQLBoardDao boardDao = new MySQLBoardDao(con, sqlSessionFactory);
-      MySQLBoardFileDao boardFileDao = new MySQLBoardFileDao(con, sqlSessionFactory);
+      MySQLMemberDao memberDao = new MySQLMemberDao(sqlSessionFactory);
+      MySQLBoardDao boardDao = new MySQLBoardDao(sqlSessionFactory);
+      MySQLBoardFileDao boardFileDao = new MySQLBoardFileDao(sqlSessionFactory);
 
       ctx.setAttribute("sqlSessionFactory", sqlSessionFactory);
 

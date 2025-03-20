@@ -16,10 +16,8 @@ import java.util.List;
 public class MySQLBoardFileDao implements BoardFileDao {
 
   private SqlSessionFactory sqlSessionFactory;
-  private Connection con;
 
-  public MySQLBoardFileDao(Connection con, SqlSessionFactory sqlSessionFactory) {
-    this.con = con;
+  public MySQLBoardFileDao(SqlSessionFactory sqlSessionFactory) {
     this.sqlSessionFactory = sqlSessionFactory;
   }
 
@@ -44,15 +42,8 @@ public class MySQLBoardFileDao implements BoardFileDao {
 
   @Override
   public int deleteAllByBoardNo(int boardNo) {
-    String sql = "delete from ed_attach_file" +
-            "      where board_id=?";
-
-    try (PreparedStatement stmt = con.prepareStatement(sql)) {
-      stmt.setInt(1, boardNo);
-      return stmt.executeUpdate();
-
-    } catch (Exception e) {
-      throw new DaoException(e);
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      return sqlSession.delete("BoardFileDao.deleteAllByBoardNo", boardNo);
     }
   }
 }

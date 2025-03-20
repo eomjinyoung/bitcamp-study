@@ -33,4 +33,9 @@
         where af_id=#{no}
     </delete>
 
+    <delete id="deleteAllByBoardNo" parameterType="int">
+        delete from ed_attach_file
+        where board_id=#{no}
+    </delete>
+
 </mapper>

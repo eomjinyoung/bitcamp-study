@@ -28,8 +28,18 @@
 - MySQLBoardDao 변경
   - SQL문을 SQL 매퍼 파일로 옮긴다.
   - Mybatis 코드를 적용한다.
+- MySQLBoardFileDao 변경
+  - SQL문을 SQL 매퍼 파일로 옮긴다.
+  - Mybatis 코드를 적용한다.
+- MySQLMemberDao 변경
+  - SQL문을 SQL 매퍼 파일로 옮긴다.
+  - Mybatis 코드를 적용한다.
 - bitcamp/myapp/mapper/BoardDao.xml 생성
   - MySQLBoardDao에서 사용할 SQL 문을 보관
+- bitcamp/myapp/mapper/BoardFileDao.xml 생성
+  - MySQLBoardFileDao에서 사용할 SQL 문을 보관
+- bitcamp/myapp/mapper/MemberDao.xml 생성
+  - MySQLMemberDao에서 사용할 SQL 문을 보관
 
 ### 4. 트랜잭션 제어
 
@@ -42,3 +52,6 @@
   - realClose()를 호출할 때 자원을 해제하도록 한다.
 - ContextLoaderListener 변경
 
+### 5. XML 설정 대신 자바 코드로 설정하기
+
+- ContextLoaderListener 변경

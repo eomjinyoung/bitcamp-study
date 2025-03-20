@@ -18,10 +18,8 @@ import java.util.List;
 public class MySQLBoardDao implements BoardDao {
 
   private SqlSessionFactory sqlSessionFactory;
-  private Connection con;
 
-  public MySQLBoardDao(Connection con, SqlSessionFactory sqlSessionFactory) {
-    this.con = con;
+  public MySQLBoardDao(SqlSessionFactory sqlSessionFactory) {
     this.sqlSessionFactory = sqlSessionFactory;
   }
 
