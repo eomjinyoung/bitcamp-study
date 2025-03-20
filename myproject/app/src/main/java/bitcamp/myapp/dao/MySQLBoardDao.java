@@ -37,63 +37,8 @@ public class MySQLBoardDao implements BoardDao {
   }
 
   public Board findByNo(int no) {
-    String sql = "select" +
-            "         b.board_id," +
-            "         b.title," +
-            "         b.content," +
-            "         b.create_date," +
-            "         b.view_count," +
-            "         m.member_id," +
-            "         m.name," +
-            "         af.af_id," +
-            "         af.filename," +
-            "         af.origin_filename" +
-            "     from ed_board b" +
-            "         inner join ed_member m on b.member_id=m.member_id" +
-            "         left outer join ed_attach_file af on b.board_id=af.board_id" +
-            "     where" +
-            "         b.board_id=?";
-
-    try (PreparedStatement stmt = con.prepareStatement(sql)) {
-
-      stmt.setInt(1, no);
-
-      try (ResultSet rs = stmt.executeQuery()) {
-
-        Board board = null;
-        ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
-
-        while (rs.next()) {
-          if (board == null) {
-            board = new Board();
-            board.setNo(rs.getInt("board_id"));
-            board.setTitle(rs.getString("title"));
-            board.setContent(rs.getString("content"));
-            board.setCreateDate(rs.getDate("create_date"));
-            board.setViewCount(rs.getInt("view_count"));
-
-            Member member = new Member();
-            member.setNo(rs.getInt("member_id"));
-            member.setName(rs.getString("name"));
-
-            board.setWriter(member);
-            board.setAttachedFiles(attachedFiles);
-          }
-
-          if (rs.getInt("af_id") > 0) {
-            AttachedFile attachedFile = new AttachedFile();
-            attachedFile.setNo(rs.getInt("af_id"));
-            attachedFile.setFilename(rs.getString("filename"));
-            attachedFile.setOriginFilename(rs.getString("origin_filename"));
-
-            attachedFiles.add(attachedFile);
-          }
-        }
-        return board;
-      }
-
-    } catch (Exception e) {
-      throw new DaoException(e);
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      return sqlSession.selectOne("BoardDao.findByNo", no);
     }
   }
 

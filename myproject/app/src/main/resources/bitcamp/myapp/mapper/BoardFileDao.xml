@@ -16,4 +16,6 @@
         values (#{boardNo}, #{filename}, #{originFilename})
     </insert>
 
+
+
 </mapper>

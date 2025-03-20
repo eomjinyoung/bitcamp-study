@@ -15,6 +15,14 @@
             <id column="member_id" property="no"/>
             <result column="name" property="name"/>
         </association>
+
+        <collection property="attachedFiles" ofType="bitcamp.myapp.vo.AttachedFile">
+            <id column="af_id" property="no"/>
+            <result column="filename" property="filename"/>
+            <result column="origin_filename" property="originFilename"/>
+            <result column="board_id" property="boardNo"/>
+        </collection>
+
     </resultMap>
 
     <select id="findAll" resultMap="boardMap">
@@ -35,4 +43,22 @@
         values (#{title}, #{content}, #{writer.no})
     </insert>
 
+    <select id="findByNo" resultMap="boardMap" parameterType="int">
+        select
+            b.board_id,
+            b.title,
+            b.content,
+            b.create_date,
+            b.view_count,
+            m.member_id,
+            m.name,
+            af.af_id,
+            af.filename,
+            af.origin_filename
+        from ed_board b
+            inner join ed_member m on b.member_id=m.member_id
+            left outer join ed_attach_file af on b.board_id=af.board_id
+        where
+            b.board_id=#{no}
+    </select>
 </mapper>
