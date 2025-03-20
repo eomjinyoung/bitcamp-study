@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MySQLBoardDao implements BoardDao {
@@ -43,48 +44,25 @@ public class MySQLBoardDao implements BoardDao {
   }
 
   public int update(Board board) {
-    String sql = "update ed_board set " +
-            "          title=?," +
-            "          content=?" +
-            "      where" +
-            "          board_id=?";
-
-    try (PreparedStatement stmt = con.prepareStatement(sql)) {
-
-      stmt.setString(1, board.getTitle());
-      stmt.setString(2, board.getContent());
-      stmt.setInt(3, board.getNo());
-
-      return stmt.executeUpdate();
-    } catch (Exception e) {
-      throw new DaoException(e);
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      return sqlSession.update("BoardDao.update", board);
     }
   }
 
   public int delete(int no) {
-    String sql = "delete from ed_board" +
-            "    where board_id=?";
-
-    try (PreparedStatement stmt = con.prepareStatement(sql)) {
-      stmt.setInt(1, no);
-      return stmt.executeUpdate();
-    } catch (Exception e) {
-      throw new DaoException(e);
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      return sqlSession.delete("BoardDao.delete", no);
     }
   }
 
   @Override
   public int updateViewCount(int no, int increment) {
-    String sql = "update ed_board set " +
-            "          view_count = view_count + ?" +
-            "      where board_id = ?";
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      HashMap<String,Object> values = new HashMap<>();
+      values.put("no", no);
+      values.put("increment", increment);
 
-    try (PreparedStatement stmt = con.prepareStatement(sql)) {
-      stmt.setInt(1, increment);
-      stmt.setInt(2, no);
-      return stmt.executeUpdate();
-    } catch (Exception e) {
-      throw new DaoException(e);
+      return sqlSession.update("BoardDao.updateViewCount", values);
     }
   }
 }

@@ -61,4 +61,23 @@
         where
             b.board_id=#{no}
     </select>
+
+    <update id="update" parameterType="bitcamp.myapp.vo.Board">
+        update ed_board set
+            title=#{title},
+            content=#{content}
+        where
+            board_id=#{no}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from ed_board
+            where board_id=#{no}
+    </delete>
+
+    <update id="updateViewCount" parameterType="map">
+        update ed_board set
+            view_count = view_count + #{increment}
+        where board_id = #{no}
+    </update>
 </mapper>

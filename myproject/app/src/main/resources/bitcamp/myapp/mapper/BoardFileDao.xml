@@ -16,6 +16,21 @@
         values (#{boardNo}, #{filename}, #{originFilename})
     </insert>
 
+    <select id="findByNo" parameterType="int" resultMap="attachedFileMap">
+        select
+            af_id,
+            board_id,
+            filename,
+            origin_filename
+        from
+            ed_attach_file
+        where
+            af_id=#{no}
+    </select>
 
+    <delete id="delete" parameterType="int">
+        delete from ed_attach_file
+        where af_id=#{no}
+    </delete>
 
 </mapper>
