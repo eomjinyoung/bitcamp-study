@@ -36,5 +36,9 @@
 - TransactionInvocationHandler 변경
 - TransactionProxyFactory 변경
 - SqlSessionFactoryProxy 생성
+  - 같은 스레드가 같은 SqlSession을 사용하도록 openSession()을 구현한다.
+- SqlSessionProxy 생성
+  - close()를 호출할 때 자원해제 하지 않도록 변경한다.
+  - realClose()를 호출할 때 자원을 해제하도록 한다.
 - ContextLoaderListener 변경
 

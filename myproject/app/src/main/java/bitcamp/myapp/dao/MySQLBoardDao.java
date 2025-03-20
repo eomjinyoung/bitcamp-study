@@ -32,9 +32,7 @@ public class MySQLBoardDao implements BoardDao {
 
   public int insert(Board board) {
     try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-      int count = sqlSession.insert("BoardDao.insert", board);
-      sqlSession.commit();
-      return count;
+      return sqlSession.insert("BoardDao.insert", board);
     }
   }
 

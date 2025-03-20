@@ -2,6 +2,7 @@ package bitcamp.myapp.listener;
 
 import bitcamp.myapp.dao.*;
 import bitcamp.myapp.service.*;
+import bitcamp.transaction.SqlSessionFactoryProxy;
 import bitcamp.transaction.TransactionProxyFactory;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -36,7 +37,7 @@ public class ContextLoaderListener implements ServletContextListener {
       String resource = "bitcamp/myapp/config/mybatis-config.xml";
       InputStream inputStream = Resources.getResourceAsStream(resource); // 클래스 경로를 절대 경로로 바꿔 리턴
       SqlSessionFactory sqlSessionFactory =
-              new SqlSessionFactoryBuilder().build(inputStream);
+              new SqlSessionFactoryProxy(new SqlSessionFactoryBuilder().build(inputStream));
 
 
       con = DriverManager.getConnection(
@@ -49,6 +50,8 @@ public class ContextLoaderListener implements ServletContextListener {
       MySQLMemberDao memberDao = new MySQLMemberDao(con);
       MySQLBoardDao boardDao = new MySQLBoardDao(con, sqlSessionFactory);
       MySQLBoardFileDao boardFileDao = new MySQLBoardFileDao(con, sqlSessionFactory);
+
+      ctx.setAttribute("sqlSessionFactory", sqlSessionFactory);
 
       // 서비스 객체의 트랜잭션을 처리할 프록시 객체 생성기
       TransactionProxyFactory transactionProxyFactory = new TransactionProxyFactory(sqlSessionFactory);

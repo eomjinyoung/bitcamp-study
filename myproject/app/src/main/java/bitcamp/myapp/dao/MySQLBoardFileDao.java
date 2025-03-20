@@ -25,9 +25,7 @@ public class MySQLBoardFileDao implements BoardFileDao {
 
   public int insert(AttachedFile attachedFile) {
     try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-      int count = sqlSession.insert("BoardFileDao.insert", attachedFile);
-      sqlSession.commit();
-      return count;
+      return sqlSession.insert("BoardFileDao.insert", attachedFile);
     }
   }
 
