@@ -1,5 +1,6 @@
 package bitcamp.myapp.listener;
 
+import bitcamp.myapp.controller.BoardController;
 import bitcamp.myapp.controller.HomeController;
 import bitcamp.myapp.controller.AuthController;
 import bitcamp.myapp.dao.MySQLBoardDao;
@@ -88,16 +89,15 @@ public class ContextLoaderListener implements ServletContextListener {
       // 서비스 객체의 트랜잭션을 처리할 프록시 객체 생성기
       TransactionProxyFactory transactionProxyFactory = new TransactionProxyFactory(sqlSessionFactory);
 
-      DefaultMemberService memberService = new DefaultMemberService(memberDao);
-      ctx.setAttribute("memberService",
-              transactionProxyFactory.createProxy(memberService, MemberService.class));
+      MemberService memberService = transactionProxyFactory.createProxy(
+              new DefaultMemberService(memberDao),
+              MemberService.class);
 
-      DefaultBoardService boardService = new DefaultBoardService(boardDao, boardFileDao);
-      ctx.setAttribute("boardService",
-              transactionProxyFactory.createProxy(boardService, BoardService.class));
+      BoardService boardService = transactionProxyFactory.createProxy(
+              new DefaultBoardService(boardDao, boardFileDao),
+              BoardService.class);
 
       NCPObjectStorageService storageService = new NCPObjectStorageService(appProps);
-      ctx.setAttribute("storageService", storageService);
 
       // 페이지 컨트롤러 등록하기
       ctx.setAttribute("/home", new HomeController());
@@ -107,6 +107,15 @@ public class ContextLoaderListener implements ServletContextListener {
       ctx.setAttribute("/auth/login", authController);
       ctx.setAttribute("/auth/logout", authController);
 
+      BoardController boardController = new BoardController(boardService, storageService);
+      ctx.setAttribute("/board/list", boardController);
+      ctx.setAttribute("/board/detail", boardController);
+      ctx.setAttribute("/board/form", boardController);
+      ctx.setAttribute("/board/add", boardController);
+      ctx.setAttribute("/board/update", boardController);
+      ctx.setAttribute("/board/delete", boardController);
+      ctx.setAttribute("/board/file/download", boardController);
+      ctx.setAttribute("/board/file/delete", boardController);
 
       System.out.println("웹애플리케이션 실행 환경 준비!");
 
