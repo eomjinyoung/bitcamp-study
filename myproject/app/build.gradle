@@ -1,7 +1,11 @@
 plugins {
-    id 'application'
+    id 'java'
+    id 'org.springframework.boot' version '2.7.18'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
+group = 'bitcamp'
+version = '0.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral() // https://repo.maven.apache.org/maven2/
@@ -11,15 +15,25 @@ dependencies {
 
     implementation 'javax.servlet:jstl:1.2'
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.782'
-    implementation 'org.mybatis:mybatis:3.5.19'
-    implementation 'org.apache.commons:commons-dbcp2:2.13.0'
 
     implementation libs.guava
-    implementation libs.mysql.connectorj
+    runtimeOnly libs.mysql.connectorj
     implementation libs.tomcat.embed.jasper
-    implementation libs.spring.webmvc
 
-    testImplementation libs.junit.jupiter
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    //implementation 'org.springframework.boot:spring-boot-starter-security'
+    //implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+    //implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    //compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    //annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
+    //testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -29,8 +43,13 @@ java {
     }
 }
 
-application {
-    mainClass = 'bitcamp.myapp.App'
+configurations {
+    compileOnly {
+        // annotationProcessor 로 설정된 의존 라이브러리는
+        // 컴파일 할 때만 적용하고,
+        // 배포 파일(.jar)에 추가하지 않는다.
+        extendsFrom annotationProcessor
+    }
 }
 
 tasks.named('test') {
