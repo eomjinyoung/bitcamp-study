@@ -32,7 +32,6 @@ public class App {
           @Value("${jdbc.username}") String username,
           @Value("${jdbc.password}") String password
   ) {
-    System.out.println("dataSourc() 호출됨!!!!!!");
     DriverManagerDataSource dataSource = new DriverManagerDataSource();
     dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
     dataSource.setUrl("jdbc:mysql://localhost:3306/studydb?serverTimezone=UTC");
