@@ -3,14 +3,17 @@ package bitcamp.myapp.listener;
 import bitcamp.myapp.controller.BoardController;
 import bitcamp.myapp.controller.HomeController;
 import bitcamp.myapp.controller.AuthController;
+import bitcamp.myapp.controller.RequestMapping;
 import bitcamp.myapp.dao.MySQLBoardDao;
 import bitcamp.myapp.dao.MySQLBoardFileDao;
 import bitcamp.myapp.dao.MySQLMemberDao;
 import bitcamp.myapp.service.*;
+import bitcamp.myapp.servlet.RequestHandler;
 import bitcamp.stereotype.Component;
 import bitcamp.stereotype.Controller;
 import bitcamp.transaction.SqlSessionFactoryProxy;
 import bitcamp.transaction.TransactionProxyFactory;
+import bitcamp.transaction.Transactional;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.io.Resources;
@@ -28,6 +31,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -38,11 +42,11 @@ import java.util.Properties;
 public class ContextLoaderListener implements ServletContextListener {
 
   private ServletContext servletContext;
-  private Connection con;
+  private TransactionProxyFactory transactionProxyFactory;
   private ArrayList<Class> classList = new ArrayList<>();
   private ArrayList<Object> objectList = new ArrayList<>();
 
-  private HashMap<String, Object> beanMap = new HashMap<>();
+  private HashMap<String, RequestHandler> requestHandlerMap = new HashMap<>();
 
   private void createObjects(String packageName) throws Exception {
     String packagePath = packageName.replaceAll("\\.", "/");
@@ -65,13 +69,13 @@ public class ContextLoaderListener implements ServletContextListener {
         Parameter[] parameters = constructor.getParameters();
         try {
           Object[] arguments = findArguments(parameters);
-          Object obj = constructor.newInstance(arguments);
+          Object obj = processTransactionalAnnotation(constructor.newInstance(arguments));
           objectList.add(obj);
           removeList.add(clazz);
-          System.out.println(clazz.getName() + "객체 생성!");
+          System.out.println(obj.getClass().getName() + " 객체 생성!");
 
         } catch (Exception e) {
-          System.out.println(clazz.getName() + "클래스는 다음에 다시 시도!");
+          System.out.println(clazz.getName() + " 클래스는 다음에 다시 시도!");
         }
       }
       classList.removeAll(removeList);
@@ -117,6 +121,38 @@ public class ContextLoaderListener implements ServletContextListener {
         Class clazz = Class.forName(className);
         if (clazz.isAnnotationPresent(Component.class) || clazz.isAnnotationPresent(Controller.class)) {
           classList.add(clazz);
+        }
+      }
+    }
+  }
+
+  private Object processTransactionalAnnotation(Object obj) {
+    Method[] methods = obj.getClass().getDeclaredMethods();
+    for (Method method : methods) {
+      if (method.isAnnotationPresent(Transactional.class)) {
+        // @Transaction 애노테이션이 붙은 메서드가 있다면
+        // 트랜잭션 처리 기능을 갖춘 프록시 객체에 담아서 리턴한다.
+        return transactionProxyFactory.createProxy(
+                obj,
+                obj.getClass().getInterfaces()[0]);
+      }
+    }
+    return obj;
+  }
+
+  // @Controller 가 붙은 객체(페이지 컨트롤러)에서 요청을 처리하는 메서드를 찾아,
+  // DipatcherServlet이 호출할 수 있도록 따로 저장해둔다.
+  private void prepareRequestHandler() throws Exception {
+    for (Object obj : objectList) {
+      if (!obj.getClass().isAnnotationPresent(Controller.class)) {
+        continue;
+      }
+
+      Method[] methods = obj.getClass().getDeclaredMethods();
+      for (Method m : methods) {
+        if (m.isAnnotationPresent(RequestMapping.class)) {
+          RequestMapping requestMapping = m.getAnnotation(RequestMapping.class);
+          requestHandlerMap.put(requestMapping.value(), new RequestHandler(obj, m));
         }
       }
     }
@@ -172,23 +208,18 @@ public class ContextLoaderListener implements ServletContextListener {
       SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryProxy(new SqlSessionFactoryBuilder().build(configuration));
       objectList.add(sqlSessionFactory);
 
+      // 서비스 객체의 트랜잭션을 처리할 프록시 객체 생성기
+      transactionProxyFactory = new TransactionProxyFactory(sqlSessionFactory);
+
+
       // bitcamp.myapp 패키지를 뒤져서 @Component와 @Controller 애노테이션이 붙은 클래스를 찾아 객체를 자동 생성한다.
       createObjects("bitcamp.myapp");
 
+      // 페이지 컨트롤러에서 request handler를 찾아 맵에 등록한다.
+      prepareRequestHandler();
+
       ServletContext ctx = sce.getServletContext();
-
       ctx.setAttribute("sqlSessionFactory", sqlSessionFactory);
-
-      // 서비스 객체의 트랜잭션을 처리할 프록시 객체 생성기
-      TransactionProxyFactory transactionProxyFactory = new TransactionProxyFactory(sqlSessionFactory);
-
-//      MemberService memberService = transactionProxyFactory.createProxy(
-//              new DefaultMemberService(memberDao),
-//              MemberService.class);
-//
-//      BoardService boardService = transactionProxyFactory.createProxy(
-//              new DefaultBoardService(boardDao, boardFileDao),
-//              BoardService.class);
 
       System.out.println("웹애플리케이션 실행 환경 준비!");
 
@@ -198,18 +229,4 @@ public class ContextLoaderListener implements ServletContextListener {
     }
   }
 
-  @Override
-  public void contextDestroyed(ServletContextEvent sce) {
-    try {
-      if (con != null && !con.isClosed()) {
-        con.close();
-      }
-
-      System.out.println("웹애플리케이션 자원 해제!");
-
-    } catch (Exception e) {
-      System.out.println("웹애플리케이션 실행 환경 해제 중 오류 발생!");
-      e.printStackTrace();
-    }
-  }
 }
