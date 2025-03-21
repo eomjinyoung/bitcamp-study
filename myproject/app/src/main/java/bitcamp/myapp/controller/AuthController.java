@@ -2,11 +2,13 @@ package bitcamp.myapp.controller;
 
 import bitcamp.myapp.service.MemberService;
 import bitcamp.myapp.vo.Member;
+import bitcamp.stereotype.Controller;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Controller
 public class AuthController {
 
   private MemberService memberService;

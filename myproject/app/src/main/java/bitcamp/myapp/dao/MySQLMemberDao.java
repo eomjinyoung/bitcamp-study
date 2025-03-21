@@ -1,6 +1,7 @@
 package bitcamp.myapp.dao;
 
 import bitcamp.myapp.vo.Member;
+import bitcamp.stereotype.Component;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -10,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
 
+@Component
 public class MySQLMemberDao implements MemberDao {
 
   private SqlSessionFactory sqlSessionFactory;

@@ -24,18 +24,45 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import java.io.FileReader;
-import java.io.InputStream;
+import java.io.*;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 @WebListener
 public class ContextLoaderListener implements ServletContextListener {
 
+  private ServletContext servletContext;
   private Connection con;
+  private ArrayList<Class> classList = new ArrayList<>();
+  private HashMap<String,Object> beanMap = new HashMap<>();
+
+  private void createObjects(String packageName) throws Exception {
+    String packagePath = packageName.replaceAll("\\.", "/");
+    File path = Resources.getResourceAsFile(packagePath);
+
+    findClasses(path);
+  }
+
+  private void findClasses(File path) throws Exception {
+    File[] files = path.listFiles(file -> file.isDirectory() || file.getName().endsWith(".class")); // 현재 경로에 있는 모든 디렉토리와 파일을 알아낸다.
+    for (File file : files) {
+      if (file.isDirectory()) {
+        findClasses(file);
+      } else {
+        System.out.println(file.getName());
+      }
+    }
+  }
+
+
 
   @Override
   public void contextInitialized(ServletContextEvent sce) {
+
+    this.servletContext = sce.getServletContext();
+
     try {
       String userHome = System.getProperty("user.home");
       Properties appProps = new Properties();
@@ -77,6 +104,11 @@ public class ContextLoaderListener implements ServletContextListener {
 
       // SqlSessionFactory 준비: 단 멀티 스레드 기반으로 SqlSession을 다룰 수 있도록 프록시 객체로 감싼다.
       SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryProxy(new SqlSessionFactoryBuilder().build(configuration));
+      beanMap.put("sqlSessionFactory", sqlSessionFactory);
+
+      // bitcamp.myapp 패키지를 뒤져서 @Component와 @Controller 애노테이션이 붙은 클래스를 찾아 객체를 자동 생성한다.
+      createObjects("bitcamp.myapp");
+
 
       ServletContext ctx = sce.getServletContext();
 

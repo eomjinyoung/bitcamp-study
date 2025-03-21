@@ -1,5 +1,6 @@
 package bitcamp.myapp.service;
 
+import bitcamp.stereotype.Component;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -11,6 +12,7 @@ import com.amazonaws.services.s3.model.*;
 import java.io.*;
 import java.util.Properties;
 
+@Component
 public class NCPObjectStorageService implements StorageService {
   final String endPoint;
   final String regionName;

@@ -9,4 +9,4 @@
 ## 07. Mybatis 퍼시스턴스 프레임워크 적용하기
 ## 08. Front Controller 패턴 적용하기 I - DispatcherServlet 만들기
 ## 09. Front Controller 패턴 적용하기 II - 페이지 컨트롤러를 POJO로 바꾸기
-## 10. IoC 컨테이너 구현 
+## 10. IoC 컨테이너 구현하기
