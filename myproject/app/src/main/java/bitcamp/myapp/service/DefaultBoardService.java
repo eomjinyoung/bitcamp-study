@@ -4,13 +4,12 @@ import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.dao.BoardFileDao;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
-import bitcamp.stereotype.Component;
-import bitcamp.transaction.Transactional;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Connection;
 import java.util.List;
 
-@Component
+//@Service
 public class DefaultBoardService implements BoardService {
 
   private BoardDao boardDao;

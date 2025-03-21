@@ -2,9 +2,9 @@ package bitcamp.myapp.service;
 
 import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.vo.Member;
-import bitcamp.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+//@Service
 public class DefaultMemberService implements MemberService {
 
   private MemberDao memberDao;
