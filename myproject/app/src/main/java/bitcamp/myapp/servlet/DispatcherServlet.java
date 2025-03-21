@@ -21,6 +21,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
 
 @MultipartConfig(
@@ -32,32 +33,21 @@ import java.util.UUID;
 public class DispatcherServlet extends HttpServlet {
   @Override
   protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    Map<String,RequestHandler> requestHandlerMap =
+            (Map<String,RequestHandler>) req.getServletContext().getAttribute("requestHandlerMap");
+
     try {
       String requestPath = req.getPathInfo();
 
       // 페이지 컨트롤러를 찾는다.
-      Object pageController = req.getServletContext().getAttribute(requestPath);
-      if (pageController == null) {
-        throw new Exception("요청한 자원을 찾을 수 없습니다.");
-      }
-
-      // 페이지 컨트롤러에서 클라이언트 요청을 처리할 메서드를 찾는다.
-      Method requestHandler = null; // 클라이언트 요청을 처리할 메서드를 저장할 레퍼런스
-      Method[] methods = pageController.getClass().getMethods();
-      for (Method method : methods) {
-        RequestMapping anno = method.getAnnotation(RequestMapping.class);
-        if (anno != null && anno.value().equals(requestPath)) {
-          requestHandler = method;
-          break;
-        }
-      }
-
+      RequestHandler requestHandler = requestHandlerMap.get(requestPath);
       if (requestHandler == null) {
         throw new Exception("요청한 자원을 찾을 수 없습니다.");
       }
 
       // 클라이언트 요청을 처리할 메서드를 호출한다.
-      String viewUrl = (String) requestHandler.invoke(pageController, req, resp);
+      String viewUrl = (String) requestHandler.handler.invoke(requestHandler.pageController, req, resp);
       if (viewUrl == null) {
         // 페이지 컨트롤러에서 직접 응답할 경우
         return;

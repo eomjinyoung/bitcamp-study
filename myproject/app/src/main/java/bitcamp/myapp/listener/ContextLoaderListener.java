@@ -153,6 +153,7 @@ public class ContextLoaderListener implements ServletContextListener {
         if (m.isAnnotationPresent(RequestMapping.class)) {
           RequestMapping requestMapping = m.getAnnotation(RequestMapping.class);
           requestHandlerMap.put(requestMapping.value(), new RequestHandler(obj, m));
+          System.out.printf("%s: %s\n", requestMapping.value(), m.getName());
         }
       }
     }
@@ -218,8 +219,12 @@ public class ContextLoaderListener implements ServletContextListener {
       // 페이지 컨트롤러에서 request handler를 찾아 맵에 등록한다.
       prepareRequestHandler();
 
-      ServletContext ctx = sce.getServletContext();
-      ctx.setAttribute("sqlSessionFactory", sqlSessionFactory);
+      // ResourceServletRequestListener에서 SqlSession을 닫기 위해
+      // SqlSessionFactory를 사용한다.
+      servletContext.setAttribute("sqlSessionFactory", sqlSessionFactory);
+
+      // DispatcherServlet에서 RequestHandler 맵을 사용한다.
+      servletContext.setAttribute("requestHandlerMap", requestHandlerMap);
 
       System.out.println("웹애플리케이션 실행 환경 준비!");
 
