@@ -26,3 +26,19 @@
   - 요청을 처리할 메서드에 애노테이션을 붙인다.
 - DispatcherServlet 변경
   - ServletContext에서 꺼낸 객체에서 애노테이션이 붙은 메서드를 찾아 호출한다.
+
+### 4. 관련된 메서드를 한 클래스에 통합
+
+- AuthController 클래스 생성
+  - LoginFormController
+  - LoginController
+  - LogoutController
+- BoardController 클래스 생성
+  - BoardListController
+  - BoardDetailController
+  - BoardFormController
+  - BoardAddController
+  - BoardUpdateController
+  - BoardDeleteController
+  - BoardFileDownloadController
+  - BoardFileDeleteController
