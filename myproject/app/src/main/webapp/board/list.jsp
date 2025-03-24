@@ -47,7 +47,7 @@
 <body>
 <div class="container">
     <h1>게시글 목록</h1>
-    <a href="/app/board/form">새 게시글</a>
+    <a href="/board/form">새 게시글</a>
     <table>
         <thead>
         <tr>
@@ -62,7 +62,7 @@
         <c:forEach items="${list}" var="board">
             <tr>
                 <td>${board.no}</td>
-                <td><a href="/app/board/detail?no=${board.no}">${board.title}</a></td>
+                <td><a href="/board/detail?no=${board.no}">${board.title}</a></td>
                 <td>${board.writer.name}</td>
                 <td>${board.createDate}</td>
                 <td>${board.viewCount}</td>

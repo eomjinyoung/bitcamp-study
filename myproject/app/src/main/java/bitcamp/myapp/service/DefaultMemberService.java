@@ -4,7 +4,7 @@ import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.vo.Member;
 import org.springframework.stereotype.Service;
 
-//@Service
+@Service
 public class DefaultMemberService implements MemberService {
 
   private MemberDao memberDao;

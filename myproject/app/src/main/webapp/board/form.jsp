@@ -73,7 +73,7 @@
 <body>
 <div class="board-form-container">
     <h1>새 게시글</h1>
-    <form action="/app/board/add" method="post" enctype="multipart/form-data">
+    <form action="/board/add" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="title">제목:</label>
             <input type="text" id="title" name="title" required>

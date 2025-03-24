@@ -87,7 +87,7 @@
 <body>
 <div class="board-form-container">
     <h1>게시글</h1>
-    <form action="/app/board/update" method="post"  enctype="multipart/form-data">
+    <form action="/board/update" method="post"  enctype="multipart/form-data">
         <div class="form-group">
             <label for="no">번호:</label>
             <input type="text" id="no" name="no" value="${board.no}" readonly>
@@ -106,7 +106,7 @@
             <ul id="attached-files">
             <c:forEach items="${board.attachedFiles}" var="attachedFile">
                 <li>
-                    <a href="/app/board/file/download?fileNo=${attachedFile.no}">${attachedFile.originFilename}</a>
+                    <a href="/board/file/download?fileNo=${attachedFile.no}">${attachedFile.originFilename}</a>
                     <button type="button" onclick="deleteFile(${attachedFile.no})">삭제</button>
                 </li>
             </c:forEach>
@@ -129,16 +129,16 @@
             <input type="button" value="삭제" onclick="deleteBoard(${board.no})">
         </div>
     </form>
-    <a href="/app/board/list">목록</a>
+    <a href="/board/list">목록</a>
 </div>
 
 <script>
 function deleteBoard(no) {
-    location.href = "/app/board/delete?no=" + no;
+    location.href = "/board/delete?no=" + no;
 }
 
 function deleteFile(no) {
-    location.href = "/app/board/file/delete?no=" + no;
+    location.href = "/board/file/delete?no=" + no;
 }
 </script>
 </body>

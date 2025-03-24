@@ -8,7 +8,7 @@
 <body>
 <div>
     <h2>로그인</h2>
-    <form action="/app/auth/login" method="post">
+    <form action="/auth/login" method="post">
         <div>
             <label for="email">이메일:</label>
             <input type="email" id="email" name="email" value="${cookie.email.value}" required>

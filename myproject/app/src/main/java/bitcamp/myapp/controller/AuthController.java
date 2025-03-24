@@ -9,7 +9,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//@Controller
+@Controller
 public class AuthController {
 
   private MemberService memberService;
@@ -45,12 +45,12 @@ public class AuthController {
     }
 
     req.getSession().setAttribute("loginUser", member);
-    return "redirect:../home";
+    return "redirect:/home";
   }
 
   @RequestMapping("/auth/logout")
   public String logout(HttpServletRequest req, HttpServletResponse resp) {
     req.getSession().invalidate();
-    return "redirect:../home";
+    return "redirect:/home";
   }
 }

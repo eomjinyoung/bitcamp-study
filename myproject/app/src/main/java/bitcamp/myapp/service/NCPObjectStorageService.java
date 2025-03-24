@@ -9,32 +9,52 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
-//@Service
+@Service
 public class NCPObjectStorageService implements StorageService {
-  final String endPoint;
-  final String regionName;
-  final String accessKey;
-  final String secretKey;
 
-  final String bucketName;
+  @Value("${ncp.end-point}")
+  private String endPoint;
 
-  final AmazonS3 s3;
+  @Value("${ncp.region-name}")
+  private String regionName;
 
-  public NCPObjectStorageService(Properties props) {
+  @Value("${ncp.access-key}")
+  private String accessKey;
 
-    this.endPoint = props.getProperty("ncp.end-point");
-    this.regionName = props.getProperty("ncp.region-name");
-    this.accessKey = props.getProperty("ncp.access-key");
-    this.secretKey = props.getProperty("ncp.secret-key");
-    this.bucketName = props.getProperty("ncp.bucket-name");
+  @Value("${ncp.secret-key}")
+  private String secretKey;
 
-    s3 = AmazonS3ClientBuilder.standard()
+  @Value("${ncp.bucket-name}")
+  private String bucketName;
+
+  private AmazonS3 s3;
+
+/* 스프링 프레임워크에서 객체를 생성하는 과정:
+
+1) 객체 생성 -> 생성자 호출
+NCPObjectStorageService obj = new NCPObjectStorageService();
+
+2) @Value 애노테이션이 붙은 필드에 값 삽입
+obj.endPoint = prop.getProperty("ncp.end-point");
+...
+
+3) @PostContruct 애노테이션이 붙은 메서드 호출
+obj.init();
+*/
+
+  @PostConstruct
+  public void init() {
+    System.out.println("init() 호출됨! : " + endPoint);
+
+    this.s3 = AmazonS3ClientBuilder.standard()
             .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
             .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
             .build();
