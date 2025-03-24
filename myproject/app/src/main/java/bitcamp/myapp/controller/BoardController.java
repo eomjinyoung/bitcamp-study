@@ -6,17 +6,21 @@ import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.JstlView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
+@RequestMapping("/board")
 public class BoardController {
 
   private BoardService boardService;
@@ -26,47 +30,62 @@ public class BoardController {
     this.boardService = boardService;
     this.storageService = storageService;
   }
-
-  @RequestMapping("/board/list")
-  public String list(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+  /*
+  @GetMapping("list")
+  public String list(Map map) throws Exception {
     List<Board> list = boardService.list();
-    req.setAttribute("list", list);
-    return "/board/list.jsp";
+    map.put("list", list);
+    return "/board/list";
+  }
+  */
+
+  /*
+  @GetMapping("list")
+  public String list(Model model) throws Exception {
+    List<Board> list = boardService.list();
+    model.addAttribute("list", list);
+    return "/board/list";
+  }
+  */
+
+  @GetMapping("list")
+  public ModelAndView list() throws Exception {
+    List<Board> list = boardService.list();
+    ModelAndView mv = new ModelAndView();
+    mv.addObject("list", list);
+    mv.setViewName("/board/list");
+    return mv;
   }
 
-  @RequestMapping("/board/detail")
-  public String detail(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-    int no = Integer.parseInt(req.getParameter("no"));
+  @GetMapping("detail")
+  public View detail(int no, Model model) throws Exception {
     boardService.increaseViewCount(no);
     Board board = boardService.get(no);
-    req.setAttribute("board", board);
-    return "/board/detail.jsp";
+    model.addAttribute("board", board);
+    return new JstlView("/WEB-INF/view/board/detail.jsp");
   }
 
-  @RequestMapping("/board/form")
-  public String form(HttpServletRequest req, HttpServletResponse resp) {
-    return "/board/form.jsp";
+  @GetMapping("form")
+  public String form() {
+    return "/board/form";
   }
 
-  @RequestMapping("/board/add")
-  public String add(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-    Member loginUser = (Member) req.getSession().getAttribute("loginUser");
+  @PostMapping("add")
+  public String add(
+          Board board,
+          Part[] files,
+          HttpSession session) throws Exception {
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new Exception("로그인이 필요합니다.");
     }
 
-    Board board = new Board();
-    board.setTitle(req.getParameter("title"));
-    board.setContent(req.getParameter("content"));
     board.setWriter(loginUser);
 
-    Collection<Part> parts = req.getParts();
     ArrayList<AttachedFile> fileList = new ArrayList<>();
 
-    for (Part part : parts) {
-      if (!part.getName().equals("files")) {
-        continue;
-      }
+    for (Part part : files) {
       String filename = UUID.randomUUID().toString();
       storageService.upload("board/" + filename, part.getInputStream());
 
@@ -87,40 +106,34 @@ public class BoardController {
     return "redirect:list";
   }
 
-  @RequestMapping("/board/update")
-  public String update(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-    Member loginUser = (Member) req.getSession().getAttribute("loginUser");
+  @PostMapping("update")
+  public String update(
+          Board board,
+          MultipartFile[] files,
+          HttpSession session) throws Exception {
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new Exception("로그인이 필요합니다.");
     }
-
-    Board board = new Board();
-    board.setNo(Integer.parseInt(req.getParameter("no")));
-    board.setTitle(req.getParameter("title"));
-    board.setContent(req.getParameter("content"));
 
     Board oldBoard = boardService.get(board.getNo());
     if (oldBoard.getWriter().getNo() != loginUser.getNo()) {
       throw new Exception("변경 권한이 없습니다.");
     }
 
-    Collection<Part> parts = req.getParts();
     ArrayList<AttachedFile> fileList = new ArrayList<>();
 
-    for (Part part : parts) {
-      if (!part.getName().equals("files")) {
-        continue;
-      }
+    for (MultipartFile part : files) {
       String filename = UUID.randomUUID().toString();
       storageService.upload("board/" + filename, part.getInputStream());
 
       AttachedFile attachedFile = new AttachedFile();
       attachedFile.setFilename(filename);
-      attachedFile.setOriginFilename(part.getSubmittedFileName());
+      attachedFile.setOriginFilename(part.getOriginalFilename());
       attachedFile.setBoardNo(board.getNo());
       fileList.add(attachedFile);
     }
-
     board.setAttachedFiles(fileList);
 
     try {
@@ -135,14 +148,13 @@ public class BoardController {
     return "redirect:list";
   }
 
-  @RequestMapping("/board/delete")
-  public String delete(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-    Member loginUser = (Member) req.getSession().getAttribute("loginUser");
+  @GetMapping("delete")
+  public String delete(int no, HttpSession session) throws Exception {
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new Exception("로그인이 필요합니다.");
     }
-
-    int no = Integer.parseInt(req.getParameter("no"));
 
     Board board = boardService.get(no);
     if (board.getWriter().getNo() != loginUser.getNo()) {
@@ -157,9 +169,9 @@ public class BoardController {
     return "redirect:list";
   }
 
-  @RequestMapping("/board/file/download")
-  public String fileDownload(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-    int fileNo = Integer.parseInt(req.getParameter("fileNo"));
+  @GetMapping("file/download")
+  public void fileDownload(int fileNo, HttpServletResponse resp) throws Exception {
+
     AttachedFile attachedFile = boardService.getAttachedFile(fileNo);
 
     resp.setHeader("Content-Disposition", "attachment; filename=" + attachedFile.getOriginFilename());
@@ -167,17 +179,18 @@ public class BoardController {
             "board/" + attachedFile.getFilename(), // 스토리지 서비스의 버킷에서 다운로드 할 파일의 경로
             resp.getOutputStream() // 다운로드 한 데이터를 보낼 클라이언트 출력 스트림
     );
-    return null;
   }
 
-  @RequestMapping("/board/file/delete")
-  public String fileDelete(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-      Member loginUser = (Member) req.getSession().getAttribute("loginUser");
+  @GetMapping("file/delete")
+  public String fileDelete(
+          @RequestParam("no") int fileNo,
+          HttpSession session) throws Exception {
+
+      Member loginUser = (Member) session.getAttribute("loginUser");
       if (loginUser == null) {
         throw new Exception("로그인이 필요합니다.");
       }
 
-      int fileNo = Integer.parseInt(req.getParameter("no"));
       AttachedFile attachedFile = boardService.getAttachedFile(fileNo);
       Board board = boardService.get(attachedFile.getBoardNo());
       if (board.getWriter().getNo() != loginUser.getNo()) {
