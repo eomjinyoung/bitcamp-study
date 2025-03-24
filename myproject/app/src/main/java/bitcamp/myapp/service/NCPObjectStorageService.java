@@ -10,6 +10,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -53,6 +54,11 @@ obj.init();
   @PostConstruct
   public void init() {
     System.out.println("init() 호출됨! : " + endPoint);
+
+    // AWS S3 API 버전 1에서 발생하는 경고 메시지를 출력하지 않게 설정
+    // 버전 2로 변경하면 경고 메시지가 발생하지 않는다.
+    // 단, 버전 2는 네이버 클라우드의 Object Storage 서비스와 연동을 지원하지 않는다.
+    System.getProperties().setProperty("aws.java.v1.disableDeprecationAnnouncement", "true");
 
     this.s3 = AmazonS3ClientBuilder.standard()
             .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
