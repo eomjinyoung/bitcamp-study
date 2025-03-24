@@ -19,7 +19,7 @@ public class MySQLBoardDao implements BoardDao {
   }
 
   public List<Board> findAll() {
-    String sql = "select2" +
+    String sql = "select" +
             " b.board_id," +
             " b.title," +
             " b.create_date," +

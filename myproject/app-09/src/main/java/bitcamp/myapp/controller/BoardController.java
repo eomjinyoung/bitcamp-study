@@ -171,20 +171,20 @@ public class BoardController {
 
   @RequestMapping("/board/file/delete")
   public String fileDelete(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-      Member loginUser = (Member) req.getSession().getAttribute("loginUser");
-      if (loginUser == null) {
-        throw new Exception("로그인이 필요합니다.");
-      }
+    Member loginUser = (Member) req.getSession().getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new Exception("로그인이 필요합니다.");
+    }
 
-      int fileNo = Integer.parseInt(req.getParameter("no"));
-      AttachedFile attachedFile = boardService.getAttachedFile(fileNo);
-      Board board = boardService.get(attachedFile.getBoardNo());
-      if (board.getWriter().getNo() != loginUser.getNo()) {
-        throw new Exception("삭제 권한이 없습니다.");
-      }
+    int fileNo = Integer.parseInt(req.getParameter("no"));
+    AttachedFile attachedFile = boardService.getAttachedFile(fileNo);
+    Board board = boardService.get(attachedFile.getBoardNo());
+    if (board.getWriter().getNo() != loginUser.getNo()) {
+      throw new Exception("삭제 권한이 없습니다.");
+    }
 
-      storageService.delete("board/" + attachedFile.getFilename());
-      boardService.deleteAttachedFile(fileNo);
-      return "redirect:../detail?no=" + board.getNo();
+    storageService.delete("board/" + attachedFile.getFilename());
+    boardService.deleteAttachedFile(fileNo);
+    return "redirect:../detail?no=" + board.getNo();
   }
 }

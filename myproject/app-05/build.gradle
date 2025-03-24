@@ -17,8 +17,6 @@ dependencies {
     implementation libs.guava
     implementation libs.mysql.connectorj
     implementation libs.tomcat.embed.jasper
-    implementation libs.spring.webmvc
-
 
     testImplementation libs.junit.jupiter
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

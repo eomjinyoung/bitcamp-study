@@ -13,4 +13,12 @@
 ### 2. Mybatis 설정 최적화
 
 - application.properties 변경
-  - ``
+```properties
+spring.datasource.url=jdbc:mysql://db-32e40j-kr.vpc-pub-cdb.ntruss.com:3306/studentdb
+spring.datasource.username=student
+spring.datasource.password=bitcamp123!@#
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+mybatis.mapper-locations=classpath:bitcamp/myapp/mapper/*Dao.xml
+mybatis.type-aliases-package=bitcamp.myapp.vo
+```
