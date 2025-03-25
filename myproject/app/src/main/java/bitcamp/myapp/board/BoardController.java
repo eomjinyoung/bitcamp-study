@@ -63,7 +63,7 @@ public class BoardController {
     boardService.increaseViewCount(no);
     Board board = boardService.get(no);
     model.addAttribute("board", board);
-    return new JstlView("/WEB-INF/view/board/detail.jsp");
+    return new JstlView("/WEB-INF/view/board/detail.html");
   }
 
   @GetMapping("form")

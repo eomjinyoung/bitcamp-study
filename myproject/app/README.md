@@ -1,36 +1,20 @@
-# 13. 기능 별로 패키지를 나누기
+# 14. Thymeleaf 적용하기
 
 ## 학습목표
 
-- 기능 별로 패키지를 만들어 MVC 컴포넌트를 배치할 수 있다.
-- Mybatis의 @Mapper 애노테이션을 사용할 수 있다.
-- 스프링부트의 application.properties 내용을 동적으로 설정할 수 있다.
+- Thymeleaf를 적용할 수 있다.
 
 ## 작업
 
-### 1. application.properties 내용을 동적으로 변경하기
+### 1. Thymeleaf 라이브러리 준비
 
-외부 프로퍼티 파일에 등록된 DB 접속 정보를 적용하여 DataSource 객체 준비하기
+- build.gradle 파일 변경
 
-- App 클래스 변경
-  - 생성자 추가
-  - init() 메서드 추가
+### 2. Thymeleaf에서 사용할 템플릿 폴더 준비
 
-### 2. 기능 분리하기
-
-- bitcamp.myapp.member
-  - Member, MemberDao, MemberService, DefaultMemberService, AuthController 를 옮긴다.
-  - MemberDao.xml
-- bitcamp.myapp.board
-  - Board, AttachedFile, BoardDao, BoardFileDao, BoardService, DefaultBoardService, BoardController를 옮긴다.
-  - BoardDao.xml, BoardFileDao.xml
-- bitcamp.myapp.cloud
-  - StorageService, StorageServiceException, NCPObjectStorageService
-- bitcamp.myapp.common
-  - HomeController
-- DAO 인터페이스에 @Mapper 애노테이션 적용
-- VO 클래스에 @Alias 애노테이션 적용
-- App 클래스 변경
-  - @MapperScan 애노테이션 제거
-- application.properties 변경
-  - mybatis.type-aliases-package 값 변경
+- src/main/resources/templates 폴더 생성
+  - Thymeleaf 가 사용할 템플릿 파일을 둔다.
+- src/main/resources/static 폴더 생성
+  - html, css, javascript, image 파일 등 정적 파일을 둔다.
+- application.properties 파일 변경
+  - 

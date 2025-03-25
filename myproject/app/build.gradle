@@ -13,16 +13,14 @@ repositories {
 
 dependencies {
 
-    implementation 'javax.servlet:jstl:1.2'
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.782'
 
     implementation libs.guava
     runtimeOnly libs.mysql.connectorj
-    implementation libs.tomcat.embed.jasper
 
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     //implementation 'org.springframework.boot:spring-boot-starter-security'
-    //implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.2'
     //implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'

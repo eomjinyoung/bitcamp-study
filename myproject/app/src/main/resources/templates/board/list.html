@@ -1,7 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>게시글 목록</title>
@@ -59,15 +57,13 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${list}" var="board">
-            <tr>
-                <td>${board.no}</td>
-                <td><a href="/board/detail?no=${board.no}">${board.title}</a></td>
-                <td>${board.writer.name}</td>
-                <td>${board.createDate}</td>
-                <td>${board.viewCount}</td>
+            <tr th:each="board : ${list}">
+                <td th:text="${board.no}"></td>
+                <td><a href="/board/detail?no=${board.no}" th:text="${board.title}"></a></td>
+                <td th:text="${board.writer.name}"></td>
+                <td th:text="${board.createDate}"></td>
+                <td th:text="${board.viewCount}"></td>
             </tr>
-        </c:forEach>
         </tbody>
     </table>
 </div>
