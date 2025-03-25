@@ -1,0 +1,56 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.18'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'bitcamp'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral() // https://repo.maven.apache.org/maven2/
+}
+
+dependencies {
+
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.782'
+
+    implementation libs.guava
+    runtimeOnly libs.mysql.connectorj
+
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    //implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.2'
+    //implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.3.2'
+    //testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        // annotationProcessor 로 설정된 의존 라이브러리는
+        // 컴파일 할 때만 적용하고,
+        // 배포 파일(.jar)에 추가하지 않는다.
+        extendsFrom annotationProcessor
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+

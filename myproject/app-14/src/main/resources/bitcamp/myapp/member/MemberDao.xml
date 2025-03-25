@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bitcamp.myapp.member.MemberDao">
+
+    <resultMap id="memberMap" type="member">
+        <id column="member_id" property="no"/>
+        <result column="name" property="name"/>
+        <result column="email" property="email"/>
+    </resultMap>
+
+    <select id="findByEmailAndPassword" resultMap="memberMap" parameterType="map">
+        select
+            m.member_id,
+            m.name,
+            m.email
+        from
+            ed_member m
+        where
+            m.email=#{email} and m.pwd = sha2(#{password}, 256)
+    </select>
+
+</mapper>
