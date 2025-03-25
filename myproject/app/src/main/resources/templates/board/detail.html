@@ -85,56 +85,56 @@
 <body>
 <div class="board-form-container">
     <h1>게시글</h1>
-    <form action="/board/update" method="post"  enctype="multipart/form-data">
+    <form data-th-action="@{/board/update}" method="post"  enctype="multipart/form-data">
         <div class="form-group">
             <label for="no">번호:</label>
             <input type="text" id="no" name="no" value="1"
-                   th:value="${board.no}" readonly>
+                   data-th-value="${board.no}" readonly>
         </div>
         <div class="form-group">
             <label for="title">제목:</label>
             <input type="text" id="title" name="title" value="제목입니다."
-                   th:value="${board.title}" required>
+                   data-th-value="${board.title}" required>
         </div>
         <div class="form-group">
             <label for="content">내용:</label>
             <textarea id="content" name="content"
-                      th:text="${board.content}"
+                      data-th-text="${board.content}"
                       required>내용입니다.</textarea>
         </div>
         <div class="form-group">
             <label for="files">첨부파일:</label>
             <input type="file" id="files" name="files" multiple>
             <ul id="attached-files">
-                <li th:each="attachedFile : ${board.attachedFiles}">
+                <li data-th-each="attachedFile : ${board.attachedFiles}">
                     <a href="/board/file/delete"
-                       th:href="@{/board/file/download(fileNo=${attachedFile.no})}"
-                       th:text="${attachedFile.originFilename}">test.pdf</a>
-                    <button type="button" onclick="deleteFile(${attachedFile.no})">삭제</button>
+                       data-th-href="@{/board/file/download(fileNo=${attachedFile.no})}"
+                       data-th-text="${attachedFile.originFilename}">test.pdf</a>
+                    <button type="button" data-th-onclick="|deleteFile(${attachedFile.no})|">삭제</button>
                 </li>
             </ul>
         </div>
         <div class="form-group">
             <label for="writer">작성자:</label>
             <input type="text" id="writer" value="홍길동"
-                   th:value="${board.writer.name}" readonly>
+                   data-th-value="${board.writer.name}" readonly>
         </div>
         <div class="form-group">
             <label for="createDate">작성일:</label>
             <input type="text" id="createDate" value="2025-03-25"
-                   th:value="${board.createDate}" readonly>
+                   data-th-value="${board.createDate}" readonly>
         </div>
         <div class="form-group">
             <label for="viewCount">조회수:</label>
             <input type="text" id="viewCount" value="22"
-                   th:value="${board.viewCount}" readonly>
+                   data-th-value="${board.viewCount}" readonly>
         </div>
         <div class="form-group">
             <input type="submit" value="변경">
-            <input type="button" value="삭제" onclick="deleteBoard(${board.no})">
+            <input type="button" value="삭제" data-th-onclick="|deleteBoard(${board.no})|">
         </div>
     </form>
-    <a href="list.html" th:href="/board/list">목록</a>
+    <a href="list.html" data-th-href="@{/board/list}">목록</a>
 </div>
 
 <script>
