@@ -3,6 +3,7 @@
 ## 학습목표
 
 - Thymeleaf를 적용할 수 있다.
+- lombok 라이브러리를 사용할 수 있다.
 
 ## 작업
 
@@ -29,3 +30,5 @@
 
 - build.gradle 변경
   - lombok 관련 라이브러리 추가
+- 도메인 클래스(Value Object, Data Transfer Object)에 롬복 애노테이션 적용
+  - Member, Board, AttachedFile
