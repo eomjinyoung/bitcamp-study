@@ -1,4 +1,4 @@
-# 14. Thymeleaf 적용하기
+# 14. Thymeleaf와 Lombok 적용하기
 
 ## 학습목표
 
