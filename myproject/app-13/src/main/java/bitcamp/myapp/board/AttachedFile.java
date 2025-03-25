@@ -1,8 +1,5 @@
 package bitcamp.myapp.board;
 
-import org.apache.ibatis.type.Alias;
-
-@Alias("attachedFile")
 public class AttachedFile {
   private int no;
   private String filename;
