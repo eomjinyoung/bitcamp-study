@@ -8,9 +8,9 @@
 
     <typeAliases>
         <!--
-        <typeAlias type="bitcamp.myapp.vo.Member" alias="member"/>
-        <typeAlias type="bitcamp.myapp.vo.Board" alias="board"/>
-        <typeAlias type="bitcamp.myapp.vo.AttachedFile" alias="attachedFile"/>
+        <typeAlias type="bitcamp.myapp.member.Member" alias="member"/>
+        <typeAlias type="bitcamp.myapp.board.Board" alias="board"/>
+        <typeAlias type="bitcamp.myapp.board.AttachedFile" alias="attachedFile"/>
         -->
         <package name="bitcamp.myapp.vo"/>
     </typeAliases>

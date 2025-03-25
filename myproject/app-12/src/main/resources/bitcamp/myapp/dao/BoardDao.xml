@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="bitcamp.myapp.dao.BoardDao">
+<mapper namespace="bitcamp.myapp.board.BoardDao">
 
     <resultMap id="boardMap" type="board">
         <id column="board_id" property="no"/>
