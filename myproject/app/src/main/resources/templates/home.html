@@ -3,26 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>홈</title>
+    <link rel="stylesheet" href="/css/common.css">
 </head>
 <body>
 <div>
 
-<div data-th-if="${session.loginUser}">
-    <p data-th-text="${session.loginUser.name}">홍길동</p>
-    <a data-th-href='@{/auth/logout}'>로그아웃</a>
+<header data-th-replace="~{header :: page-header}"></header>
+
+<div id="content">
+    <div data-th-if="${session.loginUser}">
+        <p data-th-text="${session.loginUser.name}">홍길동</p>
+        <a data-th-href='@{/auth/logout}'>로그아웃</a>
+    </div>
+
+    <div data-th-unless="${session.loginUser}">
+        <a data-th-href='@{/auth/login-form}'>로그인</a>
+    </div>
+
+    <div>
+        <h1>강의 관리 시스템</h1>
+        <p>환영합니다!</p>
+        <ul>
+            <li><a href="board/list.html" data-th-href="@{/board/list}">게시판</a></li>
+        </ul>
+    </div>
 </div>
 
-<div data-th-unless="${session.loginUser}">
-    <a data-th-href='@{/auth/login-form}'>로그인</a>
-</div>
+<footer data-th-replace="~{footer :: #page-footer}"></footer>
 
-<div>
-    <h1>강의 관리 시스템</h1>
-    <p>환영합니다!</p>
-    <ul>
-        <li><a href="board/list.html" data-th-href="@{/board/list}">게시판</a></li>
-    </ul>
-</div>
-</div>
 </body>
 </html>
