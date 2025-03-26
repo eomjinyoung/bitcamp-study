@@ -4,37 +4,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
-//@Configuration
+@Configuration
 //@EnableWebSecurity // Spring Boot에서 자동으로 활성화시킨다.
 public class SecurityConfig2 {
 
-  public SecurityConfig2() {
-    System.out.println("SecurityConfig 생성자 호출!");
-  }
-
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    // 1) 사용자 정의(개발자가 만든) 로그인폼 사용
-
-    // 로그인 폼 설정 객체 준비: 익명 클래스
-    Customizer<FormLoginConfigurer<HttpSecurity>> obj = new Customizer<FormLoginConfigurer<HttpSecurity>>() {
-      @Override
-      public void customize(FormLoginConfigurer<HttpSecurity> formLoginConfigurer) {
-        formLoginConfigurer.loginPage("/auth/login-form"); // 로그인 폼 URL 설정
-        formLoginConfigurer.loginProcessingUrl("/auth/login"); // 로그인 처리 URL 설정
-        formLoginConfigurer.usernameParameter("email"); // 기본은 "username"이다.
-        formLoginConfigurer.passwordParameter("password"); // 기본은 "password"이다.
-        formLoginConfigurer.defaultSuccessUrl("/home"); // 로그인 성공 후 리다이렉트 URL 설정
-        //formLoginConfigurer.permitAll(); // 모든 권한 부여
-      }
-    };
-
-    http.formLogin(obj);
-
-    SecurityFilterChain securityFilterChain = http.build();
-    return securityFilterChain;
+    return http
+            // 1) 요청 URL의 접근권한 설정
+            .authorizeHttpRequests()
+                .mvcMatchers("/home", "/css/**").permitAll() // "/home" 과 "/css/**" 는 인증을 검사하지 않는다.
+                .anyRequest().authenticated() // 나머지 요청 URL은 인증을 검사한다.
+                .and() // 접근제어권한설정 등록기를 만든 HttpSecurity 객체를 리턴한다.
+            // 2) 인가되지 않은 요청인 경우 Spring Security 기본 로그인 화면으로 보내기
+            .formLogin(Customizer.withDefaults())
+            // SecurityFilterChain 준비
+            .build();
   }
 }
