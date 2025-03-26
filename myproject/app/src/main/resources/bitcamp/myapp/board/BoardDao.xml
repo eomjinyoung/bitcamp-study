@@ -4,19 +4,19 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="bitcamp.myapp.board.BoardDao">
 
-    <resultMap id="boardMap" type="board">
+    <resultMap id="boardMap" type="bitcamp.myapp.board.Board">
         <id column="board_id" property="no"/>
         <result column="title" property="title"/>
         <result column="content" property="content"/>
         <result column="create_date" property="createDate"/>
         <result column="view_count" property="viewCount"/>
 
-        <association property="writer" javaType="member">
+        <association property="writer" javaType="bitcamp.myapp.member.Member">
             <id column="member_id" property="no"/>
             <result column="name" property="name"/>
         </association>
 
-        <collection property="attachedFiles" ofType="attachedFile">
+        <collection property="attachedFiles" ofType="bitcamp.myapp.board.AttachedFile">
             <id column="af_id" property="no"/>
             <result column="filename" property="filename"/>
             <result column="origin_filename" property="originFilename"/>
@@ -37,7 +37,7 @@
             join ed_member m on b.member_id=m.member_id
     </select>
 
-    <insert id="insert" parameterType="board"
+    <insert id="insert" parameterType="bitcamp.myapp.board.Board"
             useGeneratedKeys="true" keyColumn="board_id" keyProperty="no">
         insert into ed_board(title, content, member_id)
         values (#{title}, #{content}, #{writer.no})
@@ -62,7 +62,7 @@
             b.board_id=#{no}
     </select>
 
-    <update id="update" parameterType="board">
+    <update id="update" parameterType="bitcamp.myapp.board.Board">
         update ed_board set
             title=#{title},
             content=#{content}
