@@ -1,45 +1,15 @@
-# 14. Thymeleaf 적용하기
+# 15. Spring Security 적용하기
 
 ## 학습목표
 
-- Thymeleaf를 적용할 수 있다.
-- lombok 라이브러리를 사용할 수 있다.
+- Spring Security의 동작 원리를 이해하고 프로젝트에 적용할 수 있다.
 
 ## 작업
 
-### 1. Thymeleaf 라이브러리 준비
+### 1. Spring Security 라이브러리 준비
 
 - build.gradle 파일 변경
 
-### 2. Thymeleaf에서 사용할 템플릿 폴더 준비
+### 2. 설정 Java Config 준비
 
-- src/main/resources/templates 폴더 생성
-  - Thymeleaf 가 사용할 템플릿 파일을 둔다.
-- src/main/resources/static 폴더 생성
-  - html, css, javascript, image 파일 등 정적 파일을 둔다.
-- application.properties 파일 변경
-  - 개발하는 동안 정적 파일이나 템플릿 파일을 실행할 때 바로 적용할 수 있도록 디렉토리 경로 설정
-  - `spring.web.resources.static-locations=file:src/main/resources/static`
-  - `spring.thymeleaf.prefix=file:src/main/resources/templates/`
-
-### 3. JSP 파일을 Thymeleaf 템플릿 파일로 마이그레이션
-
-- src/main/resources/templates/*.html 파일 변경
-
-### 4. 페이지 영역 분할
-
-- header.html 추가
-  - 페이지 상단 화면 출력
-  - 애플리케이션 이름, 메뉴, 로그인/로그아웃 링크 출력
-- footer.html 추가
-  - 페이지 하단 화면 출력
-- src/main/resources/static/css/common.css 추가
-  - 페이지 공통 스타일 설정
-
-### 5. lombok 라이브러리 적용
-
-- build.gradle 변경
-  - lombok 관련 라이브러리 추가
-- 도메인 클래스(Value Object, Data Transfer Object)에 롬복 애노테이션 적용
-  - Member, Board, AttachedFile
-
+- 
