@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
 //@Configuration
-//@EnableWebSecurity // Spring Boot에서 자동으로 활성화시킨다.
 public class SecurityConfig3 {
 
   @Bean
