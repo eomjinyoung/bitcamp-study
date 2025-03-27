@@ -13,6 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+// 학습 목표:
+// - 사용자 정의 PasswordEncoder 만들기
+//   - encode()와 matches() 구동 원리 이해
+
 //@Configuration
 public class SecurityConfig3 {
 

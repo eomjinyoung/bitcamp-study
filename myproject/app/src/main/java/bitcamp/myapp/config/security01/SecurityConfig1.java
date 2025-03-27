@@ -6,6 +6,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
+// 학습 목표:
+// - Spring Security를 설정하는 방법
+// - /home 페이지는 사용자 인증 없이 접근 가능하게 한다.
+//   - /home 페이지에서 사용하는 .css 파일도 사용자 인증 없이 접근 가능하게 한다.
+// - 그 외 다른 페이지는 접근 불가하게 한다.
+
 //@Configuration
 //@EnableWebSecurity // Spring Boot에서 자동으로 활성화시킨다.
 public class SecurityConfig1 {

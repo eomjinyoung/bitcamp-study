@@ -16,7 +16,7 @@
     </nav>
     <div data-th-if="${session.loginUser}" class="login">
         <span data-th-text="${session.loginUser.name}">홍길동</span>
-        <a data-th-href='@{/auth/logout}'>로그아웃</a>
+        <a data-th-href='@{/logout}'>로그아웃</a>
     </div>
     <div data-th-unless="${session.loginUser}" class="login">
         <a data-th-href='@{/auth/login-form}'>로그인</a>

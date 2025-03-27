@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+// 학습 목표:
+// - method chaining 기법으로 메서드를 호출하기 : 2단계
+
 //@Configuration
 public class SecurityConfig3 {
 

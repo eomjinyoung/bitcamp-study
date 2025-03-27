@@ -11,6 +11,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+// 학습 목표:
+// - UserDetailsService와 UserDetails 사용법
+// - User 클래스를 이용하여 UserDetails 객체를 만드는 방법
+// - InMemoryUserDetailsManager 클래스를 사용하여 UserDetailsService 객체 만들기
+
+
 //@Configuration
 public class SecurityConfig2 {
 

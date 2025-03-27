@@ -14,6 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+// 학습 목표:
+// - Spring Security에서 제공하는 BcriptPasswordEncoder 사용법
+
 //@Configuration
 public class SecurityConfig4 {
 

@@ -6,6 +6,9 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+// 학습 목표:
+// - 사용자 인증이 필요한 페이지를 요청할 시 기본 로그인 폼으로 보내기
+
 //@Configuration
 public class SecurityConfig1 {
 
