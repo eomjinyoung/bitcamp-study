@@ -36,7 +36,7 @@ public class AuthController {
           HttpServletResponse resp,
           HttpSession session) throws Exception {
 
-    Member member = memberService.get(email, password);
+    Member member = memberService.get(email);
     if (member == null) {
       return "redirect:login-form";
     }

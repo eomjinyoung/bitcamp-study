@@ -8,17 +8,30 @@
         <id column="member_id" property="no"/>
         <result column="name" property="name"/>
         <result column="email" property="email"/>
+        <result column="pwd" property="password"/>
     </resultMap>
 
-    <select id="findByEmailAndPassword" resultMap="memberMap" parameterType="map">
+    <select id="findByEmail" resultMap="memberMap" parameterType="map">
         select
             m.member_id,
             m.name,
-            m.email
+            m.email,
+            m.pwd
         from
             ed_member m
         where
-            m.email=#{email} and m.pwd = sha2(#{password}, 256)
+            m.email=#{email}
     </select>
 
+    <update id="updatePassword">
+        update ed_member set
+            pwd = #{password}
+        where
+            email = #{email}
+    </update>
+
+    <update id="updateAllPassword">
+        update ed_member set
+            pwd = #{password}
+    </update>
 </mapper>
