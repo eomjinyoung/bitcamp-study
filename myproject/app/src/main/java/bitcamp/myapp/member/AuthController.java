@@ -1,7 +1,9 @@
 package bitcamp.myapp.member;
 
+import bitcamp.myapp.config.security03.CustomUserDetails;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -34,15 +36,12 @@ public class AuthController {
 
   @PostMapping("login")
   public String login(
-          String username,
+          @AuthenticationPrincipal CustomUserDetails principal,
           HttpSession session) throws Exception {
 
     log.debug("=============> /auth/login 요청 처리!");
 
-    Member member = memberService.get(username);
-    if (member == null) {
-      return "redirect:login-form";
-    }
+    Member member = principal.getMember();
 /*
     if (saveEmail != null) {
       Cookie emailCookie = new Cookie("email", email);
@@ -55,12 +54,8 @@ public class AuthController {
     }
 */
     session.setAttribute("loginUser", member);
+
     return "redirect:/home";
   }
 
-  @GetMapping("logout")
-  public String logout(HttpSession session) {
-    session.invalidate();
-    return "redirect:/home";
-  }
 }

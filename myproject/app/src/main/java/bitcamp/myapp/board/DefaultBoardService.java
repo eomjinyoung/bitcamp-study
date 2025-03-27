@@ -45,7 +45,16 @@ public class DefaultBoardService implements BoardService {
 
   @Override
   public Board get(int no) {
-    return boardDao.findByNo(no);
+    Board board =  boardDao.findByNo(no);
+
+    // 게시글의 첨부파일 데이터가 없더라도, BoardDao는 빈 값을 갖는 AttachedFile 객체를 List 담는다.
+    // 페이지 컨트롤러에게 리턴하기 전에 불필요한 첨부파일 데이터를 제거한다.
+    List<AttachedFile> files = board.getAttachedFiles();
+    if (files.size() == 1 && files.get(0).getNo() == 0) {
+      files.remove(0);
+    }
+
+    return board;
   }
 
   @Transactional

@@ -20,6 +20,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 // - Spring Security에서 인증을 수행한 후 UserDetails 에 로그인 사용자 정보 저장하기
 //   - UserDetails 커스터마이징
 //     - CustomUserDetails 클래스 생성
+//      - 로그인 사용자 정보(Member 객체)를 보관한다.
+// - 페이지 컨트롤러에서 CustomUserDetails 사용하기
+// - 이메일이 유효하지 않을 때 처리하기
+//   - loadUserByUsername() 변경
+//     - member 객체가 null 경우, 임의의 데이터를 넣은 객체 생성
 
 @Configuration
 public class SecurityConfig3 {
@@ -78,6 +83,11 @@ public class SecurityConfig3 {
       @Override
       public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberService.get(username);
+        if (member == null) {
+          member = new Member();
+          member.setEmail(username);
+          member.setPassword("");
+        }
         return new CustomUserDetails(member);
       }
     };
