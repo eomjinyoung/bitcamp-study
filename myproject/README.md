@@ -15,3 +15,4 @@
 ## 13. 기능 별로 패키지를 나누기
 ## 14. Thymeleaf와 Lombok 적용하기
 ## 15. Spring Security 적용하기
+## 16. CSR(Clien-Side Rendering) 방식으로 전환하기

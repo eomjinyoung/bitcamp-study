@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상단 고정 네비게이션</title>
+    <style>
+        /* 상단 고정 네비게이션 스타일 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .navbar .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 8px 12px;
+            transition: background 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        /* 본문 내용이 메뉴에 가려지지 않도록 여백 추가 */
+        body {
+            padding-top: 60px;
+            font-family: Arial, sans-serif;
+        }
+
+        .content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 상단 네비게이션 바 -->
+    <nav class="navbar">
+        <div class="logo">MyWebsite</div>
+        <ul class="nav-links">
+            <li><a href="#">홈</a></li>
+            <li><a href="#">서비스</a></li>
+            <li><a href="#">블로그</a></li>
+            <li><a href="#">연락처</a></li>
+        </ul>
+    </nav>
+
+    <!-- 본문 내용 -->
+    <div class="content">
+        <h1>Welcome to My Website</h1>
+        <p>이곳은 샘플 텍스트입니다. 메뉴가 상단에 고정되어 있습니다.</p>
+        <p>스크롤을 내려도 메뉴가 따라옵니다.</p>
+    </div>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-package bitcamp.myapp.config.security03;
+package bitcamp.myapp.config.security04;
 
 import bitcamp.myapp.member.Member;
 import bitcamp.myapp.member.MemberService;
@@ -6,9 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,15 +16,18 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 // 학습 목표:
-// - Spring Security에서 인증을 수행한 후 세션 처리를 위해 페이지 컨트롤러에게 넘기기
-//   - formLogin() 설정 변경
-//     - successForwardUrl("/auth/login")
-//   - logout() 설정 추가
+// - 로그인 페이지 커스터마이징
+//   - formLogin() 변경
+//     - loginPage() 추가
+//     - loginProcessingUrl() 추가
+//     - successForwardUrl() 변경
+//     - usernameParameter() 변경 "username" ---> "email"
+//     - passwordParamter() 변경 "password" ---> "password". 나중에 암호 파라미터 이름을 변경할 경우를 대비해서.
 
-//@Configuration
-public class SecurityConfig2 {
+@Configuration
+public class SecurityConfig1 {
 
-  private static final Log log = LogFactory.getLog(SecurityConfig2.class);
+  private static final Log log = LogFactory.getLog(SecurityConfig1.class);
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -40,7 +41,11 @@ public class SecurityConfig2 {
 
             // 2) 인가되지 않은 요청인 경우 Spring Security 기본 로그인 화면으로 보내기
             .formLogin()
+              .loginPage("/auth/login-form") // 커스터마이징 로그인 페이지로 설정
+              .loginProcessingUrl("/auth/login") // 로그인 폼의 action 값 설정. 이 요청은 Spring Security에서 처리한다.
               .successForwardUrl("/auth/success") // 로그인 성공 후 페이지 컨트롤러로 포워딩
+              .usernameParameter("email") // 클라이언트가 보내는 이메일의 파라미터 명을 "username"에서 "email"로 바꾼다.
+              .passwordParameter("password") // 암호를 보내는 파라미터 이름을 설정한다.
               .permitAll()
               .and()
 
@@ -80,11 +85,12 @@ public class SecurityConfig2 {
       @Override
       public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberService.get(username);
-        return User.builder()
-                .username(member.getEmail())
-                .password(member.getPassword())
-                .roles("USER")
-                .build();
+        if (member == null) {
+          member = new Member();
+          member.setEmail(username);
+          member.setPassword("");
+        }
+        return new CustomUserDetails(member);
       }
     };
   }

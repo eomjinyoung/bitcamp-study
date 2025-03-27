@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>header</title>
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+<header id="page-header" data-th-fragment="page-header">
+    <h1><a data-th-href="@{/home}">프로젝트 관리 시스템</a></h1>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/member/list.html" data-th-href="@{/member/list}">회원</a></li>
+            <li><a href="/board/list.html" data-th-href="@{/board/list}">게시글</a></li>
+        </ul>
+    </nav>
+    <div data-th-if="${session.loginUser}" class="login">
+        <span data-th-text="${session.loginUser.name}">홍길동</span>
+        <a data-th-href='@{/logout}'>로그아웃</a>
+    </div>
+    <div data-th-unless="${session.loginUser}" class="login">
+        <a data-th-href='@{/auth/login-form}'>로그인</a>
+    </div>
+</header>
+</body>
+</html>
