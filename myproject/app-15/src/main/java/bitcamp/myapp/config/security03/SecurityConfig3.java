@@ -59,13 +59,6 @@ public class SecurityConfig3 {
               .permitAll()
               .and()
 
-            // 4) CSRF(Cross-Site Request Forgery) 기능 비활성화 : 기본은 활성화이다.
-            // - 로그아웃 할 때 세션을 무효화시키면 세션에 보관된 CSRF 토큰도 함께 삭제된다.
-            // - 클라이언트가 요청했을 때 그 클라이언트에게 발급된 유효한 CSRF 토큰이 없으면
-            //   CSRF 공격으로 보고 요청을 거절한다.
-            // - 이 기능을 당분간 무효화시킨다.
-            //.csrf().disable()
-
             // SecurityFilterChain 준비
             .build();
   }
