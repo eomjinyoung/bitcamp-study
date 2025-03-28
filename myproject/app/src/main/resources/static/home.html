@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <title>홈</title>
     <link rel="stylesheet" href="/css/common.css">
+    <script src="/js/common.js"></script>
 </head>
 <body>
-
-<header id="page-header"></header>
 
 <div id="content">
 
@@ -16,23 +15,6 @@
     
 </div>
 
-<footer id="page-footer"></footer>
 
-<script>
-    (function() { // 페이지 헤더 로딩
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", "/header.html", false);
-        xhr.send();
-        document.querySelector("#page-header").innerHTML = xhr.responseText;
-    })();
-
-    (function() { // 페이지 푸터 로딩
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", "/footer.html", false);
-        xhr.send();
-        document.querySelector("#page-footer").innerHTML = xhr.responseText;
-    })();
-
-</script>
 </body>
 </html>

@@ -35,8 +35,8 @@ public class SecurityConfig {
     return http
             // 1) 요청 URL의 접근권한 설정
             .authorizeHttpRequests()
-                .regexMatchers(".*\\.html").permitAll() // 정규표현식 .*\.html 와 일치하는 요청에 대해서 인증을 검사하지 않는다.
-                .mvcMatchers("/css/**").permitAll() // "/css/**" 는 인증을 검사하지 않는다.
+                .regexMatchers(".*\\.html").permitAll() // 정규표현식과 일치하는 요청은 인증을 검사하지 않는다.
+                .mvcMatchers("/css/**", "/js/**").permitAll() // 지정된 URL의 요청은 인증을 검사하지 않는다.
                 .anyRequest().authenticated() // 나머지 요청 URL은 인증을 검사한다.
                 .and() // 접근제어권한설정 등록기를 만든 HttpSecurity 객체를 리턴한다.
 
