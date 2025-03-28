@@ -1,15 +1,14 @@
 package bitcamp.myapp.member;
 
+import bitcamp.myapp.common.JsonResult;
 import bitcamp.myapp.config.CustomUserDetails;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -57,6 +56,22 @@ public class AuthController {
     }
 
     return "redirect:/home";
+  }
+
+  @GetMapping("user-info")
+  @ResponseBody
+  public JsonResult userInfo(HttpSession session) {
+    Member member = (Member) session.getAttribute("loginUser");
+    if (member == null) {
+      return JsonResult.builder()
+              .status(JsonResult.FAILURE)
+              .build();
+    }
+
+    return JsonResult.builder()
+            .status(JsonResult.SUCCESS)
+            .data(member)
+            .build();
   }
 
 }
