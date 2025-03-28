@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 조회</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <style>
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            height: 200px;
+            resize: vertical; /* Allow vertical resizing of the textarea */
+        }
+
+        .form-group input[type="submit"] {
+            background-color: #5cb85c;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #4cae4c;
+        }
+
+        .form-group input[type="button"] {
+            background-color: darkgray;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-group input[type="button"]:hover {
+            background-color: gray;
+        }
+    </style>
+    
+</head>
+<body>
+
+<header data-th-replace="~{header :: page-header}"></header>
+    
+<div id="content">
+    <h1>게시글</h1>
+    <form data-th-action="@{/board/update}" method="post"  enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="no">번호:</label>
+            <input type="text" id="no" name="no" value="1"
+                   data-th-value="${board.no}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="title">제목:</label>
+            <input type="text" id="title" name="title" value="제목입니다."
+                   data-th-value="${board.title}" required>
+        </div>
+        <div class="form-group">
+            <label for="content">내용:</label>
+            <textarea id="content" name="content"
+                      data-th-text="${board.content}"
+                      required>내용입니다.</textarea>
+        </div>
+        <div class="form-group">
+            <label for="files">첨부파일:</label>
+            <input type="file" id="files" name="files" multiple>
+            <ul id="attached-files">
+                <li data-th-each="attachedFile : ${board.attachedFiles}">
+                    <div data-th-if="${attachedFile.no != 0}" >
+                        <a href="/board/file/delete"
+                           data-th-href="@{/board/file/download(fileNo=${attachedFile.no})}"
+                           data-th-text="${attachedFile.originFilename}">test.pdf</a>
+                        <button type="button" data-th-onclick="|deleteFile(${attachedFile.no})|">삭제</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="form-group">
+            <label for="writer">작성자:</label>
+            <input type="text" id="writer" value="홍길동"
+                   data-th-value="${board.writer.name}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="createDate">작성일:</label>
+            <input type="text" id="createDate" value="2025-03-25"
+                   data-th-value="${board.createDate}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="viewCount">조회수:</label>
+            <input type="text" id="viewCount" value="22"
+                   data-th-value="${board.viewCount}" readonly>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="변경">
+            <input type="button" value="삭제" onclick="deleteBoard()">
+        </div>
+    </form>
+    <a href="list.html" data-th-href="@{/board/list}">목록</a>
+</div>
+
+<form id="delete-form" data-th-action="@{/board/delete}" method="post">
+    <input type="hidden" name="no" data-th-value="${board.no}">
+</form>
+
+<form id="delete-file-form" data-th-action="@{/board/file/delete}" method="post">
+    <input type="hidden" name="no">
+</form>
+
+
+<footer data-th-replace="~{footer :: #page-footer}"></footer>
+
+<script>
+function deleteBoard(no) {
+    document.getElementById("delete-form").submit();
+}
+
+function deleteFile(no) {
+    document.querySelector("#delete-file-form input[name=no]").value = no;
+    document.querySelector("#delete-file-form").submit();
+}
+</script>
+</body>
+</html>

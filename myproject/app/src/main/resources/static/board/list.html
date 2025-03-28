@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 목록</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <style>
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+
+<header data-th-replace="~{header :: page-header}"></header>
+
+<div id="content">
+    <h1>게시글 목록</h1>
+    <a href="form.html" data-th-href="@{/board/form}">새 게시글</a>
+    <table>
+        <thead>
+        <tr>
+            <th>게시글 번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>생성일</th>
+            <th>조회수</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr data-th-each="board : ${list}">
+                <td data-th-text="${board.no}">1</td>
+                <td><a href="detail.html"
+                    data-th-href="@{/board/detail(no=${board.no})}" 
+                    data-th-text="${board.title}">제목입니다.</a></td>
+                <td data-th-text="${board.writer.name}">홍길동</td>
+                <td data-th-text="${board.createDate}">2025-03-25</td>
+                <td data-th-text="${board.viewCount}">22</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<footer data-th-replace="~{footer :: #page-footer}"></footer>
+
+</body>
+</html>

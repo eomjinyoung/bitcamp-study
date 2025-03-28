@@ -1,23 +1,21 @@
-# 15. Spring Security 적용하기
+# 17. CSR 방식으로 전환하기
 
 ## 학습목표
 
-- Spring Security의 동작 원리를 이해하고 프로젝트에 적용할 수 있다.
+- SSR(Server-Side Rendering)과 CSR(Client-Side Rendering)의 동작 원리를 이해하고 CSR 구조로 변경할 수 있다.
 
 ## 작업
 
-### 1. Spring Security 라이브러리 준비
+### 1. Thymeleaf 뷰 템플릿 엔진을 제거한다.
 
-- build.gradle 파일 변경
+- resources/templates 폴더의 파일을 static 폴더로 옮긴다.
+- templates 폴더를 삭제한다.
+- build.gradle 변경
+  - thymeleaf 와 관련된 라이브러리 제거
 
-### 2. 설정 Java Config 준비
+### 2. Spring Security 설정을 변경한다.
 
-- bitcamp.myapp.config.securityxx 패키지
-  - SpringSecurityX 클래스 추가
-  - CustomUserDetails 클래스 추가
-- AuthController 클래스 변경
-- MemberDao.xml 변경
-- MemberDao 변경
-- MemberService, DefaultMemberService 변경
-- login-form.html 변경
-- common.css 변경
+- authorizeHttpRequests() 변경
+  - `*.html` 요청에 대해 인증을 검사하지 않도록 변경: 정규표현식 패턴 매칭 사용
+
+### 3. HTML 페이지 변경

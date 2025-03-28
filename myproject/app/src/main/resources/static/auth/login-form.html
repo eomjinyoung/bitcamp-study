@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+
+<header data-th-replace="~{header :: page-header}"></header>
+
+<div id="content">
+    <h2>로그인</h2>
+    <p data-th-if="${param.error}" class="error">로그인 실패!</p>
+    <form data-th-action="@{/auth/login}" method="post">
+        <div>
+            <label for="email">이메일:</label>
+            <input type="email" id="email" name="email"
+                   value="hong@test.com"
+                   data-th-value="${email}" required>
+        </div>
+        <div>
+            <label for="password">암호:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <input type="checkbox" id="saveEmail" name="saveEmail" data-th-checked="${email}">
+            <label for="saveEmail">이메일 저장</label>
+        </div>
+        <div>
+            <input type="submit" value="로그인">
+        </div>
+    </form>
+</div>
+
+<footer data-th-replace="~{footer :: #page-footer}"></footer>
+
+</body>
+</html>
