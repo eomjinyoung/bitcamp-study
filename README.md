@@ -188,6 +188,7 @@
 
 
 ### 2025-03-28(금)
+- CSRF 공격의 원리 이해 및 Spring Security에서의 동작 원리
 - 16. CSR(Clien-Side Rendering) 방식으로 전환하기
 - 파이널 팀 프로젝트
     - 구현
