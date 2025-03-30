@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bitcamp.myapp.board.BoardDao">
+
+    <resultMap id="boardMap" type="bitcamp.myapp.board.Board">
+        <id column="board_id" property="no"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="create_date" property="createDate"/>
+        <result column="view_count" property="viewCount"/>
+
+        <association property="writer" javaType="bitcamp.myapp.member.Member">
+            <id column="member_id" property="no"/>
+            <result column="name" property="name"/>
+        </association>
+
+        <collection property="attachedFiles" ofType="bitcamp.myapp.board.AttachedFile">
+            <id column="af_id" property="no"/>
+            <result column="filename" property="filename"/>
+            <result column="origin_filename" property="originFilename"/>
+            <result column="board_id" property="boardNo"/>
+        </collection>
+
+    </resultMap>
+
+    <select id="findAll" resultMap="boardMap">
+        select
+            b.board_id,
+            b.title,
+            b.create_date,
+            b.view_count,
+            m.member_id,
+            m.name
+        from ed_board b
+            join ed_member m on b.member_id=m.member_id
+    </select>
+
+    <insert id="insert" parameterType="bitcamp.myapp.board.Board"
+            useGeneratedKeys="true" keyColumn="board_id" keyProperty="no">
+        insert into ed_board(title, content, member_id)
+        values (#{title}, #{content}, #{writer.no})
+    </insert>
+
+    <select id="findByNo" resultMap="boardMap" parameterType="int">
+        select
+            b.board_id,
+            b.title,
+            b.content,
+            b.create_date,
+            b.view_count,
+            m.member_id,
+            m.name,
+            af.af_id,
+            af.filename,
+            af.origin_filename
+        from ed_board b
+            inner join ed_member m on b.member_id=m.member_id
+            left outer join ed_attach_file af on b.board_id=af.board_id
+        where
+            b.board_id=#{no}
+    </select>
+
+    <update id="update" parameterType="bitcamp.myapp.board.Board">
+        update ed_board set
+            title=#{title},
+            content=#{content}
+        where
+            board_id=#{no}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from ed_board
+            where board_id=#{no}
+    </delete>
+
+    <update id="updateViewCount" parameterType="map">
+        update ed_board set
+            view_count = view_count + #{increment}
+        where board_id = #{no}
+    </update>
+</mapper>
