@@ -35,4 +35,10 @@
 - /auth/login-form.html 변경
   - /js/common.js 변경
   - AuthController 변경
-  
+- /board/list.html 변경
+- /board/detail.html 변경
+
+### 4. 예외 상황 처리 컨트롤러 추가 
+
+- ErrorController 구현체 생성
+  - CustomErrorController 클래스 추가
