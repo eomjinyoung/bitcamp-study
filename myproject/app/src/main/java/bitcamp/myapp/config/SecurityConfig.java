@@ -46,6 +46,7 @@ public class SecurityConfig {
               .loginPage("/error") // Spring Security에서 로그인 폼을 제공하지 않는다.
               .loginProcessingUrl("/auth/login") // 로그인 폼의 action 값 설정. 이 요청은 Spring Security에서 처리한다.
               .successForwardUrl("/auth/success") // 로그인 성공 후 페이지 컨트롤러로 포워딩
+              .failureForwardUrl("/auth/failure") // 로그인 실패 후 페이지 컨트롤러로 포워딩
               .usernameParameter("email") // 클라이언트가 보내는 이메일의 파라미터 명을 "username"에서 "email"로 바꾼다.
               .passwordParameter("password") // 암호를 보내는 파라미터 이름을 설정한다.
               .permitAll()
