@@ -34,7 +34,8 @@ public class AuthController {
   }
 
   @PostMapping("success")
-  public String success(
+  @ResponseBody
+  public JsonResult success(
           String saveEmail,
           @AuthenticationPrincipal CustomUserDetails principal,
           HttpSession session,
@@ -55,7 +56,7 @@ public class AuthController {
       resp.addCookie(emailCookie);
     }
 
-    return "redirect:/home";
+    return JsonResult.builder().status(JsonResult.SUCCESS).build();
   }
 
   @GetMapping("user-info")

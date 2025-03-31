@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 // 학습 목표:
@@ -42,7 +43,7 @@ public class SecurityConfig {
 
             // 2) 인가되지 않은 요청인 경우 Spring Security 기본 로그인 화면으로 보내기
             .formLogin()
-              .loginPage("/auth/login-form") // 커스터마이징 로그인 페이지로 설정
+              .loginPage("/error") // Spring Security에서 로그인 폼을 제공하지 않는다.
               .loginProcessingUrl("/auth/login") // 로그인 폼의 action 값 설정. 이 요청은 Spring Security에서 처리한다.
               .successForwardUrl("/auth/success") // 로그인 성공 후 페이지 컨트롤러로 포워딩
               .usernameParameter("email") // 클라이언트가 보내는 이메일의 파라미터 명을 "username"에서 "email"로 바꾼다.
@@ -56,18 +57,26 @@ public class SecurityConfig {
             .logout()
               //.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")) // GET 요청 허용
               .logoutUrl("/logout") // 로그아웃 URL 설정. 기본은 POST 요청에만 동작한다.
-              .logoutSuccessUrl("/home") // 로그아웃 성공 후 이동 페이지
+              //.logoutSuccessUrl("/home") // 로그아웃 성공 후 이동 페이지
               .invalidateHttpSession(true) // 세션 무효화 설정
               .deleteCookies("JSESSIONID") // 톰캣 서버에서 세션 ID를 전달할 때 사용하는 쿠키
               .permitAll()
               .and()
 
-            // 4) CSRF(Cross-Site Request Forgery) 기능 비활성화 : 기본은 활성화이다.
-            // - 로그아웃 할 때 세션을 무효화시키면 세션에 보관된 CSRF 토큰도 함께 삭제된다.
-            // - 클라이언트가 요청했을 때 그 클라이언트에게 발급된 유효한 CSRF 토큰이 없으면
-            //   CSRF 공격으로 보고 요청을 거절한다.
-            // - 이 기능을 당분간 무효화시킨다.
-            //.csrf().disable()
+            // 4) CSRF(Cross-Site Request Forgery) 설정: 기본이 활성화된 상태다.
+            // - 데이터 변경에 관련된 요청(POST, PUT, PATCH, DELETE)을 받을 때 CSRF 검증을 수행한다.
+            //   즉, 서버에서 발급한 유효한 CSRF 토큰이 있을 경우에만 해당 요청을 처리한다.
+            //   만약 CSRF 토큰이 없거나 무효하다면 요청을 거절한다.
+            // - Server-Side Rendering 방식에서는 Thymeleaf 가 CSRF 토큰을 HTML <form>에 자동 삽입했다.
+            // - 그러나 Client-Side Rendering 방식에서는 HTML 폼에 CSRF 토큰을 자동으로 삽입할 수 없다.
+            // - 해결책?
+            //   클라이언트가 CSRF 토큰을 사용할 수 있도록 서버에서 응답할 때 쿠키로 보내도록 설정한다.
+            //   XSRF-TOKEN 이라는 이름의 쿠키로 클라이언트에게 전송된다.
+            // - 클라이언트에서는 데이터 변경에 관련된 요청을 할 때 마다.
+            //   폼 파라미터 값(_csrf)이나 요청 헤더(X-XSRF-TOKEN)로 CSRF 토큰 값을 서버에 보내야 한다.
+            .csrf()
+              .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+              .and()
 
             // SecurityFilterChain 준비
             .build();
