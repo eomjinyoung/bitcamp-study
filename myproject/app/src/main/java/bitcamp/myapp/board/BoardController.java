@@ -1,14 +1,7 @@
 package bitcamp.myapp.board;
 
 import bitcamp.myapp.cloud.StorageService;
-import bitcamp.myapp.common.JsonResult;
-import bitcamp.myapp.common.JwtAuth;
 import bitcamp.myapp.member.Member;
-import bitcamp.myapp.member.MemberService;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,54 +17,65 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@RestController
+@Controller
 @RequestMapping("/board")
 public class BoardController {
 
   private BoardService boardService;
   private StorageService storageService;
-  private MemberService memberService;
 
-  public BoardController(
-      BoardService boardService,
-      StorageService storageService,
-      MemberService memberService) {
-
+  public BoardController(BoardService boardService, StorageService storageService) {
     this.boardService = boardService;
     this.storageService = storageService;
-    this.memberService = memberService;
   }
+  /*
+  @GetMapping("list")
+  public String list(Map map) throws Exception {
+    List<Board> list = boardService.list();
+    map.put("list", list);
+    return "/board/list";
+  }
+  */
+
+  /*
+  @GetMapping("list")
+  public String list(Model model) throws Exception {
+    List<Board> list = boardService.list();
+    model.addAttribute("list", list);
+    return "/board/list";
+  }
+  */
 
   @GetMapping("list")
-  public JsonResult list() throws Exception {
+  public ModelAndView list() throws Exception {
     List<Board> list = boardService.list();
-    return JsonResult.builder()
-        .status(JsonResult.SUCCESS)
-        .data(list)
-        .build();
+    ModelAndView mv = new ModelAndView();
+    mv.addObject("list", list);
+    mv.setViewName("/board/list");
+    return mv;
   }
 
   @GetMapping("detail")
-  public JsonResult detail(int no, Model model) throws Exception {
-    Board board = boardService.get(no);
-    if (board == null) {
-      return JsonResult.builder().status(JsonResult.FAILURE).build();
-    }
-
+  public void detail(int no, Model model) throws Exception {
     boardService.increaseViewCount(no);
+    Board board = boardService.get(no);
+    model.addAttribute("board", board);
+  }
 
-    return JsonResult.builder()
-        .status(JsonResult.SUCCESS)
-        .data(board)
-        .build();
+  @GetMapping("form")
+  public void form() {
   }
 
   @PostMapping("add")
-  public JsonResult add(
+  public String add(
           Board board,
-          Part[] files) throws Exception {
+          Part[] files,
+          HttpSession session) throws Exception {
 
-    Member loginUser = JwtAuth.extractUserInfo();
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new Exception("로그인이 필요합니다.");
+    }
 
     board.setWriter(loginUser);
 
@@ -90,25 +94,27 @@ public class BoardController {
       fileList.add(attachedFile);
     }
     board.setAttachedFiles(fileList);
-
     try {
       boardService.add(board);
     } catch (Exception e) {
       for (AttachedFile file : board.getAttachedFiles()) {
         storageService.delete("board/" + file.getFilename());
       }
-      return JsonResult.builder().status(JsonResult.FAILURE).build();
+      throw e;
     }
-
-    return JsonResult.builder().status(JsonResult.SUCCESS).build();
+    return "redirect:list";
   }
 
-  @PatchMapping("update")
-  public JsonResult update(
+  @PostMapping("update")
+  public String update(
           Board board,
-          MultipartFile[] files) throws Exception {
+          MultipartFile[] files,
+          HttpSession session) throws Exception {
 
-    Member loginUser = JwtAuth.extractUserInfo();
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new Exception("로그인이 필요합니다.");
+    }
 
     Board oldBoard = boardService.get(board.getNo());
     if (oldBoard.getWriter().getNo() != loginUser.getNo()) {
@@ -134,21 +140,24 @@ public class BoardController {
 
     try {
       boardService.update(board);
-
     } catch (Exception e) {
       for (AttachedFile file : board.getAttachedFiles()) {
         storageService.delete("board/" + file.getFilename());
       }
-      return JsonResult.builder().status(JsonResult.FAILURE).data(e.getMessage()).build();
+      throw e;
     }
 
-    return JsonResult.builder().status(JsonResult.SUCCESS).build();
+    return "redirect:list";
   }
 
-  @DeleteMapping("delete")
-  public JsonResult delete(int no) throws Exception {
+  @PostMapping("delete")
+  public String delete(int no, HttpSession session) throws Exception {
 
-    Member loginUser = JwtAuth.extractUserInfo();
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new Exception("로그인이 필요합니다.");
+    }
+
     Board board = boardService.get(no);
     if (board.getWriter().getNo() != loginUser.getNo()) {
       throw new Exception("삭제 권한이 없습니다.");
@@ -159,7 +168,7 @@ public class BoardController {
     }
 
     boardService.delete(no);
-    return JsonResult.builder().status(JsonResult.SUCCESS).build();
+    return "redirect:list";
   }
 
   @GetMapping("file/download")
@@ -167,28 +176,31 @@ public class BoardController {
 
     AttachedFile attachedFile = boardService.getAttachedFile(fileNo);
 
-    resp.setHeader("Content-Disposition", "attachment; filename=" +
-        URLEncoder.encode(attachedFile.getOriginFilename(), StandardCharsets.UTF_8));
+    resp.setHeader("Content-Disposition", "attachment; filename=" + attachedFile.getOriginFilename());
     storageService.download(
             "board/" + attachedFile.getFilename(), // 스토리지 서비스의 버킷에서 다운로드 할 파일의 경로
             resp.getOutputStream() // 다운로드 한 데이터를 보낼 클라이언트 출력 스트림
     );
   }
 
-  @DeleteMapping("file/delete")
-  public JsonResult fileDelete(
-          @RequestParam("no") int fileNo) throws Exception {
+  @PostMapping("file/delete")
+  public String fileDelete(
+          @RequestParam("no") int fileNo,
+          HttpSession session) throws Exception {
 
-    Member loginUser = JwtAuth.extractUserInfo();
+      Member loginUser = (Member) session.getAttribute("loginUser");
+      if (loginUser == null) {
+        throw new Exception("로그인이 필요합니다.");
+      }
 
-    AttachedFile attachedFile = boardService.getAttachedFile(fileNo);
-    Board board = boardService.get(attachedFile.getBoardNo());
-    if (board.getWriter().getNo() != loginUser.getNo()) {
-      return JsonResult.builder().status(JsonResult.FAILURE).data("삭제 권한이 없습니다.").build();
-    }
+      AttachedFile attachedFile = boardService.getAttachedFile(fileNo);
+      Board board = boardService.get(attachedFile.getBoardNo());
+      if (board.getWriter().getNo() != loginUser.getNo()) {
+        throw new Exception("삭제 권한이 없습니다.");
+      }
 
-    storageService.delete("board/" + attachedFile.getFilename());
-    boardService.deleteAttachedFile(fileNo);
-    return JsonResult.builder().status(JsonResult.SUCCESS).build();
+      storageService.delete("board/" + attachedFile.getFilename());
+      boardService.deleteAttachedFile(fileNo);
+      return "redirect:../detail?no=" + board.getNo();
   }
 }

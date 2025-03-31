@@ -27,9 +27,6 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // JWT 관련 라이브러리
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.3.2'
     testImplementation 'org.springframework.security:spring-security-test'
