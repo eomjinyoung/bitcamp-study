@@ -21,9 +21,10 @@
   - Cookie 로 CSRF 토큰 값을 주고 받을 수 있게 설정
 - formLogin() 설정
   - loginPage() 변경: 로그인 폼 페이지 변경
-  - failureForwardUrl() 추가: 로그인 실패 처리 추가
+    - failureForwardUrl() 추가: 로그인 실패 처리 추가
 - logout() 설정
-  - .logoutSuccessUrl() 삭제: 로그아웃 후에 포워딩 페이지 제거
+  - logoutSuccessUrl() 삭제: 로그아웃 후에 포워딩 페이지 제거
+  - logoutSuccessHandler() 추가: 로그아웃 결과를 클라이언트에게 직접 출력
 
 ### 3. HTML 페이지 변경
 
