@@ -38,7 +38,7 @@
 </head>
 <body>
 
-<div id="content">
+<div id="page-content">
     <h1>게시글 목록</h1>
     <a href="form.html">새 게시글</a>
     <table>
@@ -51,17 +51,36 @@
             <th>조회수</th>
         </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td><a href="detail.html">제목입니다.</a></td>
-                <td>홍길동</td>
-                <td>2025-03-25</td>
-                <td>22</td>
-            </tr>
-        </tbody>
+        <tbody></tbody>
     </table>
 </div>
+
+<script id="tr-template" type="text/handlerbars">
+    {{#each data}}
+    <tr>
+        <td>{{no}}</td>
+        <td><a href="detail.html?no={{no}}">{{title}}</a></td>
+        <td>{{writer.name}}</td>
+        <td>{{createDate}}</td>
+        <td>{{viewCount}}</td>
+    </tr>
+    {{/each}}
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+<script>
+    const tbody = document.querySelector("#page-content tbody");
+    const trTemplate = document.querySelector("#tr-template");
+    
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "/board/list", false);
+    xhr.send();
+    const response = JSON.parse(xhr.responseText);
+    
+    const template = Handlebars.compile(trTemplate.innerHTML);
+    tbody.innerHTML = template(response);
+</script>
 
 </body>
 </html>

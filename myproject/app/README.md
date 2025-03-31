@@ -34,4 +34,5 @@
   - /js/common.js 추가
 - /auth/login-form.html 변경
   - /js/common.js 변경
+  - AuthController 변경
   

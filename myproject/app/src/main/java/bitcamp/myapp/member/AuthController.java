@@ -14,27 +14,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@Controller
+@RestController
 @RequestMapping("/auth")
 public class AuthController {
 
   private static final Log log = LogFactory.getLog(AuthController.class);
 
-  private MemberService memberService;
-
-  public AuthController(MemberService memberService) {
-    this.memberService = memberService;
-  }
-
-  @GetMapping("login-form")
-  public void form(
-          @CookieValue(value="email", required=false) String email,
-          Model model) {
-    model.addAttribute("email", email);
-  }
-
   @PostMapping("success")
-  @ResponseBody
   public JsonResult success(
           String saveEmail,
           @AuthenticationPrincipal CustomUserDetails principal,
@@ -60,13 +46,11 @@ public class AuthController {
   }
 
   @PostMapping("failure")
-  @ResponseBody
   public JsonResult failure() {
     return JsonResult.builder().status(JsonResult.FAILURE).build();
   }
 
   @GetMapping("user-info")
-  @ResponseBody
   public JsonResult userInfo(HttpSession session) {
     Member member = (Member) session.getAttribute("loginUser");
     if (member == null) {

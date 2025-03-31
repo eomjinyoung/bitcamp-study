@@ -1,6 +1,7 @@
 package bitcamp.myapp.board;
 
 import bitcamp.myapp.cloud.StorageService;
+import bitcamp.myapp.common.JsonResult;
 import bitcamp.myapp.member.Member;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequestMapping("/board")
 public class BoardController {
 
@@ -28,38 +29,29 @@ public class BoardController {
     this.boardService = boardService;
     this.storageService = storageService;
   }
-  /*
-  @GetMapping("list")
-  public String list(Map map) throws Exception {
-    List<Board> list = boardService.list();
-    map.put("list", list);
-    return "/board/list";
-  }
-  */
-
-  /*
-  @GetMapping("list")
-  public String list(Model model) throws Exception {
-    List<Board> list = boardService.list();
-    model.addAttribute("list", list);
-    return "/board/list";
-  }
-  */
 
   @GetMapping("list")
-  public ModelAndView list() throws Exception {
+  public JsonResult list() throws Exception {
     List<Board> list = boardService.list();
-    ModelAndView mv = new ModelAndView();
-    mv.addObject("list", list);
-    mv.setViewName("/board/list");
-    return mv;
+    return JsonResult.builder()
+            .status(JsonResult.SUCCESS)
+            .data(list)
+            .build();
   }
 
   @GetMapping("detail")
-  public void detail(int no, Model model) throws Exception {
-    boardService.increaseViewCount(no);
+  public JsonResult detail(int no) throws Exception {
     Board board = boardService.get(no);
-    model.addAttribute("board", board);
+    if (board == null) {
+      return JsonResult.builder().status(JsonResult.FAILURE).build();
+    }
+
+    boardService.increaseViewCount(no);
+
+    return JsonResult.builder()
+            .status(JsonResult.SUCCESS)
+            .data(board)
+            .build();
   }
 
   @GetMapping("form")
