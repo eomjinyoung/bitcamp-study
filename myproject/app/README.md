@@ -28,7 +28,6 @@
 
 ### 3. HTML 페이지 변경
 
-
 - /home.html 변경
   - /header.html 변경
   - /js/common.js 추가
