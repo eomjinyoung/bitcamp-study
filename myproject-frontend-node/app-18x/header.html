@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>헤더</title>
+</head>
+
+<body>
+    <header id="page-header">
+        <h1><a href="/home.html">프로젝트 관리 시스템</a></h1>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/member/list.html">회원</a></li>
+                <li><a href="/board/list.html">게시글</a></li>
+            </ul>
+        </nav>
+        <div class="login logged-in">
+            <span id="user-name">홍길동</span>
+            <a href='#' onclick="logout(); return false">로그아웃</a>
+        </div>
+        <div class="login logged-out">
+            <a href='/auth/login-form.html'>로그인</a>
+        </div>
+    </header>
+</body>
+
+</html>
