@@ -17,5 +17,20 @@
 
 - authorizeHttpRequests() 변경
   - `*.html` 요청에 대해 인증을 검사하지 않도록 변경: 정규표현식 패턴 매칭 사용
+- csrf() 설정
+  - Cookie 로 CSRF 토큰 값을 주고 받을 수 있게 설정
+- formLogin() 설정
+  - loginPage() 변경: 로그인 폼 페이지 변경
+  - failureForwardUrl() 추가: 로그인 실패 처리 추가
+- logout() 설정
+  - .logoutSuccessUrl() 삭제: 로그아웃 후에 포워딩 페이지 제거
 
 ### 3. HTML 페이지 변경
+
+
+- /home.html 변경
+  - /header.html 변경
+  - /js/common.js 추가
+- /auth/login-form.html 변경
+  - /js/common.js 변경
+  
