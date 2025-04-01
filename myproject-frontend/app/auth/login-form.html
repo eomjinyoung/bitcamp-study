@@ -50,9 +50,10 @@
         e.preventDefault();
 
         const xhr = new XMLHttpRequest();
-        xhr.open("POST", "/auth/login", false);
+        xhr.open("POST", `${__restServer}/auth/login`, false);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.setRequestHeader("X-XSRF-TOKEN", __csrfToken);
+        xhr.withCredentials = true;
 
         const params = new URLSearchParams();
         params.append("email", email.value);

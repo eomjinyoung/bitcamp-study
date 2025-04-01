@@ -84,8 +84,9 @@ boardForm.addEventListener("submit", (e) => {
     e.preventDefault();
     
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/board/add", false);
+    xhr.open("POST", `${__restServer}/board/add`, false);
     xhr.setRequestHeader("X-XSRF-TOKEN", __csrfToken);
+    xhr.withCredentials = true;
     xhr.send(new FormData(boardForm));
     
     const response = JSON.parse(xhr.responseText);

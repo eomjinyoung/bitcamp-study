@@ -126,7 +126,8 @@ if (isNaN(no)) {
 }
 
 const xhr = new XMLHttpRequest();
-xhr.open("GET", `/board/detail?no=${no}`, false);
+xhr.open("GET", `${__restServer}/board/detail?no=${no}`, false);
+xhr.withCredentials = true;
 xhr.send();
 const response = JSON.parse(xhr.responseText);
 if (response.status == "failure") {
@@ -151,8 +152,9 @@ document.querySelector("#board-form").addEventListener("submit", (e) => {
     e.preventDefault(); // 웹브라우저의 서버 요청을 막는다. 왜? AJAX로 직접 요청하기 때문이다.
     
     const xhr = new XMLHttpRequest();
-    xhr.open("PATCH", `/board/update`, false);
+    xhr.open("PATCH", `${__restServer}/board/update`, false);
     xhr.setRequestHeader("X-XSRF-TOKEN", __csrfToken);
+    xhr.withCredentials = true;
     xhr.send(new FormData(document.querySelector("#board-form")));
 
     const response = JSON.parse(xhr.responseText);
@@ -165,8 +167,9 @@ document.querySelector("#board-form").addEventListener("submit", (e) => {
 
 function deleteBoard() {
     const xhr = new XMLHttpRequest();
-    xhr.open("DELETE", `/board/delete?no=${no}`, false);
+    xhr.open("DELETE", `${__restServer}/board/delete?no=${no}`, false);
     xhr.setRequestHeader("X-XSRF-TOKEN", __csrfToken);
+    xhr.withCredentials = true;
     xhr.send();
 
     const response = JSON.parse(xhr.responseText);
@@ -179,9 +182,10 @@ function deleteBoard() {
 
 function deleteFile(no) {
     const xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/board/file/delete", false);
+    xhr.open("DELETE", `${__restServer}/board/file/delete`, false);
     xhr.setRequestHeader("X-XSRF-TOKEN", __csrfToken);
-
+    xhr.withCredentials = true;
+    
     const formData = new FormData();
     formData.append("fileNo", no);
 

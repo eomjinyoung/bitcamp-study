@@ -2,7 +2,8 @@
 
 ## 학습목표
 
-- 
+- Cross-Domain 간에 AJAX 요청이 가능하게 설정할 수 있다.
+- Nodejs 에서 live-server 모듈을 사용하여 개발용 웹서버를 구동할 수 있다.
 
 ## 작업
 
@@ -73,8 +74,18 @@ $ npm run start
 - CORS(Cross-Origin Resource Sharing) 설정
   - SecurityConfig 변경
     - cors() 추가
-  - App 변경
     - CorsConfigurationSource 객체 준비
       - CorsConfiguration 객체를 통해 CORS 설정
       - UrlBasedCorsConfigurationSource 객체를 이용하여 요청 검증
+
+### 6 credential 설정
+
+Cross-Domain 간에는 쿠키, 세션, HTTP 인증 헤더를 전송할 수 없다. CORS를 수행하려면 허용해야 한다.
+
+- 서버측 설정
+  - CorsConfiguration 설정할 때,
+    - configuration.setAllowCredentials(true) 
+- 클라이언트측 설정
+  - AJAX 요청 시 credential을 true로 설정해야 한다.
+    - xhr.withCredentials = true;
 

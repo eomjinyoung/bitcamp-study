@@ -74,7 +74,8 @@
     const trTemplate = document.querySelector("#tr-template");
     
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", "/board/list", false);
+    xhr.open("GET", `${__restServer}/board/list`, false);
+    xhr.withCredentials = true;
     xhr.send();
     const response = JSON.parse(xhr.responseText);
     

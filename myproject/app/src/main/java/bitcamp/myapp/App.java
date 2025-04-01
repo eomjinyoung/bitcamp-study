@@ -50,19 +50,6 @@ public class App {
     configurableEnvironment.getPropertySources().addFirst(propertySource);
   }
 
-  @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(List.of("http://localhost:3000")); // 허용할 도메인
-    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-    configuration.setAllowedHeaders(List.of("*")); // 모든 요청 헤더를 수락한다.
-    configuration.setAllowCredentials(true); // 다른 사이트와의 쿠키 전송 허용
-
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
-  }
-
   public static void main(String[] args) {
     System.out.println("App 실행!");
     SpringApplication.run(App.class, args);
