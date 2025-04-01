@@ -110,11 +110,9 @@
 
 <script id="li-template" type="text/handlerbars">
     {{#each attachedFiles}}
-    <li>
-        <div>
-            <a href="/board/file/download?fileNo={{no}}">{{originFilename}}</a>
-            <button type="button" onclick="deleteFile({{no}})">삭제</button>
-        </div>
+    <li id="file-{{no}}">
+        <a href="/board/file/download?fileNo={{no}}">{{originFilename}}</a>
+        <button type="button" onclick="deleteFile({{no}})">삭제</button>
     </li>
     {{/each}}
 </script>
@@ -154,8 +152,24 @@ function deleteBoard(no) {
 }
 
 function deleteFile(no) {
-    document.querySelector("#delete-file-form input[name=no]").value = no;
-    document.querySelector("#delete-file-form").submit();
+    const xhr = new XMLHttpRequest();
+    xhr.open("DELETE", `/board/file/delete?fileNo=${no}`, false);
+    xhr.setRequestHeader("X-XSRF-TOKEN", __csrfToken);
+
+    const formData = new FormData();
+    formData.append("no", no);
+
+    xhr.send(formData);
+
+    const response = JSON.parse(xhr.responseText);
+    if (response.status == "failure") {
+        alert("파일 삭제 실패!");
+        return;
+    }
+    
+    document.querySelector("#attached-files").removeChild(document.querySelector("#file-" + no));
+    //location.reload();
+
 }
 </script>
 </body>
