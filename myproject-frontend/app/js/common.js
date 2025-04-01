@@ -1,3 +1,4 @@
+const __restServer = "http://localhost:8888";
 const __csrfToken = getCookie("XSRF-TOKEN");
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -33,7 +34,7 @@ function loadFooter() { // 페이지 푸터 로딩
 
 function getUserInfo() { // 페이지 푸터 로딩
   let xhr = new XMLHttpRequest();
-  xhr.open("GET", "/auth/user-info", false);
+  xhr.open("GET", `${__restServer}/auth/user-info`, false);
   xhr.send();
 
   let result = JSON.parse(xhr.responseText);
@@ -47,7 +48,7 @@ function getUserInfo() { // 페이지 푸터 로딩
 
 function logout() {
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "/logout", false);
+  xhr.open("POST", `${__restServer}/logout`, false);
   xhr.setRequestHeader("X-XSRF-TOKEN", __csrfToken);
   xhr.send();
   location.href = "/home.html";

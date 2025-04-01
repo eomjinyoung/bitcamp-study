@@ -89,6 +89,13 @@ public class SecurityConfig {
               .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
               .and()
 
+            // 4) CORS 설정
+            // - 기본으로 비활성화된 상태다.
+            // - 즉 Cross-Origin 요청(다른 사이트에서 AJAX로 요청하는 것)을 차단한다.
+            // - 다른 사이트에서 요청하는 것을 허용하려면 CORS를 활성화시켜야 한다.
+            .cors()
+              .and()
+
             // SecurityFilterChain 준비
             .build();
   }

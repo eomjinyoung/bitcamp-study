@@ -7,7 +7,7 @@
 ```bash
 $ mkdir myproject-frontend-node
 ```
-
+ 
 ### 1.2 프론트엔드 관련 파일 복사
 
 - myproject/app/src/main/resources/static 폴더의 파일을 복사해 온다.

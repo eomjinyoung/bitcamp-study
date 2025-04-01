@@ -62,7 +62,7 @@
         }
         //params.append("_csrf", __csrfToken);
 
-        xhr.send(params.toString());
+        xhr.send(params.toString()); // "email=user1@test.com&password=1111&saveEmail=on"
 
         const response = JSON.parse(xhr.responseText);
 
