@@ -86,14 +86,7 @@
         <div class="form-group">
             <label for="files">첨부파일:</label>
             <input type="file" id="files" name="files" multiple>
-            <ul id="attached-files">
-                <li>
-                    <div>
-                        <a href="/board/file/delete"></a>
-                        <button type="button" onclick="deleteFile(${attachedFile.no})">삭제</button>
-                    </div>
-                </li>
-            </ul>
+            <ul id="attached-files"></ul>
         </div>
         <div class="form-group">
             <label for="writer">작성자:</label>
@@ -115,6 +108,18 @@
     <a href="list.html">목록</a>
 </div>
 
+<script id="li-template" type="text/handlerbars">
+    {{#each attachedFiles}}
+    <li>
+        <div>
+            <a href="/board/file/download?fileNo={{no}}">{{originFilename}}</a>
+            <button type="button" onclick="deleteFile({{no}})">삭제</button>
+        </div>
+    </li>
+    {{/each}}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 <script>
 const no = parseInt(new URLSearchParams(window.location.search).get("no"));
 if (isNaN(no)) {
@@ -141,7 +146,8 @@ document.querySelector("#writer").value = data.writer.name;
 document.querySelector("#createDate").value = data.createDate;
 document.querySelector("#viewCount").value = data.viewCount;
 
-
+const template = Handlebars.compile(document.querySelector("#li-template").innerHTML);
+document.querySelector("#attached-files").innerHTML = template(data);
 
 function deleteBoard(no) {
     document.getElementById("delete-form").submit();

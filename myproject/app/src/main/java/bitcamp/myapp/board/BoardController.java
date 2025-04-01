@@ -14,6 +14,8 @@ import org.springframework.web.servlet.view.JstlView;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -54,21 +56,13 @@ public class BoardController {
             .build();
   }
 
-  @GetMapping("form")
-  public void form() {
-  }
-
   @PostMapping("add")
-  public String add(
+  public JsonResult add(
           Board board,
           Part[] files,
           HttpSession session) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
-    if (loginUser == null) {
-      throw new Exception("로그인이 필요합니다.");
-    }
-
     board.setWriter(loginUser);
 
     ArrayList<AttachedFile> fileList = new ArrayList<>();
@@ -92,9 +86,9 @@ public class BoardController {
       for (AttachedFile file : board.getAttachedFiles()) {
         storageService.delete("board/" + file.getFilename());
       }
-      throw e;
+      return JsonResult.builder().status(JsonResult.FAILURE).build();
     }
-    return "redirect:list";
+    return JsonResult.builder().status(JsonResult.SUCCESS).build();
   }
 
   @PostMapping("update")
@@ -168,7 +162,8 @@ public class BoardController {
 
     AttachedFile attachedFile = boardService.getAttachedFile(fileNo);
 
-    resp.setHeader("Content-Disposition", "attachment; filename=" + attachedFile.getOriginFilename());
+    resp.setHeader("Content-Disposition", "attachment; filename=" +
+            URLEncoder.encode(attachedFile.getOriginFilename(), StandardCharsets.UTF_8));
     storageService.download(
             "board/" + attachedFile.getFilename(), // 스토리지 서비스의 버킷에서 다운로드 할 파일의 경로
             resp.getOutputStream() // 다운로드 한 데이터를 보낼 클라이언트 출력 스트림

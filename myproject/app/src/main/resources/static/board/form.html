@@ -55,9 +55,9 @@
 <body>
 
 
-<div id="content" class="board-form-container">
+<div id="page-content" class="board-form-container">
     <h1>새 게시글</h1>
-    <form data-th-action="@{/board/add}" method="POST" enctype="multipart/form-data">
+    <form id="board-form" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="no" value="39">
         <div class="form-group">
             <label for="title">제목:</label>
@@ -76,6 +76,29 @@
         </div>
     </form>
 </div>
+
+<script>
+const boardForm = document.querySelector("#board-form");
+
+boardForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/board/add", false);
+    xhr.setRequestHeader("X-XSRF-TOKEN", __csrfToken);
+    xhr.send(new FormData(boardForm));
+    
+    const response = JSON.parse(xhr.responseText);
+    if (response.status == "failure") {
+        alert("게시글 등록 실패!");
+        throw new Error("게시글 등록 실패!");
+    }
+    
+    location.href = "list.html";
+});
+
+
+</script>
 
 </body>
 </html>
