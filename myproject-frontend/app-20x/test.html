@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>새 게시글</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <style>
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            height: 200px;
+            resize: vertical; /* Allow vertical resizing of the textarea */
+        }
+
+        .form-group input[type="submit"] {
+            background-color: #5cb85c;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+<body>
+
+<header id="page-header">
+    <h1><a href="/home">프로젝트 관리 시스템</a></h1>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/member/list">회원</a></li>
+            <li><a href="/board/list">게시글</a></li>
+        </ul>
+    </nav>
+    <div class="login">
+        <span>user1</span>
+        <a href='/logout'>로그아웃</a>
+    </div>
+    
+</header>
+
+<div id="content" class="board-form-container">
+    <h1>새 게시글</h1>
+    <form action="http://192.168.0.33:8888/board/add" method="post" enctype="multipart/form-data"><input type="hidden" name="_csrf" value="373546b2-83b1-4cea-9afb-9a31b39b956b"/>
+        <div class="form-group">
+            <label for="title">제목:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="content">내용:</label>
+            <textarea id="content" name="content" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="files">첨부파일:</label>
+            <input type="file" id="files" name="files" multiple>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="등록">
+        </div>
+    </form>
+</div>
+
+<footer id="page-footer">
+    <address>서울시 강남구 강남대로 20길</address>
+</footer>
+
+</body>
+</html>
