@@ -2,6 +2,7 @@ package bitcamp.myapp.member;
 
 import bitcamp.myapp.common.JsonResult;
 import bitcamp.myapp.common.JwtAuth;
+import bitcamp.myapp.common.LoginUser;
 import bitcamp.myapp.config.CustomUserDetails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.logging.Log;
@@ -94,8 +95,8 @@ public class AuthController {
   }
 
   @GetMapping("user-info")
-  public JsonResult userInfo(HttpSession session) {
-    Member member = JwtAuth.extractUserInfo();
+  public JsonResult userInfo(@LoginUser Member member) {
+    //Member member = JwtAuth.extractUserInfo();
 
     if (member == null) {
       return JsonResult.builder()

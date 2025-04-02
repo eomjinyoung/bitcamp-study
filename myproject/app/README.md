@@ -3,6 +3,7 @@
 ## 학습목표
 
 - JWT 인증 원리를 이해하고 구성할 수 있다.
+- HandlerMethodArgumentResolver의 구동 원리를 이해하고 사용할 수 있다.
 
 ## 작업
 
@@ -55,3 +56,12 @@ JWT 토큰을 암호화하거나 암호 해제하는 일을 한다.
   - 세션이 아니라 JWT 에서 로그인 사용자 정보를 추출하도록 변경
   - 게시글 관련 페이지 변경
     - 요청할 때 JWT 토큰을 포함하기
+
+### 5 파라미터로 JWT에서 추출한 사용자 정보를 받기
+
+- @LoginUser 애노테이션 생성
+- HandlerMethodArgumentResolver 구현체 생성
+  - LoginUserArgumentResolver 클래스 생성
+- App 클래스 변경
+  - WebMvcConfigurer 구현
+  - addArgumentResolvers() 추가
