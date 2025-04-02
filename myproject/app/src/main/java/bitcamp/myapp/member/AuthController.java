@@ -1,12 +1,15 @@
 package bitcamp.myapp.member;
 
 import bitcamp.myapp.common.JsonResult;
+import bitcamp.myapp.common.JwtAuth;
 import bitcamp.myapp.config.CustomUserDetails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -92,11 +95,13 @@ public class AuthController {
 
   @GetMapping("user-info")
   public JsonResult userInfo(HttpSession session) {
-    Member member = (Member) session.getAttribute("loginUser");
+    Member member = JwtAuth.extractUserInfo();
+
     if (member == null) {
       return JsonResult.builder()
               .status(JsonResult.FAILURE)
               .build();
+
     }
 
     return JsonResult.builder()

@@ -2,6 +2,7 @@ package bitcamp.myapp.board;
 
 import bitcamp.myapp.cloud.StorageService;
 import bitcamp.myapp.common.JsonResult;
+import bitcamp.myapp.common.JwtAuth;
 import bitcamp.myapp.member.Member;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,10 +60,9 @@ public class BoardController {
   @PostMapping("add")
   public JsonResult add(
           Board board,
-          Part[] files,
-          HttpSession session) throws Exception {
+          Part[] files) throws Exception {
 
-    Member loginUser = (Member) session.getAttribute("loginUser");
+    Member loginUser = JwtAuth.extractUserInfo();
     board.setWriter(loginUser);
 
     ArrayList<AttachedFile> fileList = new ArrayList<>();
@@ -94,10 +94,9 @@ public class BoardController {
   @PatchMapping("update")
   public JsonResult update(
           Board board,
-          MultipartFile[] files,
-          HttpSession session) throws Exception {
+          MultipartFile[] files) throws Exception {
 
-    Member loginUser = (Member) session.getAttribute("loginUser");
+    Member loginUser = JwtAuth.extractUserInfo();
 
     Board oldBoard = boardService.get(board.getNo());
     if (oldBoard.getWriter().getNo() != loginUser.getNo()) {
@@ -141,8 +140,8 @@ public class BoardController {
   }
 
   @DeleteMapping("delete")
-  public JsonResult delete(int no, HttpSession session) throws Exception {
-    Member loginUser = (Member) session.getAttribute("loginUser");
+  public JsonResult delete(int no) throws Exception {
+    Member loginUser = JwtAuth.extractUserInfo();
     Board board = boardService.get(no);
     if (board.getWriter().getNo() != loginUser.getNo()) {
       return JsonResult.builder()
@@ -173,11 +172,9 @@ public class BoardController {
   }
 
   @DeleteMapping("file/delete")
-  public JsonResult fileDelete(
-          int fileNo,
-          HttpSession session) throws Exception {
+  public JsonResult fileDelete(int fileNo) throws Exception {
 
-      Member loginUser = (Member) session.getAttribute("loginUser");
+      Member loginUser = JwtAuth.extractUserInfo();
 
       AttachedFile attachedFile = boardService.getAttachedFile(fileNo);
       Board board = boardService.get(attachedFile.getBoardNo());

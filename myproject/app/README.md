@@ -39,4 +39,19 @@ JWT 토큰을 암호화하거나 암호 해제하는 일을 한다.
     - csrf().disable() 변경
 - AuthController 변경
   - success() 변경
-    - 로그인 회원 정보를 JWT 토큰에 담아서 클라이언트로 전달한다. 
+    - 로그인 회원 정보를 JWT 토큰에 담아서 클라이언트로 전달한다.
+
+### 4 웹 페이지 변경
+
+- login-form.html 변경
+  - 서버에서 받은 JWT 토큰을 sessionStorage에 보관한다.
+- /js/common.js 변경
+  - JWT 토큰 값을 글로벌 변수(__jwtToken)에 저장해 둔다.
+  - getUserInfo() 메서드에서 서버에 요청할 때 JWT 토큰 값을 Authorization 헤더로 보낸다.
+- AuthController 변경
+  - userInfo() 변경
+    - JWT 토큰에서 사용자 정보를 추출하여 리턴한다.
+- BoardController 변경
+  - 세션이 아니라 JWT 에서 로그인 사용자 정보를 추출하도록 변경
+  - 게시글 관련 페이지 변경
+    - 요청할 때 JWT 토큰을 포함하기

@@ -52,7 +52,6 @@
         const xhr = new XMLHttpRequest();
         xhr.open("POST", `${__restServer}/auth/login`, false);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.setRequestHeader("X-XSRF-TOKEN", __csrfToken);
         xhr.withCredentials = true;
 
         const params = new URLSearchParams();
@@ -61,15 +60,14 @@
         if (saveEmail.checked) {
             params.append("saveEmail", "on");
         }
-        //params.append("_csrf", __csrfToken);
 
         xhr.send(params.toString()); // "email=user1@test.com&password=1111&saveEmail=on"
 
         const response = JSON.parse(xhr.responseText);
 
         if (response.status == "success") {
+            localStorage.setItem("JWT-TOKEN", response.data);
             location.href = "/home.html";
-
         } else {
             errorMessage.classList.remove("invisible");
         }
