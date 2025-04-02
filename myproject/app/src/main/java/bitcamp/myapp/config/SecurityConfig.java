@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -109,6 +110,12 @@ public class SecurityConfig {
             //   "Authorization: Bearer <JWT토큰>" 헤더에 붙여 보내야 한다.
             // - OAuth2 인증 표준을 준수하는 필터다. 다른 OAuth2 인증 서버와 연동 가능하다.
             .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+
+            // 7) 세션 사용 안함으로 설정
+            // - JWT만 사용하도록 Stateless 로 설정
+            .sessionManagement()
+              .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+              .and()
 
             // SecurityFilterChain 준비
             .build();

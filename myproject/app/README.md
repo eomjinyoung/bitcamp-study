@@ -35,6 +35,8 @@ JWT 토큰을 암호화하거나 암호 해제하는 일을 한다.
   - JwtEncoder/JwtDecoder 생성
   - OAuth2 인증 필터 설정
     - oauth2ResourceServer() 추가
+  - 세션 사용하지 않도록 설정
+    - sessionManagement() 추가
   - 세션과 쿠키를 이용하지 않기(Stateless) 때문에 이와 관련된 설정을 제거한다.
     - logout() 제거
     - csrf().disable() 변경
