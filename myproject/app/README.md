@@ -29,9 +29,14 @@ JWT 토큰을 암호화하거나 암호 해제하는 일을 한다.
   - `jwt.private.key=classpath:private.pem`
   - `jwt.public.key=classpath:public.pem`
 - SpringSecurity 변경
-  - RSA 파일의 데이터를 읽어 온다.
-  - RSAPrivateKey, RSAPublicKey 필드 추가
-  - JwtEncoder 생성
-  - JwtDecoder 생성
+  - RSA 파일의 데이터를 필드로 읽어 온다.
+    - RSAPrivateKey, RSAPublicKey 필드 추가
+  - JwtEncoder/JwtDecoder 생성
   - OAuth2 인증 필터 설정
-    - oauth2
+    - oauth2ResourceServer() 추가
+  - 세션과 쿠키를 이용하지 않기(Stateless) 때문에 이와 관련된 설정을 제거한다.
+    - logout() 제거
+    - csrf().disable() 변경
+- AuthController 변경
+  - success() 변경
+    - 로그인 회원 정보를 JWT 토큰에 담아서 클라이언트로 전달한다. 

@@ -21,28 +21,19 @@ public class AuthController {
   private static final Log log = LogFactory.getLog(AuthController.class);
 
   @PostMapping("success")
-  public JsonResult success(
-          String saveEmail,
-          @AuthenticationPrincipal CustomUserDetails principal,
-          HttpSession session,
-          HttpServletResponse resp) throws Exception {
+  public JsonResult success(@AuthenticationPrincipal CustomUserDetails principal) throws Exception {
 
     log.debug("Spring Security에서 로그인 성공한 후 마무리 작업 수행!");
 
     Member member = principal.getMember();
-    session.setAttribute("loginUser", member);
 
-    if (saveEmail != null) {
-      Cookie emailCookie = new Cookie("email", member.getEmail());
-      emailCookie.setMaxAge(60 * 60 * 24 * 7);
-      resp.addCookie(emailCookie);
-    } else {
-      Cookie emailCookie = new Cookie("email", "");
-      emailCookie.setMaxAge(0);
-      resp.addCookie(emailCookie);
-    }
+    // JWT 토큰 생성
+    String jwtToken = "";
 
-    return JsonResult.builder().status(JsonResult.SUCCESS).build();
+    return JsonResult.builder()
+            .status(JsonResult.SUCCESS)
+            .data(jwtToken)
+            .build();
   }
 
   @PostMapping("failure")
