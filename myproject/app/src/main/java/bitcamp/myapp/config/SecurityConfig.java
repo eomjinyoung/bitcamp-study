@@ -2,17 +2,29 @@ package bitcamp.myapp.config;
 
 import bitcamp.myapp.member.Member;
 import bitcamp.myapp.member.MemberService;
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -26,6 +38,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.List;
 
 // 학습 목표:
@@ -41,6 +55,12 @@ import java.util.List;
 public class SecurityConfig {
 
   private static final Log log = LogFactory.getLog(SecurityConfig.class);
+
+  @Value("${jwt.private.key}")
+  RSAPrivateKey privateKey;
+
+  @Value("${jwt.public.key}")
+  RSAPublicKey publicKey;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -93,12 +113,15 @@ public class SecurityConfig {
               .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
               .and()
 
-            // 4) CORS 설정
+            // 5) CORS 설정
             // - 기본으로 비활성화된 상태다.
             // - 즉 Cross-Origin 요청(다른 사이트에서 AJAX로 요청하는 것)을 차단한다.
             // - 다른 사이트에서 요청하는 것을 허용하려면 CORS를 활성화시켜야 한다.
             .cors()
               .and()
+
+            // 6) OAuth2 설정
+            .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
 
             // SecurityFilterChain 준비
             .build();
@@ -144,6 +167,26 @@ public class SecurityConfig {
   public PasswordEncoder passwordEncoder() {
     log.debug("PasswordEncoder 준비!");
     return new BCryptPasswordEncoder();
+  }
+
+  /**
+   * JWT 서명을 위한 JwtEncoder 생성
+   */
+  @Bean
+  public JwtEncoder jwtEncoder() {
+    JWK jwk = new RSAKey.Builder(publicKey)
+            .privateKey(privateKey)
+            .build();
+    JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
+    return new NimbusJwtEncoder(jwkSource);
+  }
+
+  /**
+   * JWT 검증을 위한 JwtDecoder 생성
+   */
+  @Bean
+  public JwtDecoder jwtDecoder() {
+    return NimbusJwtDecoder.withPublicKey(publicKey).build();
   }
 }
 
