@@ -63,7 +63,6 @@
         background-color: gray;
       }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="http://localhost:3010/js/common.js"></script>
     <script src="/js/app.js"></script>
   </head>
@@ -126,13 +125,12 @@
       }
 
       (async function () {
-        const response = await axios.get(`${__restServer}/board/detail`, {
-          params: { no: no },
+        const response = await fetch(`${__restServer}/board/detail?no=${no}`, {
           headers: {
             Authorization: "Bearer " + __jwtToken,
           },
         });
-        const result = response.data;
+        const result = await response.json();
 
         if (result.status == "failure") {
           alert("해당 번호의 게시글이 없습니다.");
@@ -155,16 +153,14 @@
       document.querySelector("#board-form").addEventListener("submit", async (e) => {
         e.preventDefault(); // 웹브라우저의 서버 요청을 막는다. 왜? AJAX로 직접 요청하기 때문이다.
 
-        const response = await axios.patch(
-          `${__restServer}/board/update`,
-          new FormData(document.querySelector("#board-form")),
-          {
-            headers: {
-              Authorization: "Bearer " + __jwtToken,
-            },
-          }
-        );
-        const result = response.data;
+        const response = await fetch(`${__restServer}/board/update`, {
+          method: "PATCH",
+          headers: {
+            Authorization: "Bearer " + __jwtToken,
+          },
+          body: new FormData(document.querySelector("#board-form")),
+        });
+        const result = await response.json();
 
         if (result.status == "failure") {
           alert("게시글 변경 실패!");
@@ -174,13 +170,14 @@
       });
 
       async function deleteBoard() {
-        const response = await axios.delete(`${__restServer}/board/delete`, {
+        const response = await fetch(`${__restServer}/board/delete`, {
+          method: "DELETE",
           headers: {
             Authorization: "Bearer " + __jwtToken,
           },
-          data: new URLSearchParams({ no: no }),
+          body: new URLSearchParams({ no: no }),
         });
-        const result = response.data;
+        const result = await response.json();
 
         if (result.status == "failure") {
           alert("게시글 삭제 실패!");
@@ -190,13 +187,14 @@
       }
 
       async function deleteFile(no) {
-        const response = await axios.delete(`${__restServer}/board/file/delete`, {
+        const response = await fetch(`${__restServer}/board/file/delete`, {
+          method: "DELETE",
           headers: {
             Authorization: "Bearer " + __jwtToken,
           },
-          data: new URLSearchParams({ fileNo: no }),
+          body: new URLSearchParams({ fileNo: no }),
         });
-        const result = response.data;
+        const result = await response.json();
 
         if (result.status == "failure") {
           alert("파일 삭제 실패!");

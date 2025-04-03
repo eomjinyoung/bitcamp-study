@@ -34,7 +34,6 @@
         background-color: #f5f5f5;
       }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="http://localhost:3010/js/common.js"></script>
     <script src="/js/app.js"></script>
   </head>
@@ -73,16 +72,18 @@
       const tbody = document.querySelector("#page-content tbody");
       const trTemplate = document.querySelector("#tr-template");
 
-      (async function () {
-        const response = await axios.get(`${__restServer}/board/list`, {
-          headers: {
-            Authorization: "Bearer " + __jwtToken,
-          },
+      fetch(`${__restServer}/board/list`, {
+        headers: {
+          Authorization: "Bearer " + __jwtToken,
+        },
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((result) => {
+          const template = Handlebars.compile(trTemplate.innerHTML);
+          tbody.innerHTML = template(result);
         });
-        const result = response.data;
-        const template = Handlebars.compile(trTemplate.innerHTML);
-        tbody.innerHTML = template(result);
-      })();
     </script>
   </body>
 </html>

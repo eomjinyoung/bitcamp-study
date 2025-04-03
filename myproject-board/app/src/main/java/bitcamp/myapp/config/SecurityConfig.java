@@ -43,6 +43,7 @@ public class SecurityConfig {
     log.debug("SecurityFilterChain 준비!");
     return http
             .authorizeHttpRequests()
+                .mvcMatchers("/board/file/download/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
             .csrf().disable()

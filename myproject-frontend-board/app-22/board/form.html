@@ -50,7 +50,6 @@
         background-color: #4cae4c;
       }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="http://localhost:3010/js/common.js"></script>
     <script src="/js/app.js"></script>
   </head>
@@ -80,21 +79,26 @@
     <script>
       const boardForm = document.querySelector("#board-form");
 
-      boardForm.addEventListener("submit", async (e) => {
+      boardForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const response = await axios.post(`${__restServer}/board/add`, new FormData(boardForm), {
+        fetch(`${__restServer}/board/add`, {
+          method: "POST",
           headers: {
             Authorization: "Bearer " + __jwtToken,
           },
-        });
-        const result = response.data;
-
-        if (result.status == "failure") {
-          alert("게시글 등록 실패!");
-          throw new Error("게시글 등록 실패!");
-        }
-        location.href = "list.html";
+          body: new FormData(boardForm),
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((result) => {
+            if (result.status == "failure") {
+              alert("게시글 등록 실패!");
+              throw new Error("게시글 등록 실패!");
+            }
+            location.href = "list.html";
+          });
       });
     </script>
   </body>

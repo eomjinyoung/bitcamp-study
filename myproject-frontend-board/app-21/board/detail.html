@@ -63,7 +63,6 @@
         background-color: gray;
       }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="http://localhost:3010/js/common.js"></script>
     <script src="/js/app.js"></script>
   </head>
@@ -125,20 +124,16 @@
         throw new Error("게시글 번호가 없습니다.");
       }
 
-      (async function () {
-        const response = await axios.get(`${__restServer}/board/detail`, {
-          params: { no: no },
-          headers: {
-            Authorization: "Bearer " + __jwtToken,
-          },
-        });
-        const result = response.data;
-
-        if (result.status == "failure") {
+      const xhr = new XMLHttpRequest();
+      xhr.addEventListener("load", () => {
+        const response = JSON.parse(xhr.responseText);
+        if (response.status == "failure") {
           alert("해당 번호의 게시글이 없습니다.");
-          throw new Error(result.data);
+          console.log(response.data);
+          throw new Error(response.data);
         }
-        const data = result.data;
+
+        const data = response.data;
 
         document.querySelector("#no").value = data.no;
         document.querySelector("#title").value = data.title;
@@ -150,62 +145,60 @@
         const template = Handlebars.compile(document.querySelector("#li-template").innerHTML);
         data.__restServer = __restServer;
         document.querySelector("#attached-files").innerHTML = template(data);
-      })();
+      });
+      xhr.open("GET", `${__restServer}/board/detail?no=${no}`);
+      xhr.setRequestHeader("Authorization", "Bearer " + __jwtToken);
+      xhr.send();
 
-      document.querySelector("#board-form").addEventListener("submit", async (e) => {
+      document.querySelector("#board-form").addEventListener("submit", (e) => {
         e.preventDefault(); // 웹브라우저의 서버 요청을 막는다. 왜? AJAX로 직접 요청하기 때문이다.
 
-        const response = await axios.patch(
-          `${__restServer}/board/update`,
-          new FormData(document.querySelector("#board-form")),
-          {
-            headers: {
-              Authorization: "Bearer " + __jwtToken,
-            },
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener("load", () => {
+          const response = JSON.parse(xhr.responseText);
+          if (response.status == "failure") {
+            alert("게시글 변경 실패!");
+            return;
           }
-        );
-        const result = response.data;
-
-        if (result.status == "failure") {
-          alert("게시글 변경 실패!");
-          return;
-        }
-        location.reload();
+          location.reload();
+        });
+        xhr.open("PATCH", `${__restServer}/board/update`);
+        xhr.setRequestHeader("Authorization", "Bearer " + __jwtToken);
+        xhr.send(new FormData(document.querySelector("#board-form")));
       });
 
-      async function deleteBoard() {
-        const response = await axios.delete(`${__restServer}/board/delete`, {
-          headers: {
-            Authorization: "Bearer " + __jwtToken,
-          },
-          data: new URLSearchParams({ no: no }),
+      function deleteBoard() {
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener("load", () => {
+          const response = JSON.parse(xhr.responseText);
+          if (response.status == "failure") {
+            alert("게시글 삭제 실패!");
+            return;
+          }
+          location.href = "list.html";
         });
-        const result = response.data;
-
-        if (result.status == "failure") {
-          alert("게시글 삭제 실패!");
-          return;
-        }
-        location.href = "list.html";
+        xhr.open("DELETE", `${__restServer}/board/delete`);
+        xhr.setRequestHeader("Authorization", "Bearer " + __jwtToken);
+        xhr.send(new URLSearchParams({ no: no }));
       }
 
-      async function deleteFile(no) {
-        const response = await axios.delete(`${__restServer}/board/file/delete`, {
-          headers: {
-            Authorization: "Bearer " + __jwtToken,
-          },
-          data: new URLSearchParams({ fileNo: no }),
+      function deleteFile(no) {
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener("load", () => {
+          const response = JSON.parse(xhr.responseText);
+          if (response.status == "failure") {
+            alert("파일 삭제 실패!");
+            return;
+          }
+
+          document
+            .querySelector("#attached-files")
+            .removeChild(document.querySelector("#file-" + no));
+          //location.reload();
         });
-        const result = response.data;
-
-        if (result.status == "failure") {
-          alert("파일 삭제 실패!");
-          return;
-        }
-
-        document
-          .querySelector("#attached-files")
-          .removeChild(document.querySelector("#file-" + no));
+        xhr.open("DELETE", `${__restServer}/board/file/delete`);
+        xhr.setRequestHeader("Authorization", "Bearer " + __jwtToken);
+        xhr.send(new URLSearchParams({ fileNo: no }));
       }
     </script>
   </body>

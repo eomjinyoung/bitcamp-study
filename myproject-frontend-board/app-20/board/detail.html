@@ -1,208 +1,208 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>게시글 조회</title>
-    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/common.css" />
     <style>
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+      }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+      .form-group {
+        margin-bottom: 15px;
+      }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-        }
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+      }
 
-        .form-group input[type="text"],
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
+      .form-group input[type="text"],
+      .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box;
+        font-size: 16px;
+      }
 
-        .form-group textarea {
-            height: 200px;
-            resize: vertical; /* Allow vertical resizing of the textarea */
-        }
+      .form-group textarea {
+        height: 200px;
+        resize: vertical; /* Allow vertical resizing of the textarea */
+      }
 
-        .form-group input[type="submit"] {
-            background-color: #5cb85c;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+      .form-group input[type="submit"] {
+        background-color: #5cb85c;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 16px;
+      }
 
-        .form-group input[type="submit"]:hover {
-            background-color: #4cae4c;
-        }
+      .form-group input[type="submit"]:hover {
+        background-color: #4cae4c;
+      }
 
-        .form-group input[type="button"] {
-            background-color: darkgray;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .form-group input[type="button"]:hover {
-            background-color: gray;
-        }
+      .form-group input[type="button"] {
+        background-color: darkgray;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .form-group input[type="button"]:hover {
+        background-color: gray;
+      }
     </style>
     <script src="http://localhost:3010/js/common.js"></script>
     <script src="/js/app.js"></script>
-    
-</head>
-<body>
-    
-<div id="page-content">
-    <h1>게시글</h1>
-    <form id="board-form" method="post" enctype="multipart/form-data">
+  </head>
+  <body>
+    <div id="page-content">
+      <h1>게시글</h1>
+      <form id="board-form" method="post" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="no">번호:</label>
-            <input type="text" id="no" name="no" readonly>
+          <label for="no">번호:</label>
+          <input type="text" id="no" name="no" readonly />
         </div>
         <div class="form-group">
-            <label for="title">제목:</label>
-            <input type="text" id="title" name="title" required>
+          <label for="title">제목:</label>
+          <input type="text" id="title" name="title" required />
         </div>
         <div class="form-group">
-            <label for="content">내용:</label>
-            <textarea id="content" name="content" required></textarea>
+          <label for="content">내용:</label>
+          <textarea id="content" name="content" required></textarea>
         </div>
         <div class="form-group">
-            <label for="files">첨부파일:</label>
-            <input type="file" id="files" name="files" multiple>
-            <ul id="attached-files"></ul>
+          <label for="files">첨부파일:</label>
+          <input type="file" id="files" name="files" multiple />
+          <ul id="attached-files"></ul>
         </div>
         <div class="form-group">
-            <label for="writer">작성자:</label>
-            <input type="text" id="writer" readonly>
+          <label for="writer">작성자:</label>
+          <input type="text" id="writer" readonly />
         </div>
         <div class="form-group">
-            <label for="createDate">작성일:</label>
-            <input type="text" id="createDate" readonly>
+          <label for="createDate">작성일:</label>
+          <input type="text" id="createDate" readonly />
         </div>
         <div class="form-group">
-            <label for="viewCount">조회수:</label>
-            <input type="text" id="viewCount" readonly>
+          <label for="viewCount">조회수:</label>
+          <input type="text" id="viewCount" readonly />
         </div>
         <div class="form-group">
-            <input type="submit" value="변경">
-            <input type="button" value="삭제" onclick="deleteBoard()">
+          <input type="submit" value="변경" />
+          <input type="button" value="삭제" onclick="deleteBoard()" />
         </div>
-    </form>
-    <a href="list.html">목록</a>
-</div>
+      </form>
+      <a href="list.html">목록</a>
+    </div>
 
-<script id="li-template" type="text/handlerbars">
-    {{#each attachedFiles}}
-    <li id="file-{{no}}">
-        <a href="/board/file/download?fileNo={{no}}">{{originFilename}}</a>
-        <button type="button" onclick="deleteFile({{no}})">삭제</button>
-    </li>
-    {{/each}}
-</script>
+    <script id="li-template" type="text/handlerbars">
+      {{#each attachedFiles}}
+      <li id="file-{{no}}">
+          <a href="{{../__restServer}}/board/file/download?fileNo={{no}}">{{originFilename}}</a>
+          <button type="button" onclick="deleteFile({{no}})">삭제</button>
+      </li>
+      {{/each}}
+    </script>
 
-<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
-<script>
-const no = parseInt(new URLSearchParams(window.location.search).get("no"));
-if (isNaN(no)) {
-    alert("게시글 번호를 지정하세요!");
-    throw new Error("게시글 번호가 없습니다.");
-}
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script>
+      const no = parseInt(new URLSearchParams(window.location.search).get("no"));
+      if (isNaN(no)) {
+        alert("게시글 번호를 지정하세요!");
+        throw new Error("게시글 번호가 없습니다.");
+      }
 
-const xhr = new XMLHttpRequest();
-xhr.open("GET", `${__restServer}/board/detail?no=${no}`, false);
-xhr.setRequestHeader("Authorization", "Bearer " + __jwtToken);
-xhr.withCredentials = true;
-xhr.send();
-const response = JSON.parse(xhr.responseText);
-if (response.status == "failure") {
-    alert("해당 번호의 게시글이 없습니다.")
-    console.log(response.data);
-    throw new Error(response.data);
-}
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", `${__restServer}/board/detail?no=${no}`, false);
+      xhr.setRequestHeader("Authorization", "Bearer " + __jwtToken);
+      xhr.withCredentials = true;
+      xhr.send();
+      const response = JSON.parse(xhr.responseText);
+      if (response.status == "failure") {
+        alert("해당 번호의 게시글이 없습니다.");
+        console.log(response.data);
+        throw new Error(response.data);
+      }
 
-const data = response.data;
+      const data = response.data;
 
-document.querySelector("#no").value = data.no;
-document.querySelector("#title").value = data.title;
-document.querySelector("#content").value = data.content;
-document.querySelector("#writer").value = data.writer.name;
-document.querySelector("#createDate").value = data.createDate;
-document.querySelector("#viewCount").value = data.viewCount;
+      document.querySelector("#no").value = data.no;
+      document.querySelector("#title").value = data.title;
+      document.querySelector("#content").value = data.content;
+      document.querySelector("#writer").value = data.writer.name;
+      document.querySelector("#createDate").value = data.createDate;
+      document.querySelector("#viewCount").value = data.viewCount;
 
-const template = Handlebars.compile(document.querySelector("#li-template").innerHTML);
-document.querySelector("#attached-files").innerHTML = template(data);
+      const template = Handlebars.compile(document.querySelector("#li-template").innerHTML);
+      data.__restServer = __restServer;
+      document.querySelector("#attached-files").innerHTML = template(data);
 
-document.querySelector("#board-form").addEventListener("submit", (e) => {
-    e.preventDefault(); // 웹브라우저의 서버 요청을 막는다. 왜? AJAX로 직접 요청하기 때문이다.
-    
-    const xhr = new XMLHttpRequest();
-    xhr.open("PATCH", `${__restServer}/board/update`, false);
-    xhr.setRequestHeader("Authorization", "Bearer " + __jwtToken);
-    xhr.withCredentials = true;
-    xhr.send(new FormData(document.querySelector("#board-form")));
+      document.querySelector("#board-form").addEventListener("submit", (e) => {
+        e.preventDefault(); // 웹브라우저의 서버 요청을 막는다. 왜? AJAX로 직접 요청하기 때문이다.
 
-    const response = JSON.parse(xhr.responseText);
-    if (response.status == "failure") {
-        alert("게시글 변경 실패!");
-        return;
-    }
-    location.reload();
-});
+        const xhr = new XMLHttpRequest();
+        xhr.open("PATCH", `${__restServer}/board/update`, false);
+        xhr.setRequestHeader("Authorization", "Bearer " + __jwtToken);
+        xhr.withCredentials = true;
+        xhr.send(new FormData(document.querySelector("#board-form")));
 
-function deleteBoard() {
-    const xhr = new XMLHttpRequest();
-    xhr.open("DELETE", `${__restServer}/board/delete?no=${no}`, false);
-    xhr.setRequestHeader("Authorization", "Bearer " + __jwtToken);
-    xhr.withCredentials = true;
-    xhr.send();
+        const response = JSON.parse(xhr.responseText);
+        if (response.status == "failure") {
+          alert("게시글 변경 실패!");
+          return;
+        }
+        location.reload();
+      });
 
-    const response = JSON.parse(xhr.responseText);
-    if (response.status == "failure") {
-        alert("게시글 삭제 실패!");
-        return;
-    }
-    location.href = "list.html";
-}
+      function deleteBoard() {
+        const xhr = new XMLHttpRequest();
+        xhr.open("DELETE", `${__restServer}/board/delete?no=${no}`, false);
+        xhr.setRequestHeader("Authorization", "Bearer " + __jwtToken);
+        xhr.withCredentials = true;
+        xhr.send();
 
-function deleteFile(no) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("DELETE", `${__restServer}/board/file/delete`, false);
-    xhr.setRequestHeader("Authorization", "Bearer " + __jwtToken);
-    xhr.withCredentials = true;
-    
-    const formData = new FormData();
-    formData.append("fileNo", no);
+        const response = JSON.parse(xhr.responseText);
+        if (response.status == "failure") {
+          alert("게시글 삭제 실패!");
+          return;
+        }
+        location.href = "list.html";
+      }
 
-    xhr.send(formData);
+      function deleteFile(no) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("DELETE", `${__restServer}/board/file/delete`, false);
+        xhr.setRequestHeader("Authorization", "Bearer " + __jwtToken);
+        xhr.withCredentials = true;
 
-    const response = JSON.parse(xhr.responseText);
-    if (response.status == "failure") {
-        alert("파일 삭제 실패!");
-        return;
-    }
-    
-    document.querySelector("#attached-files").removeChild(document.querySelector("#file-" + no));
-    //location.reload();
+        const formData = new FormData();
+        formData.append("fileNo", no);
 
-}
-</script>
-</body>
+        xhr.send(formData);
+
+        const response = JSON.parse(xhr.responseText);
+        if (response.status == "failure") {
+          alert("파일 삭제 실패!");
+          return;
+        }
+
+        document
+          .querySelector("#attached-files")
+          .removeChild(document.querySelector("#file-" + no));
+        //location.reload();
+      }
+    </script>
+  </body>
 </html>

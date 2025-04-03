@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/app.js"></script>
+</head>
+<body>
+
+<div id="page-content">
+    <h2>로그인</h2>
+    <p id="error-message" class="error invisible">로그인 실패!</p>
+    <form id="login-form" method="post">
+        <div>
+            <label for="email">이메일:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="password">암호:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <input type="checkbox" id="saveEmail" name="saveEmail">
+            <label for="saveEmail">이메일 저장</label>
+        </div>
+        <div>
+            <input type="submit" value="로그인">
+        </div>
+    </form>
+</div>
+
+<script>
+    const loginForm = document.querySelector("#login-form");
+    const email = document.querySelector("#email");
+    const password = document.querySelector("#password");
+    const saveEmail = document.querySelector("#saveEmail");
+    const errorMessage = document.querySelector("#error-message");
+
+    const emailCookie = getCookie("email");
+    if (emailCookie) {
+        email.value = emailCookie;
+        saveEmail.checked = true;
+    }
+
+    loginForm.addEventListener("submit", async (e) => {
+        // form 태그에서 submit 이벤트가 발생하면 이 함수가 호출된다.
+        // 호출이 끝난 후 기본으로 서버에 POST 요청을 보낸다.
+        // 이 행동을 막고 싶으면 다음과 같이 설정하라!
+        e.preventDefault();
+
+        const response = await axios.post(
+            `${__restServer}/auth/login`, 
+            new URLSearchParams({
+                email: email.value,
+                password: password.value
+            })
+        );
+
+        const result = response.data;
+        if (result.status == "success") {
+            //localStorage.setItem("JWT-TOKEN", response.data);
+            document.cookie = `jwt_token=${result.data}; path=/; domain=localhost; SameSite=None; Secure`;
+            location.href = "/home.html";
+        } else {
+            errorMessage.classList.remove("invisible");
+        }
+    });
+
+</script>
+
+</body>
+</html>

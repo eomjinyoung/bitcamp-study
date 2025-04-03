@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>새 게시글</title>
+</head>
+<body>
+
+<script>
+    function f1() {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:8010/auth/login", false);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.send(new URLSearchParams({email: "user1@test.com", password: "1111"}));
+        console.log(xhr.responseText);
+    }
+
+    async function f2() {
+        console.log("1111");
+        const response = await fetch("http://localhost:8010/auth/login", {
+            method: "POST",
+            body: new URLSearchParams({email: "user1@test.com", password: "1111"}) 
+        });
+        console.log("2222");
+        const result = await response.json();
+        console.log(result);
+    }
+
+    // f1();
+    // console.log("f1() 호출했음!");
+
+    f2();
+    console.log("f2() 호출했음!");
+
+
+</script>
+</body>
+</html>

@@ -50,7 +50,6 @@
         background-color: #4cae4c;
       }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="http://localhost:3010/js/common.js"></script>
     <script src="/js/app.js"></script>
   </head>
@@ -83,12 +82,14 @@
       boardForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const response = await axios.post(`${__restServer}/board/add`, new FormData(boardForm), {
+        const response = await fetch(`${__restServer}/board/add`, {
+          method: "POST",
           headers: {
             Authorization: "Bearer " + __jwtToken,
           },
+          body: new FormData(boardForm),
         });
-        const result = response.data;
+        const result = await response.json();
 
         if (result.status == "failure") {
           alert("게시글 등록 실패!");
