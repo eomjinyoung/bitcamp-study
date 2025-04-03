@@ -44,28 +44,32 @@
         saveEmail.checked = true;
     }
 
-    loginForm.addEventListener("submit", async (e) => {
+    loginForm.addEventListener("submit", (e) => {
         // form 태그에서 submit 이벤트가 발생하면 이 함수가 호출된다.
         // 호출이 끝난 후 기본으로 서버에 POST 요청을 보낸다.
         // 이 행동을 막고 싶으면 다음과 같이 설정하라!
         e.preventDefault();
 
-        const response = await fetch(`${__restServer}/auth/login`, {
+
+        fetch(`${__restServer}/auth/login`, {
             method: "POST",
             body: new URLSearchParams({
                 email: email.value,
                 password: password.value
             })
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((result) => {  
+            if (result.status == "success") {
+                //localStorage.setItem("JWT-TOKEN", response.data);
+                document.cookie = `jwt_token=${result.data}; path=/; domain=localhost; SameSite=None; Secure`;
+                location.href = "/home.html";
+            } else {
+                errorMessage.classList.remove("invisible");
+            }
         });
-
-        const result = await response.json();
-        if (result.status == "success") {
-            //localStorage.setItem("JWT-TOKEN", response.data);
-            document.cookie = `jwt_token=${result.data}; path=/; domain=localhost; SameSite=None; Secure`;
-            location.href = "/home.html";
-        } else {
-            errorMessage.classList.remove("invisible");
-        }
     });
 
 </script>
