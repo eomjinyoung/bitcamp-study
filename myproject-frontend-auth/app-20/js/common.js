@@ -7,49 +7,38 @@ document.addEventListener("DOMContentLoaded", () => {
   // DOM Tree 를 완성한 후, 렌더링 전에 호출됨
   loadHeader();
   loadFooter();
+
+  if (__jwtToken) {
+    getUserInfo();
+  }
 });
 
 function loadHeader() { // 페이지 헤더 로딩
-  const xhr = new XMLHttpRequest();
-  xhr.addEventListener("load", () => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(xhr.responseText, "text/html");
-    document.body.insertBefore(doc.querySelector("#page-header"), document.body.firstChild);
-
-    if (__jwtToken) {
-      getUserInfo();
-    }
-  });
-  xhr.open("GET", "http://localhost:3010/header.html");
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://localhost:3010/header.html", false);
   xhr.send();
+  
+  let parser = new DOMParser();
+  let doc = parser.parseFromString(xhr.responseText, "text/html");
+
+  document.body.insertBefore(doc.querySelector("#page-header"), document.body.firstChild);
+
 }
 
 function loadFooter() { // 페이지 푸터 로딩
-  const xhr = new XMLHttpRequest();
-  xhr.addEventListener("load", () => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(xhr.responseText, "text/html");
-    document.body.appendChild(doc.querySelector("#page-footer"));
-  });
-  xhr.open("GET", "http://localhost:3010/footer.html");
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://localhost:3010/footer.html", false);
   xhr.send();
+
+  let parser = new DOMParser();
+  let doc = parser.parseFromString(xhr.responseText, "text/html");
+
+  document.body.appendChild(doc.querySelector("#page-footer"));
 }
 
 function getUserInfo() { // 페이지 푸터 로딩
   const xhr = new XMLHttpRequest();
-  xhr.addEventListener("load", () => {
-    const result = JSON.parse(xhr.responseText);
-    console.log(result);
-    if (result.status == "success") {
-      document.querySelector("#user-name").innerHTML = result.data.name;
-      document.querySelector(".logged-out").classList.add("invisible");
-      document.querySelector(".logged-in").classList.remove("invisible");
-    } else {
-      document.querySelector(".logged-in").classList.add("invisible");
-      document.querySelector(".logged-out").classList.remove("invisible");
-    }
-  });
-  xhr.open("GET", `http://localhost:8010/auth/user-info`);
+  xhr.open("GET", `http://localhost:8010/auth/user-info`, false);
   xhr.setRequestHeader("Authorization", "Bearer " + __jwtToken);
   
   // 클라이언트에서 Cross Domain 으로 쿠키, 세션, HTTP 인증 헤더를 보내고 받고 싶다면, 다음을 설정해야 한다.
@@ -57,6 +46,18 @@ function getUserInfo() { // 페이지 푸터 로딩
   xhr.withCredentials = true;
 
   xhr.send();
+
+  const result = JSON.parse(xhr.responseText);
+  console.log(result);
+
+  if (result.status == "success") {
+    document.querySelector("#user-name").innerHTML = result.data.name;
+    document.querySelector(".logged-out").classList.add("invisible");
+    document.querySelector(".logged-in").classList.remove("invisible");
+  } else {
+    document.querySelector(".logged-in").classList.add("invisible");
+    document.querySelector(".logged-out").classList.remove("invisible");
+  }
 }
 
 function logout() {

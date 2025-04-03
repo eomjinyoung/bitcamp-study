@@ -1,0 +1,1 @@
+const __restServer = "http://localhost:8020";

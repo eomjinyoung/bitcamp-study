@@ -83,6 +83,9 @@ public class AuthController {
     // JWT 토큰을 String으로 변환
     String jwtToken = jwt.getTokenValue();
 
+    // 비동기 실행이 필요한 이유를 확인하기 위함!
+    //Thread.sleep(10000);
+
     return JsonResult.builder()
             .status(JsonResult.SUCCESS)
             .data(jwtToken)

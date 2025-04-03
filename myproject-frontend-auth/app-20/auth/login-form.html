@@ -51,19 +51,7 @@
         e.preventDefault();
 
         const xhr = new XMLHttpRequest();
-        xhr.addEventListener("load", () => {
-            console.log("서버에서 응답을 받았음!");
-            const response = JSON.parse(xhr.responseText);
-
-            if (response.status == "success") {
-                //localStorage.setItem("JWT-TOKEN", response.data);
-                document.cookie = `jwt_token=${response.data}; path=/; domain=localhost; SameSite=None; Secure`;
-                location.href = "/home.html";
-            } else {
-                errorMessage.classList.remove("invisible");
-            }
-        });
-        xhr.open("POST", `${__restServer}/auth/login`);
+        xhr.open("POST", `${__restServer}/auth/login`, false);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.withCredentials = true;
 
@@ -75,7 +63,16 @@
         }
 
         xhr.send(params.toString()); // "email=user1@test.com&password=1111&saveEmail=on"
-        console.log("서버에 로그인 요청을 보내놨음!");
+
+        const response = JSON.parse(xhr.responseText);
+
+        if (response.status == "success") {
+            //localStorage.setItem("JWT-TOKEN", response.data);
+            document.cookie = `jwt_token=${response.data}; path=/; domain=localhost; SameSite=None; Secure`;
+            location.href = "/home.html";
+        } else {
+            errorMessage.classList.remove("invisible");
+        }
     });
 
 </script>
