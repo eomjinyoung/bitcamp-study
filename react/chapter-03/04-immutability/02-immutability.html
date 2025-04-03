@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no"/>
+    <meta charset="utf-8">
+    <title>Immutability</title>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+<h1>Immutability</h1>
+<p>Open the console</p>
+<script type="text/babel">
+
+    let color_lawn = {
+      title: "잔디",
+      color: "#00FF00",
+      rating: 0
+    }
+
+    var rateColor = function(color, rating) {
+      return Object.assign({}, color, {rating:rating})
+    }
+
+    //
+    // Object.assign으로 복사본을 만들어서 평점을 부여한다
+    //
+
+    console.log(rateColor(color_lawn, 5).rating)
+    console.log(color_lawn.rating)
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no"/>
+    <meta charset="utf-8">
+    <title>Immutability</title>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+<h1>Immutability</h1>
+<p>Open the console</p>
+<script type="text/babel">
+
+    let list = [
+        { title: "과격한 빨강"},
+        { title: "잔디"},
+        { title: "파티 핑크"}
+    ]
+
+    var addColor = function(title, colors) {
+      colors.push({ title: title })
+      return colors
+    }
+
+    //
+    // 색을 추가하면 원래의 배열이 바뀐다
+    //
+
+    console.log(addColor("매력적인 초록", list).length)
+    console.log(list.length)
+
+</script>
+</body>
+</html>

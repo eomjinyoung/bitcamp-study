@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no"/>
+    <meta charset="utf-8">
+    <title>Arrow Functions</title>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+<h1>Arrow Functions</h1>
+<p>Open the console</p>
+<script type="text/babel">
+
+    // 언제 화살표 함수를 사용해야 할지 알고 사용할 것
+
+    var gangwon = {
+      resorts: ["용평","평창","강촌","강릉","홍천"],
+      print: function(delay=1000) {
+
+        setTimeout(() => {
+          console.log(this === window)
+        }, delay)
+
+      }
+    }
+
+    gangwon.print(); // true
+
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AddColorForm /> UI Componnet Rendering the UI renders correctly 1`] = `
+<form
+  className="add-color"
+  onSubmit={[Function]}
+>
+  <input
+    placeholder="색 이름..."
+    required={true}
+    type="text"
+  />
+  <input
+    required={true}
+    type="color"
+  />
+  <button>
+    추가
+  </button>
+</form>
+`;

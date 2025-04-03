@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no"/>
+    <meta charset="utf-8">
+    <title>Destructuring</title>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+<h1>Destructuring</h1>
+<p>Open the console</p>
+<script type="text/babel">
+
+    // 객체 인자 구조분해
+
+    var lordify = ({firstname}) =>
+      console.log(`캔터베리의 ${firstname}`)
+
+    var regularPerson = {
+      firstname: "현석",
+      lastname: "오"
+    }
+
+    lordify(regularPerson)
+
+</script>
+</body>
+</html>

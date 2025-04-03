@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no"/>
+    <meta charset="utf-8">
+    <title>Spread Operator</title>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+<h1>Spread Operator</h1>
+<p>Open the console</p>
+<script type="text/babel">
+
+    // peaks를 스프레드 연산자로 복사한 후 reverse 수행
+
+    var peaks = ["대청봉", "중청봉", "소청봉"]
+    var [last] = [...peaks].reverse()
+
+    console.log(last) // 소청봉
+    console.log(peaks.join(', '))
+
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no"/>
+    <meta charset="utf-8">
+    <title>Pure Functions</title>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+<h1>Pure Functions</h1>
+<p>Open the console</p>
+<script type="text/babel">
+
+    var frederick = {
+      name: "Frederick Douglass",
+      canRead: false,
+      canWrite: false
+    }
+
+    const selfEducate = person =>
+        ({
+            ...person,
+            canRead: true,
+            canWrite: true
+        })
+
+    //
+    // 순수함수로 객체를 인자로 받아서 새 객체를 반환한다. 
+    // 아무 부수 효과도 발생시키지 않는다
+    //
+
+    console.log( selfEducate(frederick) )
+    console.log( frederick )
+
+</script>
+</body>
+</html>

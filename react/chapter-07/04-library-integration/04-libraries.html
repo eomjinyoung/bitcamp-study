@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no"/>
+    <meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <title>라이브러리</title>
+</head>
+<body>
+<div id="react-container"></div>
+  <script type="text/babel">
+
+    const { Component } = React
+    const { render } = ReactDOM
+
+    const historicDatesForSkiing = [
+      {
+        year: 1879,
+        event: "스키 생산 시작"
+      },
+      {
+      year: 1882,
+      event: "미국 스키 클럽 창설"
+      },
+      {
+      year: 1924,
+      event: "제 1회 겨울 올림픽 개최"
+      },
+      {
+      year: 1926,
+      event: "첫번째 미국 스키샵이 문을 엶"
+      },
+      {
+      year: 1932,
+      event: "북아메리카 최초로 견인 로프(rope tow) 작동 시작"
+      },
+      {
+      year: 1936,
+      event: "첫번째 리프트 작동 시작"
+      },
+      {
+      year: 1949,
+      event: "스쿼벨리, 매드 리버 글렌 개장"
+      },
+      {
+      year: 1958,
+      event: "첫번째 곤돌라 작동 시작"
+      },
+      {
+      year: 1964,
+      event: "플라스틱 버클 부츠 출시"
+      }
+    ]
+
+    const Canvas = ({children}) =>
+        <svg height="500" width="800">
+          {children}
+        </svg>
+
+    const TimelineDot = ({position, txt}) =>
+        <g transform={`translate(${position},0)`}>
+          <circle cy={160} r={5} style={{fill: 'blue'}} />
+          <text y={115} x={-95} transform="rotate(-45)" style={{fontSize: '9px'}}>{txt}</text>
+        </g>
+
+    class Timeline extends Component {
+
+      constructor({data=[]}) {
+          const times = d3.extent(data.map(d => d.year))
+          const range = [50, 750]
+          super({data})
+          this.scale = d3.time.scale().domain(times).range(range)
+          this.state = {data, times, range}
+      }
+
+      render() {
+          const { data } = this.state
+          const { scale } = this
+          return (
+              <div className="timeline">
+                  <h1>{this.props.name} 타임라인</h1>
+                  <Canvas>
+                      {data.map((d, i) =>
+                          <TimelineDot position={scale(d.year)} txt={`${d.year} - ${d.event}`}/>
+                      )}
+                  </Canvas>
+              </div>
+          )
+      }
+
+    }
+
+    render(
+        <Timeline name="스키의 역사"
+                data={historicDatesForSkiing} />,
+        document.getElementById('react-container')
+    )
+
+
+  </script>
+</body>
+</html>
