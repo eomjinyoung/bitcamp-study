@@ -1,6 +1,7 @@
-const __restServer = "http://localhost:8010";
 const __csrfToken = getCookie("XSRF-TOKEN");
-let __jwtToken = localStorage.getItem("JWT-TOKEN");
+//let __jwtToken = localStorage.getItem("JWT-TOKEN");
+let __jwtToken = getCookie("jwt_token");
+//console.log("__jwtToken ===> ", __jwtToken);
 
 document.addEventListener("DOMContentLoaded", () => {
   // DOM Tree 를 완성한 후, 렌더링 전에 호출됨
@@ -14,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function loadHeader() { // 페이지 헤더 로딩
   let xhr = new XMLHttpRequest();
-  xhr.open("GET", "/header.html", false);
+  xhr.open("GET", "http://localhost:3010/header.html", false);
   xhr.send();
   
   let parser = new DOMParser();
@@ -26,7 +27,7 @@ function loadHeader() { // 페이지 헤더 로딩
 
 function loadFooter() { // 페이지 푸터 로딩
   let xhr = new XMLHttpRequest();
-  xhr.open("GET", "/footer.html", false);
+  xhr.open("GET", "http://localhost:3010/footer.html", false);
   xhr.send();
 
   let parser = new DOMParser();
@@ -37,7 +38,7 @@ function loadFooter() { // 페이지 푸터 로딩
 
 function getUserInfo() { // 페이지 푸터 로딩
   const xhr = new XMLHttpRequest();
-  xhr.open("GET", `${__restServer}/auth/user-info`, false);
+  xhr.open("GET", `http://localhost:8010/auth/user-info`, false);
   xhr.setRequestHeader("Authorization", "Bearer " + __jwtToken);
   
   // 클라이언트에서 Cross Domain 으로 쿠키, 세션, HTTP 인증 헤더를 보내고 받고 싶다면, 다음을 설정해야 한다.
@@ -60,9 +61,10 @@ function getUserInfo() { // 페이지 푸터 로딩
 }
 
 function logout() {
-  localStorage.removeItem("JWT-TOKEN");
+  //localStorage.removeItem("JWT-TOKEN");
+  document.cookie = `jwt_token=; path=/; domain=localhost; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=None; Secure`;
   __jwtToken = null;
-  location.href = "/home.html";
+  location.href = "http://localhost:3010/home.html";
 }
 
 function getCookie(name) {
