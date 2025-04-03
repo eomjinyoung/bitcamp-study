@@ -10,8 +10,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function loadHeader() {
-  const response = await fetch("http://localhost:3010/header.html");
-  const result = await response.text();
+  const response = await axios({
+    method: "get", // 기본값: "get"
+    url: "http://localhost:3010/header.html",
+    responseType: "text" // 기본값: "json"
+  });
+  const result = response.data;
 
   const parser = new DOMParser();
   const doc = parser.parseFromString(result, "text/html");
@@ -23,8 +27,10 @@ async function loadHeader() {
 }
 
 async function loadFooter() { // 페이지 푸터 로딩
-    const response = await fetch("http://localhost:3010/footer.html");
-    const result =  await response.text();
+    const response = await axios.get("http://localhost:3010/footer.html", {
+      responseType: "text"
+    });
+    const result =  response.data;
         
     const parser = new DOMParser();
     const doc = parser.parseFromString(result, "text/html");
@@ -32,12 +38,12 @@ async function loadFooter() { // 페이지 푸터 로딩
 }
 
 async function getUserInfo() {
-  const response = await fetch(`http://localhost:8010/auth/user-info`, {
+  const response = await axios.get(`http://localhost:8010/auth/user-info`, {
     headers: {
       "Authorization": "Bearer " + __jwtToken
     }
   });
-  const result = await response.json();
+  const result = response.data;
   
   if (result.status == "success") {
     document.querySelector("#user-name").innerHTML = result.data.name;
