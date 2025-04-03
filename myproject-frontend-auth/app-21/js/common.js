@@ -1,0 +1,78 @@
+const __csrfToken = getCookie("XSRF-TOKEN");
+//let __jwtToken = localStorage.getItem("JWT-TOKEN");
+let __jwtToken = getCookie("jwt_token");
+//console.log("__jwtToken ===> ", __jwtToken);
+
+document.addEventListener("DOMContentLoaded", () => {
+  // DOM Tree 를 완성한 후, 렌더링 전에 호출됨
+  loadHeader();
+  loadFooter();
+});
+
+function loadHeader() { // 페이지 헤더 로딩
+  const xhr = new XMLHttpRequest();
+  xhr.addEventListener("load", () => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xhr.responseText, "text/html");
+    document.body.insertBefore(doc.querySelector("#page-header"), document.body.firstChild);
+
+    if (__jwtToken) {
+      getUserInfo();
+    }
+  });
+  xhr.open("GET", "http://localhost:3010/header.html");
+  xhr.send();
+}
+
+function loadFooter() { // 페이지 푸터 로딩
+  const xhr = new XMLHttpRequest();
+  xhr.addEventListener("load", () => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xhr.responseText, "text/html");
+    document.body.appendChild(doc.querySelector("#page-footer"));
+  });
+  xhr.open("GET", "http://localhost:3010/footer.html");
+  xhr.send();
+}
+
+function getUserInfo() { // 페이지 푸터 로딩
+  const xhr = new XMLHttpRequest();
+  xhr.addEventListener("load", () => {
+    const result = JSON.parse(xhr.responseText);
+    console.log(result);
+    if (result.status == "success") {
+      document.querySelector("#user-name").innerHTML = result.data.name;
+      document.querySelector(".logged-out").classList.add("invisible");
+      document.querySelector(".logged-in").classList.remove("invisible");
+    } else {
+      document.querySelector(".logged-in").classList.add("invisible");
+      document.querySelector(".logged-out").classList.remove("invisible");
+    }
+  });
+  xhr.open("GET", `http://localhost:8010/auth/user-info`);
+  xhr.setRequestHeader("Authorization", "Bearer " + __jwtToken);
+  
+  // 클라이언트에서 Cross Domain 으로 쿠키, 세션, HTTP 인증 헤더를 보내고 받고 싶다면, 다음을 설정해야 한다.
+  // 설정하지 않으면, Cross Domain으로 쿠키, 세션, HTTP 인증 헤더를 보내거나 받을 수 없다.
+  xhr.withCredentials = true;
+
+  xhr.send();
+}
+
+function logout() {
+  //localStorage.removeItem("JWT-TOKEN");
+  document.cookie = `jwt_token=; path=/; domain=localhost; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=None; Secure`;
+  __jwtToken = null;
+  location.href = "http://localhost:3010/home.html";
+}
+
+function getCookie(name) {
+  const cookies = document.cookie.split('; ');
+  for (const cookie of cookies) {
+      const [cookieName, cookieValue] = cookie.split('=');
+      if (cookieName === name) {
+          return decodeURIComponent(cookieValue);
+      }
+  }
+  return null; // 해당 쿠키가 없으면 null 반환
+}
