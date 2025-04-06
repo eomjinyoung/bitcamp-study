@@ -13,11 +13,22 @@
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
     <script type="text/babel">
-      function Test(props) {
-        return <h1>오호라!</h1>;
+      
+      function Cat({name, age}) {
+        return (
+          <React.Fragment>
+            <h1>고양이: {name}({age})</h1>
+            <p>고양이는 귀엽습니다.</p>
+          </React.Fragment>
+      );
       }
 
-      ReactDOM.render(<Test />, document.getElementById("react-container"));
+      const data = {
+        name: "고양이",
+        age: 5
+      }
+
+      ReactDOM.render(<Cat {...data}/>, document.getElementById("react-container"));
     </script>
   </body>
 </html>
