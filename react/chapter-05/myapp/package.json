@@ -1,15 +1,14 @@
 {
-  "name": "recipe-app2",
+  "name": "myapp",
   "version": "1.0.0",
+  "description": "## 1 프로젝트 디렉토리 준비",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --mode production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "react": "^16.14.0",
     "react-dom": "^16.14.0",

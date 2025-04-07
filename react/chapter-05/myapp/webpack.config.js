@@ -1,4 +1,5 @@
-var path = require('path');
+// webpack 설정
+var path = require("path");
 
 module.exports = {
   entry: "./src/index.js",
@@ -6,8 +7,7 @@ module.exports = {
     path: path.join(__dirname, "dist", "assets"),
     filename: "bundle.js",
   },
-  devtool: 'source-map',
   module: {
-    rules: [{ test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'}]
+    rules: [{ test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }],
   },
 };
