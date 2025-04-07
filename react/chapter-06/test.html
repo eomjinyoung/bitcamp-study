@@ -1,18 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <h1>6장 테스트</h1>
-    <script>
-        //const createArray = (length) => { return [...Array(length)];}
-        //console.log(createArray(5));
-        const plus = (a, b) => 
-            a + b;
-        console.log(plus(1, 2));
+  </head>
+  <body>
+    <div id="react-container"></div>
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+    <script type="text/babel">
+      function Counter() {
+        const [count, setCount] = React.useState(0);
+        const prevCount = React.useRef();
+
+        React.useEffect(() => {
+          console.log(count);
+          prevCount.current = count;
+        }, [count]);
+
+        return (
+          <div>
+            <p>현재: {count}</p>
+            <p>이전: {prevCount.current}</p>
+            <button onClick={() => setCount(count + 1)}>+1</button>
+          </div>
+        );
+      }
+
+      ReactDOM.render(<Counter />, document.getElementById("react-container"));
     </script>
-</body>
+  </body>
 </html>
