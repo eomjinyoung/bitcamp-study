@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import recipeData from "./data/recipe-data";
+import Recipe from "./components/Recipe";
 
 console.log(recipeData);
 
@@ -13,19 +14,7 @@ ReactDOM.render(
     </header>
     <div className='recipes'>
       {recipeData.map(function (recipe) {
-        return (
-          <section key={recipe.name.toLowerCase().replace(/ /, "-")}>
-            <h1>{recipe.name}</h1>
-            <ul>
-              {recipe.ingredients.map((ingredient, index) => (
-                <li key={index}>
-                  {ingredient.name} {ingredient.amout} {ingredient.measurement}
-                </li>
-              ))}
-            </ul>
-            <section></section>
-          </section>
-        );
+        return <Recipe key={recipe.name.toLowerCase().replace(/ /, "-")} {...recipe} />;
       })}
     </div>
   </article>,
