@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 
 export default function AddColorForm() {
+  // useRef(연결할객체) ===> 리턴 값: { current: 연결할객체}
   const txtTitle = useRef(); // 리턴 값: { current: undefined }
   const hexColor = useRef(); // 리턴 값: { current: undefined }
 
