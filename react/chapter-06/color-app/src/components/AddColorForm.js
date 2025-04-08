@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 
 export default function AddColorForm() {
-  const txtTitle = useRef("오호라!");
-  const hexColor = useRef("#ffff00");
+  const txtTitle = useRef(); // 리턴 값: { current: undefined }
+  const hexColor = useRef(); // 리턴 값: { current: undefined }
 
   function submit(e) {
     e.preventDefault();
@@ -11,6 +11,8 @@ export default function AddColorForm() {
     hexColor.current.value = "#000000";
   }
 
+  // 태그에서 ref 속성에 useRef() 객체를 설정하면 current 변수에 태그 객체가 저장된다.
+  // 예) <input ref={txtTitle} />  ===> txtTitle.current = input태그객체
   return (
     <form>
       <input ref={txtTitle} type='text' required />
