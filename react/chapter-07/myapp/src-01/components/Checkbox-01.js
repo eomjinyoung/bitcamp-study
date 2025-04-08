@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 
+// useEffect() 사용 전
 export default function Checkbox() {
   const [checked, setChecked] = useState(false);
 
-  console.log(`checked: ${checked.toString()}`);
+  alert(`checked: ${checked.toString()}`);
 
   return (
     <>

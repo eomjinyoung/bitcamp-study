@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Checkbox from "./components/Checkbox";
+import App from "./components/App";
 
-ReactDOM.render(<Checkbox />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById("root"));
+ 
