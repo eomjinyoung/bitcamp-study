@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>테스트</h1>
+    <script>
+      const values = [];
+      let index = 0;
+
+      function useState(initValue) {
+        let currentIndex = index;
+
+        if (values[currentIndex] == undefined) {
+          console.log("초기값 저장");
+          values[currentIndex] = initValue;
+        }
+
+        function setValue(newValue) {
+          values[currentIndex] = newValue;
+        }
+
+        index++;
+        return [values[currentIndex], setValue];
+      }
+
+      function render() {
+        index = 0;
+        let [v1, setValue1] = useState(100);
+        let [v2, setValue2] = useState(200);
+        console.log(v1, v2);
+
+        setValue1(111);
+        setValue2(222);
+      }
+
+      render();
+      render();
+    </script>
+  </body>
+</html>
