@@ -1,15 +1,38 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { useAuth } from "context/AuthProvider";
 
 export default function Auth() {
+  const { setAuth } = useAuth();
+  const [loginError, setLoginError] = useState(null);
   const router = useRouter();
   const txtEmail = useRef();
   const txtPassword = useRef();
   const chkSaveEmail = useRef();
-  const paraErrorMessage = useRef();
+  const emailCookie = Cookies.get("email");
+
+  async function getUserInfo(jwtToken) {
+    try {
+      const response = await fetch(`http://localhost:8010/auth/user-info`, {
+        headers: {
+          Authorization: "Bearer " + jwtToken,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("응답 오류!");
+      }
+      const result = await response.json();
+
+      if (result.status === "success") {
+        setAuth(result.data);
+      }
+    } catch (err) {
+      alert("Auth()/getUserInfo(): 사용자 정보 로딩 오류!");
+    }
+  }
 
   async function submit(e) {
     e.preventDefault();
@@ -34,9 +57,17 @@ export default function Auth() {
           sameSite: "None",
           secure: true,
         });
+
+        getUserInfo(result.data);
+
+        if (chkSaveEmail.current.checked) {
+          Cookies.set("email", txtEmail.current.value, { expires: 7 });
+        } else {
+          Cookies.remove("email");
+        }
         router.push("/");
       } else {
-        paraErrorMessage.current.classList.remove("invisible");
+        setLoginError("로그인 실패!");
       }
     } catch (error) {
       // 서버와의 통신 오류 발생!
@@ -47,17 +78,21 @@ export default function Auth() {
   return (
     <>
       <h2>로그인</h2>
-      <p ref={paraErrorMessage} className='error invisible'>
-        로그인 실패!
-      </p>
+      {loginError && <p className='error'>로그인 실패!</p>}
       <form onSubmit={submit}>
         <div>
           <label htmlFor='email'>이메일:</label>
-          <input ref={txtEmail} type='email' required />
+          <input
+            ref={txtEmail}
+            defaultValue={emailCookie}
+            type='email'
+            autoComplete='email'
+            required
+          />
         </div>
         <div>
           <label htmlFor='password'>암호:</label>
-          <input ref={txtPassword} type='password' required />
+          <input ref={txtPassword} type='password' autoComplete='current-password' required />
         </div>
         <div>
           <input ref={chkSaveEmail} type='checkbox' />
