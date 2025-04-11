@@ -1,27 +1,51 @@
+"use client";
+
+import { useRef } from "react";
+
 export default function Auth() {
+  const txtEmail = useRef("");
+  const txtPassword = useRef("");
+  const chkSaveEmail = useRef(false);
+
+  function submit(e) {
+    e.preventDefault();
+    fetch("http://localhost:8010/auth/login", {
+      method: "POST",
+      body: new URLSearchParams({
+        email: txtEmail.current.value,
+        password: txtPassword.current.value,
+      }),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result.data);
+      })
+      .catch((error) => {
+        alert("로그인 오류!");
+      });
+  }
+
   return (
-    <main id='page-content'>
+    <>
       <h2>로그인</h2>
-      <p id='error-message' class='error invisible'>
-        로그인 실패!
-      </p>
-      <form id='login-form' method='post'>
+      <p className='error invisible'>로그인 실패!</p>
+      <form onSubmit={submit}>
         <div>
-          <label for='email'>이메일:</label>
-          <input type='email' id='email' name='email' required />
+          <label htmlFor='email'>이메일:</label>
+          <input ref={txtEmail} type='email' required />
         </div>
         <div>
-          <label for='password'>암호:</label>
-          <input type='password' id='password' name='password' required />
+          <label htmlFor='password'>암호:</label>
+          <input ref={txtPassword} type='password' required />
         </div>
         <div>
-          <input type='checkbox' id='saveEmail' name='saveEmail' />
-          <label for='saveEmail'>이메일 저장</label>
+          <input ref={chkSaveEmail} type='checkbox' />
+          <label htmlFor='saveEmail'>이메일 저장</label>
         </div>
         <div>
-          <input type='submit' value='로그인' />
+          <button>로그인</button>
         </div>
       </form>
-    </main>
+    </>
   );
 }

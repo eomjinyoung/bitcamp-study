@@ -1,11 +1,13 @@
+import "./header.css";
+
 export default function Header() {
   return (
-    <header id='page-header'>
+    <header className='page-header'>
       <h1>
         <a href='http://localhost:3010/home.html'>프로젝트 관리 시스템</a>
       </h1>
       <nav>
-        <ul class='nav-links'>
+        <ul className='nav-links'>
           <li>
             <a href='http://localhost:3010/member/list.html'>회원</a>
           </li>
@@ -14,13 +16,11 @@ export default function Header() {
           </li>
         </ul>
       </nav>
-      <div class='login logged-in invisible'>
+      <div className='login logged-in invisible'>
         <span id='user-name'>홍길동</span>
-        <a href='#' onclick='logout(); return false'>
-          로그아웃
-        </a>
+        <a href='#'>로그아웃</a>
       </div>
-      <div class='login logged-out'>
+      <div className='login logged-out'>
         <a href='http://localhost:3010/auth/login-form.html'>로그인</a>
       </div>
     </header>

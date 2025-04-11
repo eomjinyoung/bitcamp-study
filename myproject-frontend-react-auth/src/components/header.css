@@ -1,33 +1,48 @@
-body {
-  font-size: small;
-  width: 800px;
-  margin: 0px auto;
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
 }
 
-#page-header {
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+.page-header {
   display: flex;
-  align-items: center;  /* 세로 중앙 정렬 */
-  justify-content: space-between;  /* 양쪽 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: space-between; /* 양쪽 정렬 */
   background-color: green; /* 배경색 */
   padding: 15px 20px;
   color: white;
 }
 
 /* h1 (왼쪽 고정) */
-#page-header h1 {
+.page-header h1 {
   margin: 0;
   font-size: 24px;
   xborder: 1px solid red;
 }
 
-#page-header h1 a {
+.page-header h1 a {
   text-decoration: none;
   color: white;
 }
 
 /* nav는 가운데 배치 및 남은 공간 차지 */
-#page-header nav {
-  flex: 1;  /* 남은 공간을 차지하여 가운데 정렬 */
+.page-header nav {
+  flex: 1; /* 남은 공간을 차지하여 가운데 정렬 */
   text-align: center;
   xborder: 1px solid red;
 }
@@ -59,7 +74,7 @@ body {
 }
 
 /* 로그인 div (오른쪽 고정) */
-#page-header div {
+.page-header div {
   margin-left: auto; /* 오른쪽 정렬 */
   font-size: 18px;
   xborder: 1px solid red;
@@ -74,9 +89,7 @@ body {
   border-radius: 5px;
 }
 
-
-
-#page-footer {
+.page-footer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,18 +100,12 @@ body {
   xborder: 1px blue solid;
 }
 
-#page-content {
-  min-height: 500px;
-  padding: 10px;
-  xborder: 1px blue solid;
-}
-
 .error {
   box-sizing: border-box;
   height: 40px;
   background-color: lightpink;
   padding: 10px;
-  border: 3px solid darkred; 
+  border: 3px solid darkred;
 }
 
 .invisible {
