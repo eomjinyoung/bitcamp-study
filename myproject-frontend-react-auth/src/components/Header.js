@@ -4,15 +4,15 @@ export default function Header() {
   return (
     <header className='page-header'>
       <h1>
-        <a href='http://localhost:3010/home.html'>프로젝트 관리 시스템</a>
+        <a href='http://localhost:3010/'>프로젝트 관리 시스템</a>
       </h1>
       <nav>
         <ul className='nav-links'>
           <li>
-            <a href='http://localhost:3010/member/list.html'>회원</a>
+            <a href='http://localhost:3010/member'>회원</a>
           </li>
           <li>
-            <a href='http://localhost:3020/board/list.html'>게시글</a>
+            <a href='http://localhost:3020/board'>게시글</a>
           </li>
         </ul>
       </nav>
@@ -21,7 +21,7 @@ export default function Header() {
         <a href='#'>로그아웃</a>
       </div>
       <div className='login logged-out'>
-        <a href='http://localhost:3010/auth/login-form.html'>로그인</a>
+        <a href='http://localhost:3010/auth'>로그인</a>
       </div>
     </header>
   );
