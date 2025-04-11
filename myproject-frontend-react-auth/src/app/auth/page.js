@@ -2,13 +2,12 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 import "../globals.css";
 import { useAuth } from "components/AuthProvider";
 
 export default function Auth() {
   const [errorMessage, setErrorMessage] = useState("");
-  const { setAuth } = useAuth();
+  const { setToken } = useAuth();
   const router = useRouter();
   const txtEmail = useRef();
   const txtPassword = useRef();
@@ -30,13 +29,7 @@ export default function Auth() {
       const result = await response.json();
 
       if (result.status == "success") {
-        Cookies.set("jwt_token", result.data, {
-          path: "/",
-          domain: "localhost",
-          sameSite: "None",
-          secure: true,
-        });
-        setAuth(result.data); // JWT 토큰을 AuthProvider에 저장
+        setToken(result.data); // JWT 토큰을 AuthProvider에 저장
         router.push("/");
         
       } else {
@@ -44,7 +37,7 @@ export default function Auth() {
       }
     } catch (error) {
       // 서버와의 통신 오류 발생!
-      alert(`로그인 중 오류 발생: ${error.message}`);
+      console.log(error);
     }
   }
 

@@ -38,7 +38,11 @@ export const useUserInfo = () => {
       };
 
       fetchUserInfo();
+      
+    } else {
+      setUserInfo(null);
     }
+
   }, [auth]);
 
   return [userInfo, error];

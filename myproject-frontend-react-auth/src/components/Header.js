@@ -1,10 +1,18 @@
 "use client";
 
 import { useUserInfo } from "hooks/useUserInfo";
+import { useAuth } from "components/AuthProvider";
 import "./header.css";
 
 export default function Header() {
-  const [userInfo, error] = useUserInfo();
+  const [userInfo] = useUserInfo();
+  const { resetToken } = useAuth();
+
+  function handleLogout(e) {
+    e.preventDefault();
+    console.log("로그아웃 처리");
+    resetToken();
+  }
 
   return (
     <header className='page-header'>
@@ -24,7 +32,7 @@ export default function Header() {
       {userInfo ? (
       <div className='login'>
         <span className='user-name'>{userInfo.name}</span>
-        <a href='#'>로그아웃</a>
+        <a href='#' onClick={handleLogout}>로그아웃</a>
       </div>
       ) : (
       <div className='login'>
