@@ -1,15 +1,18 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import "../globals.css";
+import { useAuth } from "components/AuthProvider";
 
 export default function Auth() {
+  const [errorMessage, setErrorMessage] = useState("");
+  const { setAuth } = useAuth();
   const router = useRouter();
   const txtEmail = useRef();
   const txtPassword = useRef();
   const chkSaveEmail = useRef();
-  const paraErrorMessage = useRef();
 
   async function submit(e) {
     e.preventDefault();
@@ -22,8 +25,7 @@ export default function Auth() {
         }),
       });
       if (!response.ok) {
-        // HTTP 요청 오류!
-        alert("응답 오류!");
+        throw new Error("로그인 요청 실패!");
       }
       const result = await response.json();
 
@@ -34,9 +36,11 @@ export default function Auth() {
           sameSite: "None",
           secure: true,
         });
+        setAuth(result.data); // JWT 토큰을 AuthProvider에 저장
         router.push("/");
+        
       } else {
-        paraErrorMessage.current.classList.remove("invisible");
+        setErrorMessage("사용자 인증 실패!");
       }
     } catch (error) {
       // 서버와의 통신 오류 발생!
@@ -47,9 +51,11 @@ export default function Auth() {
   return (
     <>
       <h2>로그인</h2>
-      <p ref={paraErrorMessage} className='error invisible'>
-        로그인 실패!
+      {errorMessage && (
+      <p className='error'>
+        사용자 인증 실패!
       </p>
+      )}
       <form onSubmit={submit}>
         <div>
           <label htmlFor='email'>이메일:</label>

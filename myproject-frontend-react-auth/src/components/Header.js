@@ -1,6 +1,11 @@
+"use client";
+
+import { useUserInfo } from "hooks/useUserInfo";
 import "./header.css";
 
 export default function Header() {
+  const [userInfo, error] = useUserInfo();
+
   return (
     <header className='page-header'>
       <h1>
@@ -16,13 +21,16 @@ export default function Header() {
           </li>
         </ul>
       </nav>
-      <div className='login logged-in invisible'>
-        <span id='user-name'>홍길동</span>
+      {userInfo ? (
+      <div className='login'>
+        <span className='user-name'>{userInfo.name}</span>
         <a href='#'>로그아웃</a>
       </div>
-      <div className='login logged-out'>
+      ) : (
+      <div className='login'>
         <a href='http://localhost:3010/auth'>로그인</a>
       </div>
+      )}
     </header>
   );
 }
