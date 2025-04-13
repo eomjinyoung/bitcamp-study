@@ -1,0 +1,6 @@
+[submodule "myproject-frontend-react-common/src/common"]
+	path = myproject-frontend-react-common/src/common
+	url = https://github.com/eomjinyoung/myproject-frontend-react-common
+[submodule "myproject-frontend-react-auth/src/common"]
+	path = myproject-frontend-react-auth/src/common
+	url = https://github.com/eomjinyoung/myproject-frontend-react-common
