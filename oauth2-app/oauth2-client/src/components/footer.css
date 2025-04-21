@@ -1,0 +1,10 @@
+.page-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  background-color: black;
+  color: white;
+  box-sizing: border-box;
+  xborder: 1px blue solid;
+}

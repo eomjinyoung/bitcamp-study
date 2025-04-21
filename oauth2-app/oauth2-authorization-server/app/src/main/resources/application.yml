@@ -1,0 +1,33 @@
+server:
+  port: 9000
+
+logging:
+  level:
+    org.springframework.security: trace
+
+spring:
+  security:
+    oauth2:
+      authorizationserver:
+        issuer: http://localhost:9000
+        client:
+          oidc-client:
+            registration:
+              client-id: "oidc-client"
+              client-secret: "{noop}secret"
+              client-authentication-methods:
+                - "client_secret_basic"
+              authorization-grant-types:
+                - "authorization_code"
+                - "refresh_token"
+                - "client_credentials"
+              redirect-uris:
+                - "http://127.0.0.1:3000/login/oauth2/code/oidc-client"
+                - "http://127.0.0.1:3000/authorized"
+              post-logout-redirect-uris:
+                - "http://127.0.0.1:3000/"
+              scopes:
+                - "openid"
+                - "profile"
+            require-authorization-consent: true
+
