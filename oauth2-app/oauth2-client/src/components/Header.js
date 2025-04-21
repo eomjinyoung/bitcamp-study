@@ -21,7 +21,7 @@ export default function Header({ user }) {
     e.preventDefault();
     const authorizeUrl = "http://localhost:9000/oauth2/authorize";
     const clientId = "oidc-client";
-    const redirectUri = "http://localhost:8080/login/oauth2/code/oidc-client";
+    const redirectUri = "http://localhost:3000/authorized";
     const responseType = "code";
     const scope = "openid profile";
     const state = "random123"; // CSRF 확인용 임의 값
@@ -48,21 +48,21 @@ export default function Header({ user }) {
     localStorage.removeItem("email");
     Cookies.remove("jwt_token");
 
-    window.location.href = `${process.env.NEXT_PUBLIC_AUTH_UI_URL}/`;
+    window.location.href = `http://localhost:3000/`;
   }
 
   return (
     <header className='page-header'>
       <h1>
-        <a href={`${process.env.NEXT_PUBLIC_AUTH_UI_URL}/`}>프로젝트 관리 시스템</a>
+        <a href={`http://localhost:3000/`}>프로젝트 관리 시스템</a>
       </h1>
       <nav>
         <ul className='nav-links'>
           <li>
-            <a href={`${process.env.NEXT_PUBLIC_AUTH_UI_URL}/members`}>회원</a>
+            <a href={`http://localhost:3000/members`}>회원</a>
           </li>
           <li>
-            <a href={`${process.env.NEXT_PUBLIC_BOARD_UI_URL}/boards`}>게시글</a>
+            <a href={`http://localhost:3000/boards`}>게시글</a>
           </li>
         </ul>
       </nav>

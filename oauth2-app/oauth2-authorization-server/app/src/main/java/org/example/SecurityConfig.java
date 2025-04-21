@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -16,10 +17,17 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
@@ -38,7 +46,7 @@ import java.util.UUID;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-  // 🔐 Spring Authorization Server 보안 필터 체인
+  // Spring Authorization Server 보안 필터 체인
   @Bean
   @Order(1)
   public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -48,6 +56,7 @@ public class SecurityConfig {
 
     // 인증되지 않은 사용자는 로그인 페이지로 이동
     return http
+            .cors(Customizer.withDefaults())
             .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
             .with(authorizationServerConfigurer, (authorizationServer) ->
                     authorizationServer
@@ -63,7 +72,6 @@ public class SecurityConfig {
                             new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                     )
             )
-            //.cors(Customizer.withDefaults())
             .build();
   }
 
@@ -72,6 +80,7 @@ public class SecurityConfig {
   @Order(2)
   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
     return http
+            .cors(Customizer.withDefaults())
             .authorizeHttpRequests((authorize) -> authorize
                     //.requestMatchers("/login", "/css/**", "/js/**", "/favicon.ico").permitAll()
                     .anyRequest().authenticated()
@@ -83,17 +92,18 @@ public class SecurityConfig {
             .build();
   }
 
-  // 🌍 7. CORS 설정 (선택 사항)
-  //@Bean
+  // CORS 설정 (선택 사항)
+  @Bean
   public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration config = new CorsConfiguration();
-    config.addAllowedOrigin("*"); // 개발 시에만 허용
-    config.addAllowedMethod("*");
-    config.addAllowedHeader("*");
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(
+        List.of("http://localhost:3000")); // 허용할 도메인
+    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+    configuration.setAllowedHeaders(List.of("*")); // 모든 요청 헤더를 수락한다.
+    configuration.setAllowCredentials(true); // 다른 사이트와의 쿠키 및 세션, HTTP 인증 헤더 전송을 허용
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", config);
-
+    source.registerCorsConfiguration("/**", configuration);
     return source;
   }
 
@@ -110,6 +120,26 @@ public class SecurityConfig {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public RegisteredClientRepository registeredClientRepository(PasswordEncoder passwordEncoder) {
+    RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
+        .clientId("oidc-client")
+        .clientSecret(passwordEncoder.encode("secret"))
+        .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+        .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+        .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+        .redirectUri("http://localhost:3000/login/oauth2/code/oidc-client")
+        .redirectUri("http://localhost:3000/authorized")
+        .postLogoutRedirectUri("http://localhost:3000/")
+        .scope(OidcScopes.OPENID)
+        .scope(OidcScopes.PROFILE)
+        .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+        .build();
+
+    return new InMemoryRegisteredClientRepository(oidcClient);
   }
 
   @Bean
@@ -141,6 +171,13 @@ public class SecurityConfig {
   @Bean
   public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
     return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
+  }
+
+  @Bean
+  public AuthorizationServerSettings authorizationServerSettings() {
+    return AuthorizationServerSettings.builder()
+        .issuer("http://localhost:9000")
+        .build();
   }
 
 }

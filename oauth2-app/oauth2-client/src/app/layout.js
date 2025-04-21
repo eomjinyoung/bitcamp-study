@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "components/Header";
 import Footer from "components/Footer";
-import { getUserFromServer } from "lib/auth";
+//import { getUserFromServer } from "lib/auth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,7 +22,8 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const user = await getUserFromServer();
+  //const user = await getUserFromServer();
+  const user = null;
   console.log("페이지 랜더링!");
 
   return (
